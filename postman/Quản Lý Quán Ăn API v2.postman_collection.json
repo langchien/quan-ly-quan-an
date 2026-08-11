@@ -1,0 +1,1095 @@
+{
+  "info": {
+    "_postman_id": "8e4a4000-7eeb-4bc7-9dfc-09429d23eefe",
+    "name": "Quản Lý Quán Ăn API v2",
+    "description": "API Quản Lý Quán Ăn - Fastify + Prisma\n\n## Cách dùng:\n1. Chọn Environment 'Quán Ăn - Local Dev'\n2. Chạy server: cd server && npm run dev\n3. Bấm Send bất kỳ → token tự động!\n\n## Flow Guest: Danh sách bàn → Guest Login → Đặt món",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38319777"
+  },
+  "item": [
+    {
+      "name": "🔐 Auth (Quản trị)",
+      "item": [
+        {
+          "name": "Đăng nhập (Owner/Employee)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{ownerEmail}}\",\n  \"password\": \"{{ownerPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Đăng xuất",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Xác thực Owner/Employee"
+    },
+    {
+      "name": "👤 Accounts (Tài khoản)",
+      "item": [
+        {
+          "name": "Lấy thông tin bản thân (Me)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cập nhật thông tin bản thân",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Admin Quán Ăn\",\n  \"avatar\": \"https://ui-avatars.com/api/?name=Admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Đổi mật khẩu",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"{{ownerPassword}}\",\n  \"password\": \"123456\",\n  \"confirmPassword\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/change-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "change-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Danh sách nhân viên [Owner]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tạo tài khoản nhân viên [Owner]",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nguyễn Văn A\",\n  \"email\": \"nhanvien@order.com\",\n  \"password\": \"123456\",\n  \"confirmPassword\": \"123456\",\n  \"avatar\": \"https://ui-avatars.com/api/?name=NV+A\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chi tiết nhân viên [Owner]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/detail/{{employeeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "detail",
+                "{{employeeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cập nhật nhân viên [Owner]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nguyễn Văn A (Updated)\",\n  \"email\": \"nhanvien@order.com\",\n  \"changePassword\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/detail/{{employeeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "detail",
+                "{{employeeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Xóa nhân viên [Owner]",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/detail/{{employeeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "detail",
+                "{{employeeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Danh sách khách [Owner]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/guests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "guests"
+              ],
+              "query": [
+                {
+                  "key": "fromDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "toDate",
+                  "value": "2030-12-31"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tạo tài khoản khách [Owner]",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Khách Bàn {{tableNumber}}\",\n  \"tableNumber\": {{tableNumber}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/guests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "guests"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Quản lý tài khoản nhân viên và cá nhân"
+    },
+    {
+      "name": "🍽️ Dishes (Món ăn)",
+      "item": [
+        {
+          "name": "Danh sách món ăn",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/dishes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dishes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chi tiết món ăn",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/dishes/{{dishId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dishes",
+                "{{dishId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tạo món ăn [Login]",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Phở Bò\",\n  \"price\": 55000,\n  \"description\": \"Phở bò truyền thống\",\n  \"image\": \"https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Pho-Beef-Noodles-2008.jpg/800px-Pho-Beef-Noodles-2008.jpg\",\n  \"status\": \"Available\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dishes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dishes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cập nhật món ăn [Login]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Phở Bò Đặc Biệt\",\n  \"price\": 65000,\n  \"description\": \"Phở bò đặc biệt cao cấp\",\n  \"image\": \"https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Pho-Beef-Noodles-2008.jpg/800px-Pho-Beef-Noodles-2008.jpg\",\n  \"status\": \"Available\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dishes/{{dishId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dishes",
+                "{{dishId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Xóa món ăn [Login]",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/dishes/{{dishId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dishes",
+                "{{dishId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Quản lý món ăn. GET không cần auth, POST/PUT/DELETE cần đăng nhập."
+    },
+    {
+      "name": "🪑 Tables (Ban)",
+      "item": [
+        {
+          "name": "Danh sách bàn",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tables",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tables"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chi tiết bàn",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tables/{{tableNumber}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tables",
+                "{{tableNumber}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tạo bàn [Login]",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"number\": {{tableNumber}},\n  \"capacity\": 4,\n  \"status\": \"Available\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tables",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tables"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cập nhật bàn [Login]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"capacity\": 4,\n  \"status\": \"Available\",\n  \"changeToken\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tables/{{tableNumber}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tables",
+                "{{tableNumber}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Xóa bàn [Login]",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/tables/{{tableNumber}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tables",
+                "{{tableNumber}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Quản lý bàn. GET không cần auth. Kết quả tự động lưu tableToken!"
+    },
+    {
+      "name": "📋 Orders (Don hang - Quan tri)",
+      "item": [
+        {
+          "name": "Danh sách đơn hàng [Owner]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ],
+              "query": [
+                {
+                  "value": "2024-01-01",
+                  "key": "fromDate"
+                },
+                {
+                  "value": "2030-12-31",
+                  "key": "toDate"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chi tiết đơn hàng [Owner]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "{{orderId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tạo đơn cho khách [Owner]",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guestId\": {{guestId}},\n  \"orders\": [\n    { \"dishId\": {{dishId}}, \"quantity\": 2 }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cập nhật trạng thái đơn [Owner]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Processing\",\n  \"dishId\": {{dishId}},\n  \"quantity\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "{{orderId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Thanh toán đơn khách [Owner]",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guestId\": {{guestId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/pay",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "pay"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Quản lý đơn hàng. Tất cả cần Owner role."
+    },
+    {
+      "name": "👨‍🍽️ Guest (Khach hang)",
+      "item": [
+        {
+          "name": "Đăng nhập Guest (dùng tableToken)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Khách Test\",\n  \"tableNumber\": {{tableNumber}},\n  \"token\": \"{{tableToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/guest/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "guest",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token Guest",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{guestRefreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/guest/auth/refresh-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "guest",
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Đăng xuất Guest",
+          "request": {
+            "auth": {
+              "type": "bearer"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{guestRefreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/guest/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "guest",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Đặt món (Guest)",
+          "request": {
+            "auth": {
+              "type": "bearer"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"dishId\": {{dishId}}, \"quantity\": 2 }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/guest/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "guest",
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Xem đơn hàng của mình (Guest)",
+          "request": {
+            "auth": {
+              "type": "bearer"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/guest/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "guest",
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Flow khách: Danh sách bàn → Guest Login → Đặt món → Xem đơn"
+    },
+    {
+      "name": "📁 Media (Upload anh)",
+      "item": [
+        {
+          "name": "Upload ảnh",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{baseUrl}}/media/upload",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media",
+                "upload"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Xem ảnh tĩnh",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/static/ten-file-anh.jpg",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "static",
+                "ten-file-anh.jpg"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Upload ảnh. Cần đăng nhập."
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const skipPaths = ['/auth/login', '/auth/refresh-token', '/guest/auth/login', '/guest/auth/refresh-token'];",
+          "const url = pm.request.url.toString();",
+          "const isGuestReq = url.includes('/guest/orders');",
+          "const needsOwnerAuth = !skipPaths.some(p => url.includes(p)) && !isGuestReq;",
+          "if (needsOwnerAuth) {",
+          "  const token = pm.environment.get('accessToken') || pm.collectionVariables.get('accessToken');",
+          "  if (!token) {",
+          "    const base = pm.environment.get('baseUrl') || 'http://localhost:4000';",
+          "    pm.sendRequest({ url: base + '/auth/login', method: 'POST',",
+          "      header: {'Content-Type': 'application/json'},",
+          "      body: { mode: 'raw', raw: JSON.stringify({",
+          "        email: pm.environment.get('ownerEmail') || 'admin@order.com',",
+          "        password: pm.environment.get('ownerPassword') || '123456'",
+          "      })}}, function(err, res) {",
+          "      if (!err && res.json().data) {",
+          "        const d = res.json().data;",
+          "        pm.environment.set('accessToken', d.accessToken);",
+          "        pm.environment.set('refreshToken', d.refreshToken);",
+          "        pm.collectionVariables.set('accessToken', d.accessToken);",
+          "        pm.collectionVariables.set('refreshToken', d.refreshToken);",
+          "        console.log('✅ Auto-login OK! Role:', d.account.role);",
+          "      } else { console.error('❌ Auto-login thất bại. Server có đang chạy?'); }",
+          "    });",
+          "  }",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const code = pm.response.code, t = pm.response.responseTime;",
+          "if (code >= 200 && code < 300) { console.log(`✅ [${code}] ${pm.info.requestName} (${t}ms)`); }",
+          "else if (code === 401) { console.warn('⚠️ 401 - Xóa token, sẽ tự login lại'); pm.environment.unset('accessToken'); pm.collectionVariables.unset('accessToken'); }",
+          "else if (code === 403) { console.warn('⚠️ 403 - Cần quyền Owner'); }",
+          "else { console.error(`❌ [${code}]`, pm.response.text().substring(0, 200)); }",
+          "try {",
+          "  const res = pm.response.json(); const url = pm.request.url.toString();",
+          "  if (res && res.data && !Array.isArray(res.data)) {",
+          "    if (res.data.id && url.includes('/dishes')) pm.environment.set('dishId', res.data.id);",
+          "    if (res.data.number && url.includes('/tables')) { pm.environment.set('tableNumber', res.data.number); if (res.data.token) pm.environment.set('tableToken', res.data.token); }",
+          "  }",
+          "  if (res && res.data && Array.isArray(res.data) && res.data.length > 0) {",
+          "    if (url.includes('/tables')) { pm.environment.set('tableNumber', res.data[0].number); pm.environment.set('tableToken', res.data[0].token); }",
+          "    if (url.includes('/dishes')) pm.environment.set('dishId', res.data[0].id);",
+          "    if (url.includes('/accounts') && !url.includes('/me') && !url.includes('/guests') && !url.includes('/password')) pm.environment.set('employeeId', res.data[0].id);",
+          "    if (url.includes('/accounts/guests')) pm.environment.set('guestId', res.data[0].id);",
+          "    if (url.includes('/orders')) { pm.environment.set('orderId', res.data[0].id); if (res.data[0].guestId) pm.environment.set('guestId', res.data[0].guestId); }",
+          "  }",
+          "} catch(e) {}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    },
+    {
+      "key": "guestAccessToken",
+      "value": ""
+    },
+    {
+      "key": "guestRefreshToken",
+      "value": ""
+    }
+  ]
+}
