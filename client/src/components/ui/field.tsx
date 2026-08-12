@@ -1,9 +1,9 @@
-import { useMemo } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { useMemo } from 'react'
 
-import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
 
 function FieldSet({ className, ...props }: React.ComponentProps<'fieldset'>) {
   return (
@@ -179,7 +179,13 @@ function FieldError({
       return null
     }
 
-    const uniqueErrors = [...new Map(errors.map(error => [error?.message, error])).values()]
+    const uniqueErrors = [...new Map(errors.map(error => [error?.message, error])).values()].filter(
+      Boolean
+    )
+
+    if (uniqueErrors.length === 0 || !uniqueErrors[0]?.message) {
+      return null
+    }
 
     if (uniqueErrors.length === 1) {
       return uniqueErrors[0]?.message
@@ -192,15 +198,11 @@ function FieldError({
     )
   }, [children, errors])
 
-  if (!content) {
-    return null
-  }
-
   return (
     <div
-      role='alert'
+      role={content ? 'alert' : undefined}
       data-slot='field-error'
-      className={cn('text-sm font-normal text-destructive', className)}
+      className={cn('min-h-5 text-sm font-normal text-destructive', className)}
       {...props}
     >
       {content}
@@ -210,13 +212,13 @@ function FieldError({
 
 export {
   Field,
-  FieldLabel,
+  FieldContent,
   FieldDescription,
   FieldError,
   FieldGroup,
+  FieldLabel,
   FieldLegend,
   FieldSeparator,
   FieldSet,
-  FieldContent,
   FieldTitle,
 }

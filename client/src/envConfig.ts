@@ -1,13 +1,13 @@
 import z from 'zod'
 
 const envConfigSchema = z.object({
-  API_URL: z.string(),
-  WEB_URL: z.string(),
+  VITE_API_URL: z.string(),
+  VITE_WEB_URL: z.string(),
 })
 
 const parsedConfig = envConfigSchema.safeParse({
-  API_URL: process.env.API_URL,
-  WEB_URL: process.env.WEB_URL,
+  VITE_API_URL: import.meta.env.VITE_API_URL,
+  VITE_WEB_URL: import.meta.env.VITE_WEB_URL,
 })
 
 if (!parsedConfig.success) {

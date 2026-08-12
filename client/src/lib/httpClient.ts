@@ -1,5 +1,6 @@
 import { envConfig } from '@/envConfig'
 import type { RefreshTokenResType } from '@/schemaValidations/auth.schema'
+import { useAuthStore } from '@/store/useAuthStore'
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
 
@@ -61,7 +62,7 @@ function processQueue(error: unknown, token: string | null) {
 
 // ─── Axios Instance
 const axiosInstance = axios.create({
-  baseURL: envConfig.API_URL,
+  baseURL: envConfig.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -69,7 +70,8 @@ const axiosInstance = axios.create({
 
 // Request Interceptor – tự động đính kèm token
 axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const accessToken = localStorage.getItem('accessToken')
+  // Đọc accessToken từ Zustand Store (persist tự đồng bộ với localStorage)
+  const accessToken = useAuthStore.getState().accessToken
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`
   }
@@ -107,20 +109,24 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true
 
       try {
-        const refreshToken = localStorage.getItem('refreshToken')
+        const refreshToken = useAuthStore.getState().refreshToken
         if (!refreshToken) throw new Error('Không có refresh token')
 
         // Dùng axios thuần (không qua axiosInstance) để tránh vòng lặp interceptor
         const { data } = await axios.post<RefreshTokenResType>(
-          `${envConfig.API_URL}/auth/refresh-token`,
+          `${envConfig.VITE_API_URL}/auth/refresh-token`,
           { refreshToken }
         )
 
         const newAccessToken = data.data.accessToken
         const newRefreshToken = data.data.refreshToken
 
-        localStorage.setItem('accessToken', newAccessToken)
-        localStorage.setItem('refreshToken', newRefreshToken)
+        // Cập nhật token mới vào Zustand Store
+        // persist middleware tự đồng bộ vào localStorage
+        useAuthStore.getState().setAuth({
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken,
+        })
 
         // Mở khoá và retry tất cả request đang chờ trong queue
         processQueue(null, newAccessToken)
@@ -132,9 +138,8 @@ axiosInstance.interceptors.response.use(
         // Refresh thất bại → từ chối tất cả request trong queue
         processQueue(refreshError, null)
 
-        // Xoá token và đẩy về trang đăng nhập
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
+        // Xoá token & user khỏi Store (persist tự xoá localStorage)
+        useAuthStore.getState().logout()
         window.location.href = '/login'
 
         return Promise.reject(refreshError)

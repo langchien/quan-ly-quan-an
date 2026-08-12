@@ -10,33 +10,81 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PublicRouteImport } from './routes/_public'
+import { Route as PublicAuthRouteImport } from './routes/_public/_auth'
+import { Route as ManageDashboardRouteImport } from './routes/manage/dashboard'
+import { Route as PublicAuthLoginRouteImport } from './routes/_public/_auth/login'
+import { Route as PublicAuthSignupRouteImport } from './routes/_public/_auth/signup'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicAuthRoute = PublicAuthRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => PublicRoute,
+} as any)
+const ManageDashboardRoute = ManageDashboardRouteImport.update({
+  id: '/manage/dashboard',
+  path: '/manage/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicAuthLoginRoute = PublicAuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => PublicAuthRoute,
+} as any)
+const PublicAuthSignupRoute = PublicAuthSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => PublicAuthRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/manage/dashboard': typeof ManageDashboardRoute
+  '/login': typeof PublicAuthLoginRoute
+  '/signup': typeof PublicAuthSignupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/manage/dashboard': typeof ManageDashboardRoute
+  '/login': typeof PublicAuthLoginRoute
+  '/signup': typeof PublicAuthSignupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_public': typeof PublicRouteWithChildren
+  '/_public/_auth': typeof PublicAuthRouteWithChildren
+  '/manage/dashboard': typeof ManageDashboardRoute
+  '/_public/_auth/login': typeof PublicAuthLoginRoute
+  '/_public/_auth/signup': typeof PublicAuthSignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/manage/dashboard' | '/login' | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/manage/dashboard' | '/login' | '/signup'
+  id:
+    | '__root__'
+    | '/'
+    | '/_public'
+    | '/_public/_auth'
+    | '/manage/dashboard'
+    | '/_public/_auth/login'
+    | '/_public/_auth/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PublicRoute: typeof PublicRouteWithChildren
+  ManageDashboardRoute: typeof ManageDashboardRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +96,73 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/_auth': {
+      id: '/_public/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicAuthRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/manage/dashboard': {
+      id: '/manage/dashboard'
+      path: '/manage/dashboard'
+      fullPath: '/manage/dashboard'
+      preLoaderRoute: typeof ManageDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/_auth/login': {
+      id: '/_public/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicAuthLoginRouteImport
+      parentRoute: typeof PublicAuthRoute
+    }
+    '/_public/_auth/signup': {
+      id: '/_public/_auth/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof PublicAuthSignupRouteImport
+      parentRoute: typeof PublicAuthRoute
+    }
   }
 }
 
+interface PublicAuthRouteChildren {
+  PublicAuthLoginRoute: typeof PublicAuthLoginRoute
+  PublicAuthSignupRoute: typeof PublicAuthSignupRoute
+}
+
+const PublicAuthRouteChildren: PublicAuthRouteChildren = {
+  PublicAuthLoginRoute: PublicAuthLoginRoute,
+  PublicAuthSignupRoute: PublicAuthSignupRoute,
+}
+
+const PublicAuthRouteWithChildren = PublicAuthRoute._addFileChildren(
+  PublicAuthRouteChildren,
+)
+
+interface PublicRouteChildren {
+  PublicAuthRoute: typeof PublicAuthRouteWithChildren
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicAuthRoute: PublicAuthRouteWithChildren,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PublicRoute: PublicRouteWithChildren,
+  ManageDashboardRoute: ManageDashboardRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
