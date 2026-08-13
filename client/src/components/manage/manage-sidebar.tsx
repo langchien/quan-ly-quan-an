@@ -1,7 +1,5 @@
 'use client'
 
-import * as React from 'react'
-
 import { AppBrand } from '@/components/app-brand'
 import { manageNavLink } from '@/components/manage/manage-nav-link'
 import { NavMain } from '@/components/manage/nav-main'
@@ -13,14 +11,10 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar'
-import type { AccountType } from '@/schemaValidations/account.schema'
 
-export function ManageSidebar({
-  user,
-  ...props
-}: { user: AccountType } & React.ComponentProps<typeof Sidebar>) {
+export function ManageSidebar() {
   return (
-    <Sidebar collapsible='icon' {...props}>
+    <Sidebar collapsible='icon'>
       <SidebarHeader>
         <AppBrand inSidebar />
       </SidebarHeader>
@@ -28,7 +22,7 @@ export function ManageSidebar({
         <NavMain items={manageNavLink} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

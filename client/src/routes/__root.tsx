@@ -1,14 +1,17 @@
 import { Toaster } from '@/components/ui/sonner'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import { AppProvider } from '@/components/app-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import type { QueryClient } from '@tanstack/react-query'
 import '../styles.css'
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient
+}>()({
   component: RootComponent,
 })
 

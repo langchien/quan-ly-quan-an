@@ -15,7 +15,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { useLogout } from '@/hooks/use-logout'
-import type { AccountType } from '@/schemaValidations/account.schema'
+import { useAccountMe } from '@/queries/use-account'
 import {
   BadgeCheckIcon,
   BellIcon,
@@ -25,11 +25,10 @@ import {
   SparklesIcon,
 } from 'lucide-react'
 
-export function NavUser({
-  user,
-  ...props
-}: { user: AccountType } & React.ComponentProps<typeof SidebarMenuItem>) {
+export function NavUser({ ...props }: React.ComponentProps<typeof SidebarMenuItem>) {
+  const { data: user } = useAccountMe()
   const { isMobile } = useSidebar()
+  if (!user) return null
 
   // Lấy chữ cái đầu của tên (ví dụ: "Nguyễn Văn A" -> "NA", "Admin" -> "A")
   const initials = user.name

@@ -1,6 +1,8 @@
 import { ManageHeader } from '@/components/manage/manage-header'
 import { ManageSidebar } from '@/components/manage/manage-sidebar'
+import { SettingsDialog } from '@/components/settings/settings-dialog'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { accountMeQueryOptions } from '@/queries/use-account'
 import { useAuthStore } from '@/store/useAuthStore'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
@@ -11,24 +13,23 @@ export const Route = createFileRoute('/manage')({
       throw redirect({ to: '/login' })
     }
   },
-  loader: () => {
-    const user = useAuthStore.getState().user
-    return { user }
+  loader: ({ context: { queryClient } }) => {
+    return queryClient.ensureQueryData(accountMeQueryOptions)
   },
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { user } = Route.useLoaderData()
   return (
     <SidebarProvider>
-      <ManageSidebar user={user!} />
+      <ManageSidebar />
       <SidebarInset>
         <ManageHeader />
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
           <Outlet />
         </div>
       </SidebarInset>
+      <SettingsDialog />
     </SidebarProvider>
   )
 }

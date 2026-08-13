@@ -123,10 +123,9 @@ axiosInstance.interceptors.response.use(
 
         // Cập nhật token mới vào Zustand Store
         // persist middleware tự đồng bộ vào localStorage
-        useAuthStore.getState().setAuth({
-          accessToken: newAccessToken,
-          refreshToken: newRefreshToken,
-        })
+        useAuthStore
+          .getState()
+          .setTokens({ accessToken: newAccessToken, refreshToken: newRefreshToken })
 
         // Mở khoá và retry tất cả request đang chờ trong queue
         processQueue(null, newAccessToken)
@@ -138,7 +137,7 @@ axiosInstance.interceptors.response.use(
         // Refresh thất bại → từ chối tất cả request trong queue
         processQueue(refreshError, null)
 
-        // Xoá token & user khỏi Store (persist tự xoá localStorage)
+        // Xoá token khỏi Store (persist tự xoá localStorage)
         useAuthStore.getState().logout()
         window.location.href = '/login'
 

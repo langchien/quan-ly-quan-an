@@ -1,18 +1,15 @@
-﻿import type { AccountType } from '@/schemaValidations/account.schema'
-import { create } from 'zustand'
+﻿import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface AuthState {
   accessToken: string | null
   refreshToken: string | null
-  user: AccountType | null
 }
 
 interface AuthActions {
   setAccessToken: (token: string | null) => void
   setRefreshToken: (token: string | null) => void
-  setUser: (user: AccountType | null) => void
-  setAuth: (data: { accessToken: string; refreshToken: string; user?: AccountType | null }) => void
+  setTokens: ({ accessToken, refreshToken }: { accessToken: string; refreshToken: string }) => void
   logout: () => void
 }
 
@@ -29,27 +26,17 @@ export const useAuthStore = create<AuthStore>()(
     set => ({
       accessToken: null,
       refreshToken: null,
-      user: null,
 
       setAccessToken: token => set({ accessToken: token }),
 
       setRefreshToken: token => set({ refreshToken: token }),
 
-      setUser: user => set({ user }),
-
-      setAuth: ({ accessToken, refreshToken, user }) =>
-        set(prev => ({
-          accessToken,
-          refreshToken,
-          // Giữ nguyên user cũ nếu không truyền user mới
-          user: user !== undefined ? user : prev.user,
-        })),
+      setTokens: ({ accessToken, refreshToken }) => set({ accessToken, refreshToken }),
 
       logout: () =>
         set({
           accessToken: null,
           refreshToken: null,
-          user: null,
         }),
     }),
     {
@@ -58,7 +45,6 @@ export const useAuthStore = create<AuthStore>()(
       partialize: state => ({
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
-        user: state.user,
       }),
     }
   )
