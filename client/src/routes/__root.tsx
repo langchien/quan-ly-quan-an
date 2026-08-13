@@ -5,6 +5,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import { AppProvider } from '@/components/app-provider'
 import { ThemeProvider } from '@/components/theme-provider'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import '../styles.css'
 
 export const Route = createRootRoute({
@@ -14,12 +15,14 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <>
-      <ThemeProvider defaultTheme='system' storageKey='theme'>
-        <AppProvider>
-          <Outlet />
-          <Toaster />
-        </AppProvider>
-      </ThemeProvider>
+      <AppProvider>
+        <ThemeProvider defaultTheme='system' storageKey='theme'>
+          <TooltipProvider>
+            <Outlet />
+            <Toaster />
+          </TooltipProvider>
+        </ThemeProvider>
+      </AppProvider>
       <TanStackDevtools
         config={{
           position: 'bottom-right',

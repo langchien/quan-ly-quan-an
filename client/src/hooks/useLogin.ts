@@ -28,7 +28,7 @@ export function useLogin() {
     if (loginMutation.isPending) return
     try {
       const result = await loginMutation.mutateAsync(values)
-      setAuth(result.data.data)
+      setAuth({ ...result.data.data, user: { ...result.data.data.account, avatar: null } })
       router.navigate({ to: '/manage/dashboard' })
     } catch (error: any) {
       handleErrorApi({

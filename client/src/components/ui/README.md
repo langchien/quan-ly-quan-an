@@ -132,6 +132,22 @@ function BreadcrumbLink({ className, render, ...props }: useRender.ComponentProp
 }
 ```
 
+### 10. Collapsible (`collapsible.tsx`)
+
+Thêm `cursor-pointer disabled:cursor-not-allowed` cho `CollapsibleTrigger`:
+
+```tsx
+function CollapsibleTrigger({ className, ...props }: CollapsiblePrimitive.Trigger.Props) {
+  return (
+    <CollapsiblePrimitive.Trigger
+      data-slot='collapsible-trigger'
+      className={cn('cursor-pointer disabled:cursor-not-allowed', className)}
+      {...props}
+    />
+  )
+}
+```
+
 ---
 
 ## ⚡ Các Component giữ nguyên Cursor mặc định
@@ -144,9 +160,11 @@ function BreadcrumbLink({ className, render, ...props }: useRender.ComponentProp
 ## 🛡️ Quy tắc chống giật giao diện (Layout Shift) cho Form FieldError
 
 ### 1. Vấn đề
+
 Mặc định khi dùng component `<FieldError>` hiển thị lỗi validation cho ô nhập liệu, nếu chỉ render khi có lỗi (`{fieldState.invalid && <FieldError ... />}`) hoặc khi `<FieldError>` trả về `null` lúc không có lỗi, giao diện sẽ xuất hiện hiện tượng **co giãn / giật (Layout Shift)** do chiều cao của ô nhập liệu thay đổi đột ngột.
 
 ### 2. Xử lý chuẩn trong `field.tsx`
+
 Trong `field.tsx`, `<FieldError>` được cấu hình để luôn render thẻ `div` với `min-h-[20px]`, giữ sẵn chiều cao tối thiểu 1 dòng thông báo lỗi ngay cả khi không có lỗi:
 
 ```tsx
@@ -167,6 +185,7 @@ function FieldError({ className, children, errors, ...props }: ...) {
 ```
 
 ### 3. Cách sử dụng tại các Form Component (như `login-form.tsx`)
+
 Khi viết Form, chỉ cần gọi trực tiếp `<FieldError errors={[fieldState.error]} />` mà **không cần** bọc điều kiện `fieldState.invalid &&`:
 
 ```tsx
@@ -182,4 +201,3 @@ Khi viết Form, chỉ cần gọi trực tiếp `<FieldError errors={[fieldStat
   )}
 />
 ```
-

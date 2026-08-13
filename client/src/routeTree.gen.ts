@@ -11,8 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PublicRouteImport } from './routes/_public'
+import { Route as ManageRouteImport } from './routes/manage'
 import { Route as PublicAuthRouteImport } from './routes/_public/_auth'
+import { Route as ManageAnalyticsRouteImport } from './routes/manage/analytics'
 import { Route as ManageDashboardRouteImport } from './routes/manage/dashboard'
+import { Route as ManageDishesRouteImport } from './routes/manage/dishes'
+import { Route as ManageOdersRouteImport } from './routes/manage/oders'
+import { Route as ManageStaffsRouteImport } from './routes/manage/staffs'
+import { Route as ManageTablesRouteImport } from './routes/manage/tables'
 import { Route as PublicAuthLoginRouteImport } from './routes/_public/_auth/login'
 import { Route as PublicAuthSignupRouteImport } from './routes/_public/_auth/signup'
 
@@ -25,14 +31,44 @@ const PublicRoute = PublicRouteImport.update({
   id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ManageRoute = ManageRouteImport.update({
+  id: '/manage',
+  path: '/manage',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PublicAuthRoute = PublicAuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => PublicRoute,
 } as any)
+const ManageAnalyticsRoute = ManageAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => ManageRoute,
+} as any)
 const ManageDashboardRoute = ManageDashboardRouteImport.update({
-  id: '/manage/dashboard',
-  path: '/manage/dashboard',
-  getParentRoute: () => rootRouteImport,
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => ManageRoute,
+} as any)
+const ManageDishesRoute = ManageDishesRouteImport.update({
+  id: '/dishes',
+  path: '/dishes',
+  getParentRoute: () => ManageRoute,
+} as any)
+const ManageOdersRoute = ManageOdersRouteImport.update({
+  id: '/oders',
+  path: '/oders',
+  getParentRoute: () => ManageRoute,
+} as any)
+const ManageStaffsRoute = ManageStaffsRouteImport.update({
+  id: '/staffs',
+  path: '/staffs',
+  getParentRoute: () => ManageRoute,
+} as any)
+const ManageTablesRoute = ManageTablesRouteImport.update({
+  id: '/tables',
+  path: '/tables',
+  getParentRoute: () => ManageRoute,
 } as any)
 const PublicAuthLoginRoute = PublicAuthLoginRouteImport.update({
   id: '/login',
@@ -47,13 +83,25 @@ const PublicAuthSignupRoute = PublicAuthSignupRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/manage': typeof ManageRouteWithChildren
+  '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
+  '/manage/dishes': typeof ManageDishesRoute
+  '/manage/oders': typeof ManageOdersRoute
+  '/manage/staffs': typeof ManageStaffsRoute
+  '/manage/tables': typeof ManageTablesRoute
   '/login': typeof PublicAuthLoginRoute
   '/signup': typeof PublicAuthSignupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/manage': typeof ManageRouteWithChildren
+  '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
+  '/manage/dishes': typeof ManageDishesRoute
+  '/manage/oders': typeof ManageOdersRoute
+  '/manage/staffs': typeof ManageStaffsRoute
+  '/manage/tables': typeof ManageTablesRoute
   '/login': typeof PublicAuthLoginRoute
   '/signup': typeof PublicAuthSignupRoute
 }
@@ -61,22 +109,54 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_public': typeof PublicRouteWithChildren
+  '/manage': typeof ManageRouteWithChildren
   '/_public/_auth': typeof PublicAuthRouteWithChildren
+  '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
+  '/manage/dishes': typeof ManageDishesRoute
+  '/manage/oders': typeof ManageOdersRoute
+  '/manage/staffs': typeof ManageStaffsRoute
+  '/manage/tables': typeof ManageTablesRoute
   '/_public/_auth/login': typeof PublicAuthLoginRoute
   '/_public/_auth/signup': typeof PublicAuthSignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/manage/dashboard' | '/login' | '/signup'
+  fullPaths:
+    | '/'
+    | '/manage'
+    | '/manage/analytics'
+    | '/manage/dashboard'
+    | '/manage/dishes'
+    | '/manage/oders'
+    | '/manage/staffs'
+    | '/manage/tables'
+    | '/login'
+    | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/manage/dashboard' | '/login' | '/signup'
+  to:
+    | '/'
+    | '/manage'
+    | '/manage/analytics'
+    | '/manage/dashboard'
+    | '/manage/dishes'
+    | '/manage/oders'
+    | '/manage/staffs'
+    | '/manage/tables'
+    | '/login'
+    | '/signup'
   id:
     | '__root__'
     | '/'
     | '/_public'
+    | '/manage'
     | '/_public/_auth'
+    | '/manage/analytics'
     | '/manage/dashboard'
+    | '/manage/dishes'
+    | '/manage/oders'
+    | '/manage/staffs'
+    | '/manage/tables'
     | '/_public/_auth/login'
     | '/_public/_auth/signup'
   fileRoutesById: FileRoutesById
@@ -84,7 +164,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PublicRoute: typeof PublicRouteWithChildren
-  ManageDashboardRoute: typeof ManageDashboardRoute
+  ManageRoute: typeof ManageRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -103,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manage': {
+      id: '/manage'
+      path: '/manage'
+      fullPath: '/manage'
+      preLoaderRoute: typeof ManageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_public/_auth': {
       id: '/_public/_auth'
       path: ''
@@ -110,12 +197,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAuthRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/manage/analytics': {
+      id: '/manage/analytics'
+      path: '/analytics'
+      fullPath: '/manage/analytics'
+      preLoaderRoute: typeof ManageAnalyticsRouteImport
+      parentRoute: typeof ManageRoute
+    }
     '/manage/dashboard': {
       id: '/manage/dashboard'
-      path: '/manage/dashboard'
+      path: '/dashboard'
       fullPath: '/manage/dashboard'
       preLoaderRoute: typeof ManageDashboardRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ManageRoute
+    }
+    '/manage/dishes': {
+      id: '/manage/dishes'
+      path: '/dishes'
+      fullPath: '/manage/dishes'
+      preLoaderRoute: typeof ManageDishesRouteImport
+      parentRoute: typeof ManageRoute
+    }
+    '/manage/oders': {
+      id: '/manage/oders'
+      path: '/oders'
+      fullPath: '/manage/oders'
+      preLoaderRoute: typeof ManageOdersRouteImport
+      parentRoute: typeof ManageRoute
+    }
+    '/manage/staffs': {
+      id: '/manage/staffs'
+      path: '/staffs'
+      fullPath: '/manage/staffs'
+      preLoaderRoute: typeof ManageStaffsRouteImport
+      parentRoute: typeof ManageRoute
+    }
+    '/manage/tables': {
+      id: '/manage/tables'
+      path: '/tables'
+      fullPath: '/manage/tables'
+      preLoaderRoute: typeof ManageTablesRouteImport
+      parentRoute: typeof ManageRoute
     }
     '/_public/_auth/login': {
       id: '/_public/_auth/login'
@@ -159,10 +281,31 @@ const PublicRouteChildren: PublicRouteChildren = {
 const PublicRouteWithChildren =
   PublicRoute._addFileChildren(PublicRouteChildren)
 
+interface ManageRouteChildren {
+  ManageAnalyticsRoute: typeof ManageAnalyticsRoute
+  ManageDashboardRoute: typeof ManageDashboardRoute
+  ManageDishesRoute: typeof ManageDishesRoute
+  ManageOdersRoute: typeof ManageOdersRoute
+  ManageStaffsRoute: typeof ManageStaffsRoute
+  ManageTablesRoute: typeof ManageTablesRoute
+}
+
+const ManageRouteChildren: ManageRouteChildren = {
+  ManageAnalyticsRoute: ManageAnalyticsRoute,
+  ManageDashboardRoute: ManageDashboardRoute,
+  ManageDishesRoute: ManageDishesRoute,
+  ManageOdersRoute: ManageOdersRoute,
+  ManageStaffsRoute: ManageStaffsRoute,
+  ManageTablesRoute: ManageTablesRoute,
+}
+
+const ManageRouteWithChildren =
+  ManageRoute._addFileChildren(ManageRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PublicRoute: PublicRouteWithChildren,
-  ManageDashboardRoute: ManageDashboardRoute,
+  ManageRoute: ManageRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

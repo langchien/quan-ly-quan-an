@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/store/useAuthStore'
 import { Link } from '@tanstack/react-router'
-import { House } from 'lucide-react'
+import { AppBrand } from './app-brand'
 import { ModeToggle } from './mode-toggle'
 import { Card } from './ui/card'
 
@@ -57,8 +57,8 @@ export function PublicHeader() {
   return (
     <Card className='fixed z-10 h-20 w-full rounded-none'>
       <div className='container mx-auto flex h-20 items-center'>
-        <Link to='/'>
-          <House className='mr-10' />
+        <Link to='/' className='mr-10 transition-opacity hover:opacity-90'>
+          <AppBrand showModeToggle={false} />
         </Link>
         <div className='flex-row space-x-6 text-sm font-semibold text-muted-foreground'>
           <NavItems />
