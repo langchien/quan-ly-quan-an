@@ -29,6 +29,7 @@ function RouteComponent() {
           <Outlet />
         </div>
       </SidebarInset>
+      {/* Dialog cài đặt – state quản lý bởi useSettingsStore, không cần prop */}
       <SettingsDialog />
     </SidebarProvider>
   )

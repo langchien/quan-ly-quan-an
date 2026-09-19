@@ -16,21 +16,18 @@ import {
 } from '@/components/ui/sidebar'
 import { useLogout } from '@/hooks/use-logout'
 import { useAccountMe } from '@/queries/use-account'
-import {
-  BadgeCheckIcon,
-  BellIcon,
-  ChevronsUpDownIcon,
-  CreditCardIcon,
-  LogOutIcon,
-  SparklesIcon,
-} from 'lucide-react'
+import { useSettingsStore } from '@/store/useSettingsStore'
+import { ChevronsUpDownIcon, LogOutIcon, LockIcon, PaletteIcon, UserCircleIcon } from 'lucide-react'
 
 export function NavUser({ ...props }: React.ComponentProps<typeof SidebarMenuItem>) {
   const { data: user } = useAccountMe()
   const { isMobile } = useSidebar()
+  const { onLogout } = useLogout()
+  const { openSettings } = useSettingsStore()
+
   if (!user) return null
 
-  // Lấy chữ cái đầu của tên (ví dụ: "Nguyễn Văn A" -> "NA", "Admin" -> "A")
+  // Chữ cái đầu của tên (vd: "Nguyễn Văn A" → "NA")
   const initials = user.name
     ? user.name
         .trim()
@@ -40,7 +37,7 @@ export function NavUser({ ...props }: React.ComponentProps<typeof SidebarMenuIte
         .slice(0, 2)
         .toUpperCase()
     : 'U'
-  const { onLogout } = useLogout()
+
   return (
     <SidebarMenu>
       <SidebarMenuItem {...props}>
@@ -54,57 +51,65 @@ export function NavUser({ ...props }: React.ComponentProps<typeof SidebarMenuIte
             </Avatar>
             <div className='grid flex-1 text-left text-sm leading-tight'>
               <span className='truncate font-medium'>{user.name}</span>
-              <span className='truncate text-xs'>{user.email}</span>
+              <span className='truncate text-xs text-muted-foreground'>{user.email}</span>
             </div>
             <ChevronsUpDownIcon className='ml-auto size-4' />
           </DropdownMenuTrigger>
+
           <DropdownMenuContent
-            className='w-fit'
+            className='w-64'
             side={isMobile ? 'bottom' : 'right'}
             align='end'
             sideOffset={4}
           >
+            {/* Thông tin user – dùng DropdownMenuGroup bao để GroupLabel hoạt động đúng */}
             <DropdownMenuGroup>
-              <DropdownMenuLabel className='p-0 font-normal'>
-                <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                  <Avatar>
+              <DropdownMenuLabel>
+                <div className='flex items-center gap-2 px-1 py-0.5'>
+                  <Avatar className='size-9 rounded-lg'>
                     <AvatarImage src={user.avatar ?? undefined} alt={user.name} />
-                    <AvatarFallback>{initials}</AvatarFallback>
+                    <AvatarFallback className='rounded-lg'>{initials}</AvatarFallback>
                   </Avatar>
-                  <div className='grid flex-1 text-left text-sm leading-tight'>
-                    <span className='truncate font-medium'>{user.name}</span>
-                    <span className='truncate text-xs'>{user.email}</span>
+                  <div className='grid flex-1 text-left leading-tight'>
+                    <span className='truncate text-sm font-semibold text-foreground'>
+                      {user.name}
+                    </span>
+                    <span className='truncate text-xs text-muted-foreground'>{user.email}</span>
                   </div>
                 </div>
               </DropdownMenuLabel>
             </DropdownMenuGroup>
+
             <DropdownMenuSeparator />
+
+            {/* Mục cài đặt */}
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <SparklesIcon />
-                Upgrade to Pro
+              <DropdownMenuItem onClick={() => openSettings('profile')}>
+                <UserCircleIcon className='size-4' />
+                Hồ sơ cá nhân
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => openSettings('security')}>
+                <LockIcon className='size-4' />
+                Đổi mật khẩu
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => openSettings('preferences')}>
+                <PaletteIcon className='size-4' />
+                Giao diện & Thông báo
               </DropdownMenuItem>
             </DropdownMenuGroup>
+
             <DropdownMenuSeparator />
+
+            {/* Đăng xuất */}
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheckIcon />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCardIcon />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BellIcon />
-                Notifications
+              <DropdownMenuItem
+                onClick={onLogout}
+                className='text-destructive focus:bg-destructive/10 focus:text-destructive'
+              >
+                <LogOutIcon className='size-4' />
+                Đăng xuất
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onLogout}>
-              <LogOutIcon />
-              Log out
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

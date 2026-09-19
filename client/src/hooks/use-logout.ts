@@ -24,4 +24,3 @@ export function useLogout() {
 
   return { onLogout }
 }
-

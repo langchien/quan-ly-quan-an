@@ -1,5 +1,9 @@
 import { httpClient } from '@/lib/httpClient'
-import type { AccountResType, UpdateMeBodyType } from '@/schemaValidations/account.schema'
+import type {
+  AccountResType,
+  ChangePasswordBodyType,
+  UpdateMeBodyType,
+} from '@/schemaValidations/account.schema'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const accountMeQueryOptions = queryOptions({
@@ -23,5 +27,22 @@ export function useUpdateMeMutation() {
       // Invalidate làm mới dữ liệu cho toàn bộ app
       queryClient.invalidateQueries({ queryKey: ['account', 'me'] })
     },
+  })
+}
+
+export function useChangePasswordMutation() {
+  return useMutation({
+    mutationFn: (body: ChangePasswordBodyType) =>
+      httpClient.put<{ data: AccountResType['data']; message: string }>(
+        '/accounts/change-password',
+        body
+      ),
+  })
+}
+
+export function useUploadAvatarMutation() {
+  return useMutation({
+    mutationFn: (formData: FormData) =>
+      httpClient.post<{ data: string; message: string }>('/media/upload', formData),
   })
 }
