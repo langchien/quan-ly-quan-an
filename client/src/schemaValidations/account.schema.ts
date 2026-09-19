@@ -7,6 +7,8 @@ export const AccountSchema = z.object({
   email: z.string(),
   role: z.string(),
   avatar: z.string().nullable(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 })
 
 export type AccountType = z.TypeOf<typeof AccountSchema>
