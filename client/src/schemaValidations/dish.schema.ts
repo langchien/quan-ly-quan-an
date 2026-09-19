@@ -22,6 +22,8 @@ export const DishSchema = z.object({
   updatedAt: z.date(),
 })
 
+export type DishType = z.TypeOf<typeof DishSchema>
+
 export const DishRes = z.object({
   data: DishSchema,
   message: z.string(),
