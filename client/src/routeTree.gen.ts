@@ -18,7 +18,7 @@ import { Route as PublicOrdersRouteImport } from './routes/_public/orders'
 import { Route as ManageAnalyticsRouteImport } from './routes/manage/analytics'
 import { Route as ManageDashboardRouteImport } from './routes/manage/dashboard'
 import { Route as ManageDishesRouteImport } from './routes/manage/dishes'
-import { Route as ManageOdersRouteImport } from './routes/manage/oders'
+import { Route as ManageOrdersRouteImport } from './routes/manage/orders'
 import { Route as ManageStaffsRouteImport } from './routes/manage/staffs'
 import { Route as ManageTablesRouteImport } from './routes/manage/tables'
 import { Route as PublicAuthLoginRouteImport } from './routes/_public/_auth/login'
@@ -68,9 +68,9 @@ const ManageDishesRoute = ManageDishesRouteImport.update({
   path: '/dishes',
   getParentRoute: () => ManageRoute,
 } as any)
-const ManageOdersRoute = ManageOdersRouteImport.update({
-  id: '/oders',
-  path: '/oders',
+const ManageOrdersRoute = ManageOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
   getParentRoute: () => ManageRoute,
 } as any)
 const ManageStaffsRoute = ManageStaffsRouteImport.update({
@@ -108,7 +108,7 @@ export interface FileRoutesByFullPath {
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
   '/manage/dishes': typeof ManageDishesRoute
-  '/manage/oders': typeof ManageOdersRoute
+  '/manage/orders': typeof ManageOrdersRoute
   '/manage/staffs': typeof ManageStaffsRoute
   '/manage/tables': typeof ManageTablesRoute
   '/login': typeof PublicAuthLoginRoute
@@ -123,7 +123,7 @@ export interface FileRoutesByTo {
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
   '/manage/dishes': typeof ManageDishesRoute
-  '/manage/oders': typeof ManageOdersRoute
+  '/manage/orders': typeof ManageOrdersRoute
   '/manage/staffs': typeof ManageStaffsRoute
   '/manage/tables': typeof ManageTablesRoute
   '/login': typeof PublicAuthLoginRoute
@@ -140,7 +140,7 @@ export interface FileRoutesById {
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
   '/manage/dishes': typeof ManageDishesRoute
-  '/manage/oders': typeof ManageOdersRoute
+  '/manage/orders': typeof ManageOrdersRoute
   '/manage/staffs': typeof ManageStaffsRoute
   '/manage/tables': typeof ManageTablesRoute
   '/_public/': typeof PublicIndexRoute
@@ -158,7 +158,7 @@ export interface FileRouteTypes {
     | '/manage/analytics'
     | '/manage/dashboard'
     | '/manage/dishes'
-    | '/manage/oders'
+    | '/manage/orders'
     | '/manage/staffs'
     | '/manage/tables'
     | '/login'
@@ -173,7 +173,7 @@ export interface FileRouteTypes {
     | '/manage/analytics'
     | '/manage/dashboard'
     | '/manage/dishes'
-    | '/manage/oders'
+    | '/manage/orders'
     | '/manage/staffs'
     | '/manage/tables'
     | '/login'
@@ -189,7 +189,7 @@ export interface FileRouteTypes {
     | '/manage/analytics'
     | '/manage/dashboard'
     | '/manage/dishes'
-    | '/manage/oders'
+    | '/manage/orders'
     | '/manage/staffs'
     | '/manage/tables'
     | '/_public/'
@@ -268,11 +268,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManageDishesRouteImport
       parentRoute: typeof ManageRoute
     }
-    '/manage/oders': {
-      id: '/manage/oders'
-      path: '/oders'
-      fullPath: '/manage/oders'
-      preLoaderRoute: typeof ManageOdersRouteImport
+    '/manage/orders': {
+      id: '/manage/orders'
+      path: '/orders'
+      fullPath: '/manage/orders'
+      preLoaderRoute: typeof ManageOrdersRouteImport
       parentRoute: typeof ManageRoute
     }
     '/manage/staffs': {
@@ -350,7 +350,7 @@ interface ManageRouteChildren {
   ManageAnalyticsRoute: typeof ManageAnalyticsRoute
   ManageDashboardRoute: typeof ManageDashboardRoute
   ManageDishesRoute: typeof ManageDishesRoute
-  ManageOdersRoute: typeof ManageOdersRoute
+  ManageOrdersRoute: typeof ManageOrdersRoute
   ManageStaffsRoute: typeof ManageStaffsRoute
   ManageTablesRoute: typeof ManageTablesRoute
 }
@@ -359,7 +359,7 @@ const ManageRouteChildren: ManageRouteChildren = {
   ManageAnalyticsRoute: ManageAnalyticsRoute,
   ManageDashboardRoute: ManageDashboardRoute,
   ManageDishesRoute: ManageDishesRoute,
-  ManageOdersRoute: ManageOdersRoute,
+  ManageOrdersRoute: ManageOrdersRoute,
   ManageStaffsRoute: ManageStaffsRoute,
   ManageTablesRoute: ManageTablesRoute,
 }

@@ -4,6 +4,7 @@ import type {
   AccountResType,
   ChangePasswordBodyType,
   CreateEmployeeAccountBodyType,
+  GetListGuestsResType,
   UpdateEmployeeAccountBodyType,
   UpdateMeBodyType,
 } from '@/schemaValidations/account.schema'
@@ -103,6 +104,18 @@ export function useDeleteEmployeeAccountMutation() {
     mutationFn: (id: number) => httpClient.delete<AccountResType>(`/accounts/detail/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['accounts', 'list'] })
+    },
+  })
+}
+
+// ─── Guest Management Hooks ────────────────────────────────────────────────────
+
+export function useGetGuestList() {
+  return useQuery({
+    queryKey: ['accounts', 'guests'],
+    queryFn: async () => {
+      const res = await httpClient.get<GetListGuestsResType>('/accounts/guests')
+      return res.data.data
     },
   })
 }
