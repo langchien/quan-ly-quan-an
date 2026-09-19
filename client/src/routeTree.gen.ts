@@ -9,9 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as PublicRouteImport } from './routes/_public'
 import { Route as ManageRouteImport } from './routes/manage'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PublicAuthRouteImport } from './routes/_public/_auth'
 import { Route as ManageAnalyticsRouteImport } from './routes/manage/analytics'
 import { Route as ManageDashboardRouteImport } from './routes/manage/dashboard'
@@ -22,11 +22,6 @@ import { Route as ManageTablesRouteImport } from './routes/manage/tables'
 import { Route as PublicAuthLoginRouteImport } from './routes/_public/_auth/login'
 import { Route as PublicAuthSignupRouteImport } from './routes/_public/_auth/signup'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
   getParentRoute: () => rootRouteImport,
@@ -35,6 +30,11 @@ const ManageRoute = ManageRouteImport.update({
   id: '/manage',
   path: '/manage',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PublicRoute,
 } as any)
 const PublicAuthRoute = PublicAuthRouteImport.update({
   id: '/_auth',
@@ -82,7 +82,7 @@ const PublicAuthSignupRoute = PublicAuthSignupRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof PublicIndexRoute
   '/manage': typeof ManageRouteWithChildren
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
@@ -94,8 +94,8 @@ export interface FileRoutesByFullPath {
   '/signup': typeof PublicAuthSignupRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/manage': typeof ManageRouteWithChildren
+  '/': typeof PublicIndexRoute
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
   '/manage/dishes': typeof ManageDishesRoute
@@ -107,7 +107,6 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_public': typeof PublicRouteWithChildren
   '/manage': typeof ManageRouteWithChildren
   '/_public/_auth': typeof PublicAuthRouteWithChildren
@@ -117,6 +116,7 @@ export interface FileRoutesById {
   '/manage/oders': typeof ManageOdersRoute
   '/manage/staffs': typeof ManageStaffsRoute
   '/manage/tables': typeof ManageTablesRoute
+  '/_public/': typeof PublicIndexRoute
   '/_public/_auth/login': typeof PublicAuthLoginRoute
   '/_public/_auth/signup': typeof PublicAuthSignupRoute
 }
@@ -135,8 +135,8 @@ export interface FileRouteTypes {
     | '/signup'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/manage'
+    | '/'
     | '/manage/analytics'
     | '/manage/dashboard'
     | '/manage/dishes'
@@ -147,7 +147,6 @@ export interface FileRouteTypes {
     | '/signup'
   id:
     | '__root__'
-    | '/'
     | '/_public'
     | '/manage'
     | '/_public/_auth'
@@ -157,25 +156,18 @@ export interface FileRouteTypes {
     | '/manage/oders'
     | '/manage/staffs'
     | '/manage/tables'
+    | '/_public/'
     | '/_public/_auth/login'
     | '/_public/_auth/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   PublicRoute: typeof PublicRouteWithChildren
   ManageRoute: typeof ManageRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_public': {
       id: '/_public'
       path: ''
@@ -189,6 +181,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/manage'
       preLoaderRoute: typeof ManageRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_public/': {
+      id: '/_public/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRoute
     }
     '/_public/_auth': {
       id: '/_public/_auth'
@@ -272,10 +271,12 @@ const PublicAuthRouteWithChildren = PublicAuthRoute._addFileChildren(
 
 interface PublicRouteChildren {
   PublicAuthRoute: typeof PublicAuthRouteWithChildren
+  PublicIndexRoute: typeof PublicIndexRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicAuthRoute: PublicAuthRouteWithChildren,
+  PublicIndexRoute: PublicIndexRoute,
 }
 
 const PublicRouteWithChildren =
@@ -303,7 +304,6 @@ const ManageRouteWithChildren =
   ManageRoute._addFileChildren(ManageRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   PublicRoute: PublicRouteWithChildren,
   ManageRoute: ManageRouteWithChildren,
 }
