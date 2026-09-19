@@ -2,12 +2,15 @@ import { NestFactory } from '@nestjs/core'
 import { ConfigService } from '@nestjs/config'
 import { Logger } from '@nestjs/common'
 import { AppModule, ObserveInstrument } from './app.module.js'
+import { ZodValidationPipe } from './common/index.js'
 import type { EnvType } from './config/env.config.js'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     instrument: ObserveInstrument,
   })
+
+  app.useGlobalPipes(new ZodValidationPipe())
 
   const configService = app.get(ConfigService<EnvType, true>)
   const port = configService.get('PORT', { infer: true })
