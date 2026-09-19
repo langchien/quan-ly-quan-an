@@ -1,56 +1,56 @@
+import { Role } from '@/constants/type'
 import { useAuthStore } from '@/store/useAuthStore'
 import { Link } from '@tanstack/react-router'
 import { AppBrand } from './app-brand'
 import { ModeToggle } from './mode-toggle'
 import { Card } from './ui/card'
 
-type Show = 'all' | 'authRequired' | 'authNone'
-interface MenuItem {
-  title: string
-  href: string
-  show: Show
-}
-const menuItems: MenuItem[] = [
-  {
-    title: 'Món ăn',
-    href: '/menu',
-    show: 'all',
-  },
-  {
-    title: 'Đơn hàng',
-    href: '/orders',
-    show: 'all',
-  },
-  {
-    title: 'Quản lý',
-    href: '/manage/dashboard',
-    show: 'authRequired',
-  },
-  {
-    title: 'Đăng nhập',
-    href: '/login',
-    show: 'authNone',
-  },
-  {
-    title: 'Đăng ký',
-    href: '/signup',
-    show: 'authNone',
-  },
-]
+// ─── Nav items theo role ───────────────────────────────────────────────────────
+
 export function NavItems() {
-  const isAuthenticated = useAuthStore(state => state.accessToken)
-  return menuItems
-    .filter(
-      item =>
-        item.show === 'all' ||
-        (item.show === 'authRequired' && isAuthenticated) ||
-        (item.show === 'authNone' && !isAuthenticated)
+  const accessToken = useAuthStore(s => s.accessToken)
+  const guest = useAuthStore(s => s.guest)
+
+  const isGuestLoggedIn = accessToken && guest?.role === Role.Guest
+  const isStaffLoggedIn = accessToken && guest?.role !== Role.Guest
+
+  if (isGuestLoggedIn) {
+    // Guest đã đăng nhập: Gọi món & Đơn hàng
+    return (
+      <>
+        <Link to='/menu' className='[&.active]:text-foreground' activeOptions={{ exact: true }}>
+          Gọi món
+        </Link>
+        <Link to='/orders' className='[&.active]:text-foreground'>
+          Đơn hàng
+        </Link>
+      </>
     )
-    .map(item => (
-      <Link to={item.href} key={item.href}>
-        {item.title}
+  }
+
+  if (isStaffLoggedIn) {
+    // Owner/Employee: Quản lý
+    return (
+      <Link to='/manage/dashboard' className='[&.active]:text-foreground'>
+        Quản lý
       </Link>
-    ))
+    )
+  }
+
+  // Chưa đăng nhập
+  return (
+    <>
+      <Link to='/menu' className='[&.active]:text-foreground'>
+        Món ăn
+      </Link>
+      <Link to='/login' className='[&.active]:text-foreground'>
+        Đăng nhập
+      </Link>
+      <Link to='/signup' className='[&.active]:text-foreground'>
+        Đăng ký
+      </Link>
+    </>
+  )
 }
 
 export function PublicHeader() {

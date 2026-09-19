@@ -13,6 +13,8 @@ import { Route as PublicRouteImport } from './routes/_public'
 import { Route as ManageRouteImport } from './routes/manage'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PublicAuthRouteImport } from './routes/_public/_auth'
+import { Route as PublicMenuRouteImport } from './routes/_public/menu'
+import { Route as PublicOrdersRouteImport } from './routes/_public/orders'
 import { Route as ManageAnalyticsRouteImport } from './routes/manage/analytics'
 import { Route as ManageDashboardRouteImport } from './routes/manage/dashboard'
 import { Route as ManageDishesRouteImport } from './routes/manage/dishes'
@@ -21,6 +23,7 @@ import { Route as ManageStaffsRouteImport } from './routes/manage/staffs'
 import { Route as ManageTablesRouteImport } from './routes/manage/tables'
 import { Route as PublicAuthLoginRouteImport } from './routes/_public/_auth/login'
 import { Route as PublicAuthSignupRouteImport } from './routes/_public/_auth/signup'
+import { Route as PublicGuestTablesTableNumberRouteImport } from './routes/_public/guest/tables/$tableNumber'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -38,6 +41,16 @@ const PublicIndexRoute = PublicIndexRouteImport.update({
 } as any)
 const PublicAuthRoute = PublicAuthRouteImport.update({
   id: '/_auth',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicMenuRoute = PublicMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicOrdersRoute = PublicOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
   getParentRoute: () => PublicRoute,
 } as any)
 const ManageAnalyticsRoute = ManageAnalyticsRouteImport.update({
@@ -80,10 +93,18 @@ const PublicAuthSignupRoute = PublicAuthSignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => PublicAuthRoute,
 } as any)
+const PublicGuestTablesTableNumberRoute =
+  PublicGuestTablesTableNumberRouteImport.update({
+    id: '/guest/tables/$tableNumber',
+    path: '/guest/tables/$tableNumber',
+    getParentRoute: () => PublicRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/manage': typeof ManageRouteWithChildren
+  '/menu': typeof PublicMenuRoute
+  '/orders': typeof PublicOrdersRoute
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
   '/manage/dishes': typeof ManageDishesRoute
@@ -92,10 +113,13 @@ export interface FileRoutesByFullPath {
   '/manage/tables': typeof ManageTablesRoute
   '/login': typeof PublicAuthLoginRoute
   '/signup': typeof PublicAuthSignupRoute
+  '/guest/tables/$tableNumber': typeof PublicGuestTablesTableNumberRoute
 }
 export interface FileRoutesByTo {
   '/manage': typeof ManageRouteWithChildren
   '/': typeof PublicIndexRoute
+  '/menu': typeof PublicMenuRoute
+  '/orders': typeof PublicOrdersRoute
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
   '/manage/dishes': typeof ManageDishesRoute
@@ -104,12 +128,15 @@ export interface FileRoutesByTo {
   '/manage/tables': typeof ManageTablesRoute
   '/login': typeof PublicAuthLoginRoute
   '/signup': typeof PublicAuthSignupRoute
+  '/guest/tables/$tableNumber': typeof PublicGuestTablesTableNumberRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_public': typeof PublicRouteWithChildren
   '/manage': typeof ManageRouteWithChildren
   '/_public/_auth': typeof PublicAuthRouteWithChildren
+  '/_public/menu': typeof PublicMenuRoute
+  '/_public/orders': typeof PublicOrdersRoute
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
   '/manage/dishes': typeof ManageDishesRoute
@@ -119,12 +146,15 @@ export interface FileRoutesById {
   '/_public/': typeof PublicIndexRoute
   '/_public/_auth/login': typeof PublicAuthLoginRoute
   '/_public/_auth/signup': typeof PublicAuthSignupRoute
+  '/_public/guest/tables/$tableNumber': typeof PublicGuestTablesTableNumberRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/manage'
+    | '/menu'
+    | '/orders'
     | '/manage/analytics'
     | '/manage/dashboard'
     | '/manage/dishes'
@@ -133,10 +163,13 @@ export interface FileRouteTypes {
     | '/manage/tables'
     | '/login'
     | '/signup'
+    | '/guest/tables/$tableNumber'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/manage'
     | '/'
+    | '/menu'
+    | '/orders'
     | '/manage/analytics'
     | '/manage/dashboard'
     | '/manage/dishes'
@@ -145,11 +178,14 @@ export interface FileRouteTypes {
     | '/manage/tables'
     | '/login'
     | '/signup'
+    | '/guest/tables/$tableNumber'
   id:
     | '__root__'
     | '/_public'
     | '/manage'
     | '/_public/_auth'
+    | '/_public/menu'
+    | '/_public/orders'
     | '/manage/analytics'
     | '/manage/dashboard'
     | '/manage/dishes'
@@ -159,6 +195,7 @@ export interface FileRouteTypes {
     | '/_public/'
     | '/_public/_auth/login'
     | '/_public/_auth/signup'
+    | '/_public/guest/tables/$tableNumber'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -194,6 +231,20 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof PublicAuthRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/menu': {
+      id: '/_public/menu'
+      path: '/menu'
+      fullPath: '/menu'
+      preLoaderRoute: typeof PublicMenuRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/orders': {
+      id: '/_public/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof PublicOrdersRouteImport
       parentRoute: typeof PublicRoute
     }
     '/manage/analytics': {
@@ -252,6 +303,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAuthSignupRouteImport
       parentRoute: typeof PublicAuthRoute
     }
+    '/_public/guest/tables/$tableNumber': {
+      id: '/_public/guest/tables/$tableNumber'
+      path: '/guest/tables/$tableNumber'
+      fullPath: '/guest/tables/$tableNumber'
+      preLoaderRoute: typeof PublicGuestTablesTableNumberRouteImport
+      parentRoute: typeof PublicRoute
+    }
   }
 }
 
@@ -271,12 +329,18 @@ const PublicAuthRouteWithChildren = PublicAuthRoute._addFileChildren(
 
 interface PublicRouteChildren {
   PublicAuthRoute: typeof PublicAuthRouteWithChildren
+  PublicMenuRoute: typeof PublicMenuRoute
+  PublicOrdersRoute: typeof PublicOrdersRoute
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicGuestTablesTableNumberRoute: typeof PublicGuestTablesTableNumberRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicAuthRoute: PublicAuthRouteWithChildren,
+  PublicMenuRoute: PublicMenuRoute,
+  PublicOrdersRoute: PublicOrdersRoute,
   PublicIndexRoute: PublicIndexRoute,
+  PublicGuestTablesTableNumberRoute: PublicGuestTablesTableNumberRoute,
 }
 
 const PublicRouteWithChildren =

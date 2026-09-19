@@ -1,15 +1,33 @@
-﻿import { create } from 'zustand'
+import { RoleValues } from '@/constants/type'
+import z from 'zod'
+import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+
+// ─── Guest Type ────────────────────────────────────────────────────────────────
+
+const GuestInfoSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  role: z.enum(RoleValues),
+  tableNumber: z.number().nullable(),
+})
+
+export type GuestInfoType = z.TypeOf<typeof GuestInfoSchema>
+
+// ─── Store Types ───────────────────────────────────────────────────────────────
 
 interface AuthState {
   accessToken: string | null
   refreshToken: string | null
+  guest: GuestInfoType | null
 }
 
 interface AuthActions {
   setAccessToken: (token: string | null) => void
   setRefreshToken: (token: string | null) => void
   setTokens: ({ accessToken, refreshToken }: { accessToken: string; refreshToken: string }) => void
+  setGuest: (guest: GuestInfoType) => void
+  clearGuest: () => void
   logout: () => void
 }
 
@@ -26,6 +44,7 @@ export const useAuthStore = create<AuthStore>()(
     set => ({
       accessToken: null,
       refreshToken: null,
+      guest: null,
 
       setAccessToken: token => set({ accessToken: token }),
 
@@ -33,18 +52,24 @@ export const useAuthStore = create<AuthStore>()(
 
       setTokens: ({ accessToken, refreshToken }) => set({ accessToken, refreshToken }),
 
+      setGuest: guest => set({ guest }),
+
+      clearGuest: () => set({ guest: null }),
+
       logout: () =>
         set({
           accessToken: null,
           refreshToken: null,
+          guest: null,
         }),
     }),
     {
       name: 'auth-storage', // Key trong localStorage
-      // Chỉ persist token & user, bỏ qua các action function
+      // Chỉ persist token & guest info, bỏ qua các action function
       partialize: state => ({
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
+        guest: state.guest,
       }),
     }
   )
