@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -142,29 +143,31 @@ export function StaffTableToolbar({ table, onAddStaff }: StaffTableToolbarProps)
             Hiển thị
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-40'>
-            <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {table
-              .getAllColumns()
-              .filter(col => col.getCanHide())
-              .map(col => (
-                <DropdownMenuCheckboxItem
-                  key={col.id}
-                  className='capitalize'
-                  checked={col.getIsVisible()}
-                  onCheckedChange={value => col.toggleVisibility(!!value)}
-                >
-                  {col.id === 'name'
-                    ? 'Nhân viên'
-                    : col.id === 'email'
-                      ? 'Email'
-                      : col.id === 'role'
-                        ? 'Vai trò'
-                        : col.id === 'createdAt'
-                          ? 'Ngày tạo'
-                          : col.id}
-                </DropdownMenuCheckboxItem>
-              ))}
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {table
+                .getAllColumns()
+                .filter(col => col.getCanHide())
+                .map(col => (
+                  <DropdownMenuCheckboxItem
+                    key={col.id}
+                    className='capitalize'
+                    checked={col.getIsVisible()}
+                    onCheckedChange={value => col.toggleVisibility(!!value)}
+                  >
+                    {col.id === 'name'
+                      ? 'Nhân viên'
+                      : col.id === 'email'
+                        ? 'Email'
+                        : col.id === 'role'
+                          ? 'Vai trò'
+                          : col.id === 'createdAt'
+                            ? 'Ngày tạo'
+                            : col.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
 

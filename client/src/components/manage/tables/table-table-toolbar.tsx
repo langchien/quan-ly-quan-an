@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -149,31 +150,33 @@ export function TableTableToolbar({ table, onAddTable }: TableTableToolbarProps)
             Hiển thị
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-40'>
-            <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {table
-              .getAllColumns()
-              .filter(col => col.getCanHide())
-              .map(col => (
-                <DropdownMenuCheckboxItem
-                  key={col.id}
-                  className='capitalize'
-                  checked={col.getIsVisible()}
-                  onCheckedChange={value => col.toggleVisibility(!!value)}
-                >
-                  {col.id === 'number'
-                    ? 'Số bàn'
-                    : col.id === 'capacity'
-                      ? 'Sức chứa'
-                      : col.id === 'status'
-                        ? 'Trạng thái'
-                        : col.id === 'token'
-                          ? 'QR Code'
-                          : col.id === 'createdAt'
-                            ? 'Ngày tạo'
-                            : col.id}
-                </DropdownMenuCheckboxItem>
-              ))}
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {table
+                .getAllColumns()
+                .filter(col => col.getCanHide())
+                .map(col => (
+                  <DropdownMenuCheckboxItem
+                    key={col.id}
+                    className='capitalize'
+                    checked={col.getIsVisible()}
+                    onCheckedChange={value => col.toggleVisibility(!!value)}
+                  >
+                    {col.id === 'number'
+                      ? 'Số bàn'
+                      : col.id === 'capacity'
+                        ? 'Sức chứa'
+                        : col.id === 'status'
+                          ? 'Trạng thái'
+                          : col.id === 'token'
+                            ? 'QR Code'
+                            : col.id === 'createdAt'
+                              ? 'Ngày tạo'
+                              : col.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
 

@@ -4,6 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -12,8 +13,9 @@ import {
 import { envConfig } from '@/envConfig'
 import type { TableSchema } from '@/schemaValidations/table.schema'
 import type { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
+import { ArrowUpDown, Link, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
 import { QRCodeCanvas } from 'qrcode.react'
+import { toast } from 'sonner'
 import type { z } from 'zod'
 
 export function formatDate(dateStr: string | Date | undefined | null) {
@@ -160,20 +162,33 @@ export function getTableColumns({
                 <span className='sr-only'>Mở menu</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end' className='w-40'>
-                <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem id={`edit-table-${table.number}`} onClick={() => onEdit(table)}>
-                  <Pencil className='mr-2 size-4' />
-                  Chỉnh sửa
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  id={`delete-table-${table.number}`}
-                  onClick={() => onDelete(table)}
-                  className='text-destructive focus:text-destructive'
-                >
-                  <Trash2 className='mr-2 size-4' />
-                  Xóa
-                </DropdownMenuItem>
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    id={`copy-table-link-${table.number}`}
+                    onClick={() => {
+                      const url = `${envConfig.VITE_WEB_URL}/?token=${table.token}`
+                      navigator.clipboard.writeText(url)
+                      toast.success('Đã sao chép đường dẫn bàn ăn')
+                    }}
+                  >
+                    <Link className='mr-2 size-4' />
+                    Sao chép URL
+                  </DropdownMenuItem>
+                  <DropdownMenuItem id={`edit-table-${table.number}`} onClick={() => onEdit(table)}>
+                    <Pencil className='mr-2 size-4' />
+                    Chỉnh sửa
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    id={`delete-table-${table.number}`}
+                    onClick={() => onDelete(table)}
+                    className='text-destructive focus:text-destructive'
+                  >
+                    <Trash2 className='mr-2 size-4' />
+                    Xóa
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

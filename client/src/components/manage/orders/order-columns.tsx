@@ -4,6 +4,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -291,26 +292,28 @@ export function getOrderColumns({
                 <span className='sr-only'>Mở menu</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end' className='w-44'>
-                <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  id={`update-order-${order.id}`}
-                  onClick={() => onUpdate(order)}
-                  disabled={isPaid}
-                >
-                  <RefreshCcw className='mr-2 size-4' />
-                  Cập nhật
-                </DropdownMenuItem>
-                {!isPaid && order.guest && (
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    id={`pay-order-${order.id}`}
-                    onClick={() => onPay(order)}
-                    className='text-violet-600 focus:text-violet-600'
+                    id={`update-order-${order.id}`}
+                    onClick={() => onUpdate(order)}
+                    disabled={isPaid}
                   >
-                    <CheckCheck className='mr-2 size-4' />
-                    Thanh toán
+                    <RefreshCcw className='mr-2 size-4' />
+                    Cập nhật
                   </DropdownMenuItem>
-                )}
+                  {!isPaid && order.guest && (
+                    <DropdownMenuItem
+                      id={`pay-order-${order.id}`}
+                      onClick={() => onPay(order)}
+                      className='text-violet-600 focus:text-violet-600'
+                    >
+                      <CheckCheck className='mr-2 size-4' />
+                      Thanh toán
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

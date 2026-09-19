@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -142,32 +143,34 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
             Hiển thị
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-44'>
-            <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {table
-              .getAllColumns()
-              .filter(col => col.getCanHide())
-              .map(col => {
-                const labelMap: Record<string, string> = {
-                  id: '#',
-                  guest: 'Khách',
-                  dish: 'Món ăn',
-                  quantity: 'SL',
-                  total: 'Tổng tiền',
-                  status: 'Trạng thái',
-                  handler: 'Nhân viên',
-                  createdAt: 'Thời gian',
-                }
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={col.id}
-                    checked={col.getIsVisible()}
-                    onCheckedChange={value => col.toggleVisibility(!!value)}
-                  >
-                    {labelMap[col.id] ?? col.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {table
+                .getAllColumns()
+                .filter(col => col.getCanHide())
+                .map(col => {
+                  const labelMap: Record<string, string> = {
+                    id: '#',
+                    guest: 'Khách',
+                    dish: 'Món ăn',
+                    quantity: 'SL',
+                    total: 'Tổng tiền',
+                    status: 'Trạng thái',
+                    handler: 'Nhân viên',
+                    createdAt: 'Thời gian',
+                  }
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={col.id}
+                      checked={col.getIsVisible()}
+                      onCheckedChange={value => col.toggleVisibility(!!value)}
+                    >
+                      {labelMap[col.id] ?? col.id}
+                    </DropdownMenuCheckboxItem>
+                  )
+                })}
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
 

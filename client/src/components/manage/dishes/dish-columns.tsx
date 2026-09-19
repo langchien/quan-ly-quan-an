@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -178,20 +179,22 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
                 <span className='sr-only'>Mở menu</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end' className='w-40'>
-                <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem id={`edit-dish-${dish.id}`} onClick={() => onEdit(dish)}>
-                  <Pencil className='mr-2 size-4' />
-                  Chỉnh sửa
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  id={`delete-dish-${dish.id}`}
-                  onClick={() => onDelete(dish)}
-                  className='text-destructive focus:text-destructive'
-                >
-                  <Trash2 className='mr-2 size-4' />
-                  Xóa
-                </DropdownMenuItem>
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem id={`edit-dish-${dish.id}`} onClick={() => onEdit(dish)}>
+                    <Pencil className='mr-2 size-4' />
+                    Chỉnh sửa
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    id={`delete-dish-${dish.id}`}
+                    onClick={() => onDelete(dish)}
+                    className='text-destructive focus:text-destructive'
+                  >
+                    <Trash2 className='mr-2 size-4' />
+                    Xóa
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

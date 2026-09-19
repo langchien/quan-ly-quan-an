@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -142,29 +143,31 @@ export function DishTableToolbar({ table, onAddDish }: DishTableToolbarProps) {
             Hiển thị
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-44'>
-            <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {table
-              .getAllColumns()
-              .filter(col => col.getCanHide())
-              .map(col => (
-                <DropdownMenuCheckboxItem
-                  key={col.id}
-                  className='capitalize'
-                  checked={col.getIsVisible()}
-                  onCheckedChange={value => col.toggleVisibility(!!value)}
-                >
-                  {col.id === 'name'
-                    ? 'Món ăn'
-                    : col.id === 'price'
-                      ? 'Giá'
-                      : col.id === 'description'
-                        ? 'Mô tả'
-                        : col.id === 'status'
-                          ? 'Trạng thái'
-                          : col.id}
-                </DropdownMenuCheckboxItem>
-              ))}
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {table
+                .getAllColumns()
+                .filter(col => col.getCanHide())
+                .map(col => (
+                  <DropdownMenuCheckboxItem
+                    key={col.id}
+                    className='capitalize'
+                    checked={col.getIsVisible()}
+                    onCheckedChange={value => col.toggleVisibility(!!value)}
+                  >
+                    {col.id === 'name'
+                      ? 'Món ăn'
+                      : col.id === 'price'
+                        ? 'Giá'
+                        : col.id === 'description'
+                          ? 'Mô tả'
+                          : col.id === 'status'
+                            ? 'Trạng thái'
+                            : col.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
 
