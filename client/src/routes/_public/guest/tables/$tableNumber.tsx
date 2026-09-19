@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Role } from '@/constants/type'
+import { handleErrorApi } from '@/lib/handleErrorApi'
 import { socket } from '@/lib/socket'
 import { useGuestLoginMutation } from '@/queries/use-guest'
 import { useAuthStore } from '@/store/useAuthStore'
@@ -79,10 +80,8 @@ function GuestLoginPage() {
       })
 
       navigate({ to: '/menu' })
-    } catch {
-      toast.error('Đăng nhập thất bại', {
-        description: 'Token không hợp lệ hoặc đã hết hạn. Vui lòng quét lại mã QR.',
-      })
+    } catch (error) {
+      handleErrorApi({ error })
     }
   }
 

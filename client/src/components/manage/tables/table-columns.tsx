@@ -112,7 +112,7 @@ export function getTableColumns({
       header: 'QR Code',
       cell: ({ row }) => {
         const table = row.original
-        const url = `${envConfig.VITE_WEB_URL}/?token=${table.token}`
+        const url = `${envConfig.VITE_WEB_URL}/guest/tables/${table.number}?token=${table.token}`
         return (
           <div className='flex items-center justify-center p-2'>
             <div className='inline-block rounded-md border bg-white p-1'>
@@ -168,7 +168,7 @@ export function getTableColumns({
                   <DropdownMenuItem
                     id={`copy-table-link-${table.number}`}
                     onClick={() => {
-                      const url = `${envConfig.VITE_WEB_URL}/?token=${table.token}`
+                      const url = `${envConfig.VITE_WEB_URL}/guest/tables/${table.number}?token=${table.token}`
                       navigator.clipboard.writeText(url)
                       toast.success('Đã sao chép đường dẫn bàn ăn')
                     }}
