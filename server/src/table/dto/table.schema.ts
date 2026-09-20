@@ -1,7 +1,7 @@
-import { TableStatusValues } from '../../constants/type.js'
 import z from 'zod'
+import { TableStatusValues } from '../../constants/type.js'
 
-// ─── Table Schema ─────────────────────────────────────────────────────────────
+// Table Schema─────
 
 export const TableSchema = z.object({
   number: z.coerce.number(),
@@ -9,47 +9,47 @@ export const TableSchema = z.object({
   status: z.enum(TableStatusValues),
   token: z.string(),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
 })
 
 export const TableRes = z.object({
   data: TableSchema,
-  message: z.string()
+  message: z.string(),
 })
 
 export type TableResType = z.TypeOf<typeof TableRes>
 
 export const TableListRes = z.object({
   data: z.array(TableSchema),
-  message: z.string()
+  message: z.string(),
 })
 
 export type TableListResType = z.TypeOf<typeof TableListRes>
 
-// ─── Create Table ─────────────────────────────────────────────────────────────
+// Create Table─────
 
 export const CreateTableBody = z.object({
   number: z.coerce.number().positive(),
   capacity: z.coerce.number().positive(),
-  status: z.enum(TableStatusValues).optional()
+  status: z.enum(TableStatusValues).optional(),
 })
 
 export type CreateTableBodyType = z.TypeOf<typeof CreateTableBody>
 
-// ─── Update Table ─────────────────────────────────────────────────────────────
+// Update Table─────
 
 export const UpdateTableBody = z.object({
   changeToken: z.boolean(),
   capacity: z.coerce.number().positive(),
-  status: z.enum(TableStatusValues).optional()
+  status: z.enum(TableStatusValues).optional(),
 })
 
 export type UpdateTableBodyType = z.TypeOf<typeof UpdateTableBody>
 
-// ─── Params ──────────────────────────────────────────────────────────────────
+// Params──────────
 
 export const TableParams = z.object({
-  number: z.coerce.number()
+  number: z.coerce.number(),
 })
 
 export type TableParamsType = z.TypeOf<typeof TableParams>

@@ -8,8 +8,6 @@ import { OrderStatusBadge } from './order-status-badge'
 
 type Order = GuestGetOrdersResType['data'][number]
 
-// ─── Skeleton ──────────────────────────────────────────────────────────────────
-
 export function OrdersListSkeleton() {
   return (
     <div className='space-y-3'>
@@ -29,8 +27,6 @@ export function OrdersListSkeleton() {
   )
 }
 
-// ─── Status Section Label ──────────────────────────────────────────────────────
-
 const sectionOrder = [
   OrderStatus.Pending,
   OrderStatus.Processing,
@@ -38,8 +34,6 @@ const sectionOrder = [
   OrderStatus.Rejected,
   OrderStatus.Paid,
 ]
-
-// ─── Single Order Item ─────────────────────────────────────────────────────────
 
 function OrderItem({ order }: { order: Order }) {
   const snapshot = order.dishSnapshot
@@ -72,8 +66,6 @@ function OrderItem({ order }: { order: Order }) {
     </Card>
   )
 }
-
-// ─── Orders List ───────────────────────────────────────────────────────────────
 
 interface OrdersListProps {
   orders: Order[]

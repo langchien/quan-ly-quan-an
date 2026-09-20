@@ -7,7 +7,7 @@ import type {
 } from '@/schemaValidations/table.schema'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-// ─── Query Options ─────────────────────────────────────────────────────────────
+// Query Options─────
 
 export const tableListQueryOptions = queryOptions({
   queryKey: ['tables', 'list'],
@@ -17,7 +17,7 @@ export const tableListQueryOptions = queryOptions({
   },
 })
 
-// ─── Query Hooks ───────────────────────────────────────────────────────────────
+// Query Hooks───────
 
 export function useGetTableList() {
   return useQuery(tableListQueryOptions)
@@ -34,7 +34,7 @@ export function useGetTable(number: number) {
   })
 }
 
-// ─── Mutation Hooks ────────────────────────────────────────────────────────────
+// Mutation Hooks────
 
 export function useCreateTableMutation() {
   const queryClient = useQueryClient()

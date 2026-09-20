@@ -24,8 +24,6 @@ import {
   RefreshCcw,
 } from 'lucide-react'
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────
-
 export function formatCurrency(value: number) {
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -51,8 +49,6 @@ export function formatDateTime(date: Date | string) {
     minute: '2-digit',
   }).format(new Date(date))
 }
-
-// ─── Status Config ─────────────────────────────────────────────────────────────
 
 export const ORDER_STATUS_OPTIONS = [
   { value: OrderStatus.Pending, label: '🕐 Chờ xử lý' },
@@ -103,8 +99,6 @@ export function getOrderStatusBadge(status: string) {
       return <Badge variant='secondary'>{status}</Badge>
   }
 }
-
-// ─── Column Definition ─────────────────────────────────────────────────────────
 
 interface GetOrderColumnsOptions {
   onUpdate: (order: OrderSchemaType) => void

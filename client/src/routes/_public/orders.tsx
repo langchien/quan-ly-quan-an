@@ -13,7 +13,7 @@ import type z from 'zod'
 
 type OrderType = z.TypeOf<typeof OrderSchema>
 
-// ─── Route ────────────────────────────────────────────────────────────────────
+// Route────────────
 
 export const Route = createFileRoute('/_public/orders')({
   beforeLoad: () => {
@@ -25,7 +25,7 @@ export const Route = createFileRoute('/_public/orders')({
   component: OrdersPage,
 })
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// Component────────
 
 function OrdersPage() {
   const navigate = useNavigate()
@@ -62,7 +62,7 @@ function OrdersPage() {
     }
   }, [refetch])
 
-  // ── Logout ──────────────────────────────────────────────────────────────────
+  // ── Logout──────────
   async function handleLogout() {
     try {
       await logoutMutation.mutateAsync({ refreshToken: refreshToken ?? '' })

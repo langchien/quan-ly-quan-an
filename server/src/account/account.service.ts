@@ -1,25 +1,23 @@
 import { Injectable } from '@nestjs/common'
 import * as bcrypt from 'bcryptjs'
-import { PrismaService } from '../prisma/prisma.service.js'
 import { EntityErrorException } from '../common/index.js'
 import { Role } from '../constants/type.js'
+import { PrismaService } from '../prisma/prisma.service.js'
 import type {
+  ChangePasswordBodyType,
   CreateEmployeeAccountBodyType,
   UpdateEmployeeAccountBodyType,
   UpdateMeBodyType,
-  ChangePasswordBodyType
 } from './dto/account.schema.js'
 
 @Injectable()
 export class AccountService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // ─── Employee CRUD ─────────────────────────────────────────────────────────
-
   async getEmployeeList() {
     return this.prisma.account.findMany({
       where: { role: Role.Employee },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     })
   }
 
@@ -33,7 +31,7 @@ export class AccountService {
   async getAccountList(currentUserId: number) {
     return this.prisma.account.findMany({
       orderBy: { createdAt: 'desc' },
-      where: { id: { not: currentUserId } }
+      where: { id: { not: currentUserId } },
     })
   }
 
@@ -46,8 +44,8 @@ export class AccountService {
           email: body.email,
           password: hashedPassword,
           role: Role.Employee,
-          avatar: body.avatar ?? null
-        }
+          avatar: body.avatar ?? null,
+        },
       })
     } catch (error: any) {
       if (error?.code === 'P2002') {
@@ -67,8 +65,8 @@ export class AccountService {
             name: body.name,
             email: body.email,
             avatar: body.avatar ?? null,
-            password: hashedPassword
-          }
+            password: hashedPassword,
+          },
         })
       }
       return await this.prisma.account.update({
@@ -76,8 +74,8 @@ export class AccountService {
         data: {
           name: body.name,
           email: body.email,
-          avatar: body.avatar ?? null
-        }
+          avatar: body.avatar ?? null,
+        },
       })
     } catch (error: any) {
       if (error?.code === 'P2002') {
@@ -91,8 +89,6 @@ export class AccountService {
     return this.prisma.account.delete({ where: { id } })
   }
 
-  // ─── Me ───────────────────────────────────────────────────────────────────
-
   async getMe(userId: number) {
     return this.prisma.account.findUniqueOrThrow({ where: { id: userId } })
   }
@@ -100,7 +96,7 @@ export class AccountService {
   async updateMe(userId: number, body: UpdateMeBodyType) {
     return this.prisma.account.update({
       where: { id: userId },
-      data: body
+      data: body,
     })
   }
 
@@ -115,7 +111,7 @@ export class AccountService {
     const hashedPassword = await bcrypt.hash(body.password, 10)
     return this.prisma.account.update({
       where: { id: userId },
-      data: { password: hashedPassword }
+      data: { password: hashedPassword },
     })
   }
 }

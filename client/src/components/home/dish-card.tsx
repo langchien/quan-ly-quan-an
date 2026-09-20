@@ -3,8 +3,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { DishStatus } from '@/constants/type'
 import type { DishType } from '@/schemaValidations/dish.schema'
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────
-
 export function formatCurrencyVND(value: number) {
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -22,8 +20,6 @@ function getStatusBadge(status: string) {
       return null
   }
 }
-
-// ─── DishCard ──────────────────────────────────────────────────────────────────
 
 interface DishCardProps {
   dish: DishType

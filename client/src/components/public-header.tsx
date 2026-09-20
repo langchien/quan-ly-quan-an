@@ -5,8 +5,6 @@ import { AppBrand } from './app-brand'
 import { ModeToggle } from './mode-toggle'
 import { Card } from './ui/card'
 
-// ─── Nav items theo role ───────────────────────────────────────────────────────
-
 export function NavItems() {
   const accessToken = useAuthStore(s => s.accessToken)
   const guest = useAuthStore(s => s.guest)

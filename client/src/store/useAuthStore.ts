@@ -3,7 +3,7 @@ import z from 'zod'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-// ─── Guest Type ────────────────────────────────────────────────────────────────
+// Guest Type────────
 
 const GuestInfoSchema = z.object({
   id: z.number(),
@@ -14,7 +14,7 @@ const GuestInfoSchema = z.object({
 
 export type GuestInfoType = z.TypeOf<typeof GuestInfoSchema>
 
-// ─── Store Types ───────────────────────────────────────────────────────────────
+// Store Types───────
 
 interface AuthState {
   accessToken: string | null

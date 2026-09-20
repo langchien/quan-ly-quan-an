@@ -2,13 +2,17 @@ import { NestFactory } from '@nestjs/core'
 import { ConfigService } from '@nestjs/config'
 import { Logger } from '@nestjs/common'
 import { IoAdapter } from '@nestjs/platform-socket.io'
-import { AppModule, ObserveInstrument } from './app.module.js'
+import { AppModule } from './app.module.js'
 import { ZodValidationPipe, GlobalExceptionFilter } from './common/index.js'
 import type { EnvType } from './config/env.config.js'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    instrument: ObserveInstrument,
+  const app = await NestFactory.create(AppModule)
+
+  // Cho phép CORS để Frontend (port 3000) có thể gọi API kèm cookies/tokens
+  app.enableCors({
+    origin: true,
+    credentials: true,
   })
 
   app.useGlobalFilters(new GlobalExceptionFilter())

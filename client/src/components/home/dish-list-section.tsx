@@ -4,8 +4,6 @@ import { useGetDishList } from '@/queries/use-dish'
 import { SearchX } from 'lucide-react'
 import { DishCard } from './dish-card'
 
-// ─── Skeleton Loader ───────────────────────────────────────────────────────────
-
 function DishCardSkeleton() {
   return (
     <div className='overflow-hidden rounded-xl border'>
@@ -20,8 +18,6 @@ function DishCardSkeleton() {
   )
 }
 
-// ─── Empty State ───────────────────────────────────────────────────────────────
-
 function EmptyState() {
   return (
     <div className='col-span-full flex flex-col items-center justify-center py-20 text-center'>
@@ -33,8 +29,6 @@ function EmptyState() {
     </div>
   )
 }
-
-// ─── Dish List Section ─────────────────────────────────────────────────────────
 
 export function DishListSection() {
   const { data: dishes, isLoading } = useGetDishList()

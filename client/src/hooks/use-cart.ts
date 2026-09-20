@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-// ─── Types ─────────────────────────────────────────────────────────────────────
+// Types─────────────
 
 export interface CartItem {
   dishId: number
@@ -23,7 +23,7 @@ interface CartActions {
 
 type CartStore = CartState & CartActions
 
-// ─── Store ─────────────────────────────────────────────────────────────────────
+// Store─────────────
 
 /**
  * Giỏ hàng khách hàng — KHÔNG persist (xóa khi reload hoặc đặt món xong)
@@ -63,7 +63,7 @@ export const useCartStore = create<CartStore>()(set => ({
   clearCart: () => set({ items: [] }),
 }))
 
-// ─── Selectors ─────────────────────────────────────────────────────────────────
+// Selectors─────────
 
 /** Tổng số lượng món trong giỏ */
 export const selectCartTotalItems = (state: CartStore) =>

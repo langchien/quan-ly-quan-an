@@ -12,7 +12,7 @@ type EntityErrorPayload = {
   }[]
 }
 
-// ─── Custom Error Classes ─────────────────────────────────────────────────────
+// Custom Error Classes ─────────────────────────────────────────────────────
 
 export class HttpError extends Error {
   status: number
@@ -60,7 +60,7 @@ function processQueue(error: unknown, token: string | null) {
   failedQueue = []
 }
 
-// ─── Axios Instance
+// Axios Instance
 const axiosInstance = axios.create({
   baseURL: envConfig.VITE_API_URL,
   headers: {
@@ -109,14 +109,19 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true
 
       try {
-        const refreshToken = useAuthStore.getState().refreshToken
+        const { refreshToken, guest } = useAuthStore.getState()
         if (!refreshToken) throw new Error('Không có refresh token')
 
+        // ── Chọn đúng endpoint theo role ──
+        // Guest dùng /guest/auth/refresh-token
+        // Owner/Employee dùng /auth/refresh-token
+        const isGuest = guest?.role === 'Guest'
+        const refreshUrl = isGuest
+          ? `${envConfig.VITE_API_URL}/guest/auth/refresh-token`
+          : `${envConfig.VITE_API_URL}/auth/refresh-token`
+
         // Dùng axios thuần (không qua axiosInstance) để tránh vòng lặp interceptor
-        const { data } = await axios.post<RefreshTokenResType>(
-          `${envConfig.VITE_API_URL}/auth/refresh-token`,
-          { refreshToken }
-        )
+        const { data } = await axios.post<RefreshTokenResType>(refreshUrl, { refreshToken })
 
         const newAccessToken = data.data.accessToken
         const newRefreshToken = data.data.refreshToken
@@ -138,8 +143,13 @@ axiosInstance.interceptors.response.use(
         processQueue(refreshError, null)
 
         // Xoá token khỏi Store (persist tự xoá localStorage)
+        const wasGuest = useAuthStore.getState().guest?.role === 'Guest'
         useAuthStore.getState().logout()
-        window.location.href = '/login'
+
+        // Redirect đúng trang theo role:
+        // Guest → trang chủ (không có trang login riêng)
+        // Staff/Owner → trang login nhân viên
+        window.location.href = wasGuest ? '/' : '/login'
 
         return Promise.reject(refreshError)
       } finally {

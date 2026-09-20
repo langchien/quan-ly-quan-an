@@ -1,4 +1,6 @@
 import { httpClient } from '@/lib/httpClient'
+import type { LogoutBodyType } from '@/schemaValidations/auth.schema'
+import type { MessageResType } from '@/schemaValidations/common.schema'
 import type {
   GuestCreateOrdersBodyType,
   GuestCreateOrdersResType,
@@ -6,15 +8,13 @@ import type {
   GuestLoginBodyType,
   GuestLoginResType,
 } from '@/schemaValidations/guest.schema'
-import type { MessageResType } from '@/schemaValidations/common.schema'
-import type { LogoutBodyType } from '@/schemaValidations/auth.schema'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-// ─── Query Keys ────────────────────────────────────────────────────────────────
+// Query Keys────────
 
 export const guestOrdersQueryKey = ['guest', 'orders'] as const
 
-// ─── Mutation Hooks ────────────────────────────────────────────────────────────
+// Mutation Hooks────
 
 /** Đăng nhập khách (lấy token từ QR bàn) */
 export function useGuestLoginMutation() {
@@ -45,7 +45,7 @@ export function useGuestCreateOrdersMutation() {
   })
 }
 
-// ─── Query Hooks ───────────────────────────────────────────────────────────────
+// Query Hooks───────
 
 /** Lấy danh sách đơn hàng của khách đang đăng nhập */
 export function useGuestGetOrdersQuery(enabled = true) {

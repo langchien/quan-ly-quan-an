@@ -1,21 +1,21 @@
-import { RoleValues } from '../../constants/type.js'
 import z from 'zod'
+import { RoleValues } from '../../constants/type.js'
 
-// ─── Account Schema ─────────────────────────────────────────────────────────
+// Account Schema─
 
 export const AccountSchema = z.object({
   id: z.number(),
   name: z.string(),
   email: z.string(),
   role: z.enum(RoleValues),
-  avatar: z.string().nullable()
+  avatar: z.string().nullable(),
 })
 
 export type AccountType = z.TypeOf<typeof AccountSchema>
 
 export const AccountListRes = z.object({
   data: z.array(AccountSchema),
-  message: z.string()
+  message: z.string(),
 })
 
 export type AccountListResType = z.TypeOf<typeof AccountListRes>
@@ -23,13 +23,13 @@ export type AccountListResType = z.TypeOf<typeof AccountListRes>
 export const AccountRes = z
   .object({
     data: AccountSchema,
-    message: z.string()
+    message: z.string(),
   })
   .strict()
 
 export type AccountResType = z.TypeOf<typeof AccountRes>
 
-// ─── Create Employee ─────────────────────────────────────────────────────────
+// Create Employee─
 
 export const CreateEmployeeAccountBody = z
   .object({
@@ -37,7 +37,7 @@ export const CreateEmployeeAccountBody = z
     email: z.string().email(),
     avatar: z.string().url().optional(),
     password: z.string().min(6).max(100),
-    confirmPassword: z.string().min(6).max(100)
+    confirmPassword: z.string().min(6).max(100),
   })
   .strict()
   .superRefine(({ confirmPassword, password }, ctx) => {
@@ -45,14 +45,14 @@ export const CreateEmployeeAccountBody = z
       ctx.addIssue({
         code: 'custom',
         message: 'Mật khẩu không khớp',
-        path: ['confirmPassword']
+        path: ['confirmPassword'],
       })
     }
   })
 
 export type CreateEmployeeAccountBodyType = z.TypeOf<typeof CreateEmployeeAccountBody>
 
-// ─── Update Employee ─────────────────────────────────────────────────────────
+// Update Employee─
 
 export const UpdateEmployeeAccountBody = z
   .object({
@@ -61,7 +61,7 @@ export const UpdateEmployeeAccountBody = z
     avatar: z.string().url().optional(),
     changePassword: z.boolean().optional(),
     password: z.string().min(6).max(100).optional(),
-    confirmPassword: z.string().min(6).max(100).optional()
+    confirmPassword: z.string().min(6).max(100).optional(),
   })
   .strict()
   .superRefine(({ confirmPassword, password, changePassword }, ctx) => {
@@ -70,13 +70,13 @@ export const UpdateEmployeeAccountBody = z
         ctx.addIssue({
           code: 'custom',
           message: 'Hãy nhập mật khẩu mới và xác nhận mật khẩu mới',
-          path: ['changePassword']
+          path: ['changePassword'],
         })
       } else if (confirmPassword !== password) {
         ctx.addIssue({
           code: 'custom',
           message: 'Mật khẩu không khớp',
-          path: ['confirmPassword']
+          path: ['confirmPassword'],
         })
       }
     }
@@ -84,24 +84,24 @@ export const UpdateEmployeeAccountBody = z
 
 export type UpdateEmployeeAccountBodyType = z.TypeOf<typeof UpdateEmployeeAccountBody>
 
-// ─── Update Me ───────────────────────────────────────────────────────────────
+// Update Me───────
 
 export const UpdateMeBody = z
   .object({
     name: z.string().trim().min(2).max(256),
-    avatar: z.string().url().optional()
+    avatar: z.string().url().optional(),
   })
   .strict()
 
 export type UpdateMeBodyType = z.TypeOf<typeof UpdateMeBody>
 
-// ─── Change Password ─────────────────────────────────────────────────────────
+// Change Password─
 
 export const ChangePasswordBody = z
   .object({
     oldPassword: z.string().min(6).max(100),
     password: z.string().min(6).max(100),
-    confirmPassword: z.string().min(6).max(100)
+    confirmPassword: z.string().min(6).max(100),
   })
   .strict()
   .superRefine(({ confirmPassword, password }, ctx) => {
@@ -109,17 +109,17 @@ export const ChangePasswordBody = z
       ctx.addIssue({
         code: 'custom',
         message: 'Mật khẩu mới không khớp',
-        path: ['confirmPassword']
+        path: ['confirmPassword'],
       })
     }
   })
 
 export type ChangePasswordBodyType = z.TypeOf<typeof ChangePasswordBody>
 
-// ─── Params ──────────────────────────────────────────────────────────────────
+// Params──────────
 
 export const AccountIdParam = z.object({
-  id: z.coerce.number()
+  id: z.coerce.number(),
 })
 
 export type AccountIdParamType = z.TypeOf<typeof AccountIdParam>

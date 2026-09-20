@@ -51,7 +51,7 @@ export function useUploadAvatarMutation() {
   })
 }
 
-// ─── Employee Management Hooks ────────────────────────────────────────────────
+// Employee Management Hooks ────────────────────────────────────────────────
 
 export const accountListQueryOptions = queryOptions({
   queryKey: ['accounts', 'list'],
@@ -108,7 +108,7 @@ export function useDeleteEmployeeAccountMutation() {
   })
 }
 
-// ─── Guest Management Hooks ────────────────────────────────────────────────────
+// Guest Management Hooks ────────────────────────────────────────────────────
 
 export function useGetGuestList() {
   return useQuery({

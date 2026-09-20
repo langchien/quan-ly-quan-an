@@ -21,13 +21,12 @@ import {
 } from './dto/dish.schema.js'
 
 @Controller('dishes')
-@UseGuards(AccessTokenGuard)
 export class DishController {
   constructor(private readonly dishService: DishService) {}
 
   /**
    * GET /dishes
-   * Lấy danh sách món ăn
+   * Lấy danh sách món ăn (public — không yêu cầu đăng nhập)
    */
   @Get()
   async getDishList() {
@@ -37,7 +36,7 @@ export class DishController {
 
   /**
    * GET /dishes/:id
-   * Lấy chi tiết một món ăn
+   * Lấy chi tiết một món ăn (public)
    */
   @Get(':id')
   async getDish(@ZodParam(DishParams) params: DishParamsType) {
@@ -50,6 +49,7 @@ export class DishController {
    * Tạo món ăn mới
    */
   @Post()
+  @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.CREATED)
   async createDish(@ZodBody(CreateDishBody) body: CreateDishBodyType) {
     const dish = await this.dishService.createDish(body)
@@ -61,6 +61,7 @@ export class DishController {
    * Cập nhật thông tin món ăn
    */
   @Put(':id')
+  @UseGuards(AccessTokenGuard)
   async updateDish(
     @ZodParam(DishParams) params: DishParamsType,
     @ZodBody(UpdateDishBody) body: UpdateDishBodyType
@@ -74,6 +75,7 @@ export class DishController {
    * Xóa món ăn
    */
   @Delete(':id')
+  @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.OK)
   async deleteDish(@ZodParam(DishParams) params: DishParamsType) {
     const dish = await this.dishService.deleteDish(params.id)

@@ -7,7 +7,7 @@ import type {
 } from '@/schemaValidations/dish.schema'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-// ─── Query Options ─────────────────────────────────────────────────────────────
+// Query Options─────
 
 export const dishListQueryOptions = queryOptions({
   queryKey: ['dishes', 'list'],
@@ -17,7 +17,7 @@ export const dishListQueryOptions = queryOptions({
   },
 })
 
-// ─── Query Hooks ───────────────────────────────────────────────────────────────
+// Query Hooks───────
 
 export function useGetDishList() {
   return useQuery(dishListQueryOptions)
@@ -34,7 +34,7 @@ export function useGetDish(id: number) {
   })
 }
 
-// ─── Mutation Hooks ────────────────────────────────────────────────────────────
+// Mutation Hooks────
 
 export function useCreateDishMutation() {
   const queryClient = useQueryClient()

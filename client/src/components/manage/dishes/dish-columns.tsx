@@ -16,8 +16,6 @@ import type { DishType } from '@/schemaValidations/dish.schema'
 import type { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────
-
 export function formatCurrency(value: number) {
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -34,8 +32,6 @@ export function getInitials(name: string) {
     .slice(0, 2)
     .toUpperCase()
 }
-
-// ─── Status Config ─────────────────────────────────────────────────────────────
 
 export const DISH_STATUS_OPTIONS = [
   { value: DishStatus.Available, label: '✅ Đang bán' },
@@ -55,8 +51,6 @@ function getStatusBadge(status: string) {
       return <Badge variant='secondary'>{status}</Badge>
   }
 }
-
-// ─── Column Definition ─────────────────────────────────────────────────────────
 
 interface GetDishColumnsOptions {
   onEdit: (dish: DishType) => void

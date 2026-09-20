@@ -1,7 +1,7 @@
-﻿import { DishStatusValues, OrderStatusValues, RoleValues } from '../../constants/type.js'
-import z from 'zod'
+﻿import z from 'zod'
+import { DishStatusValues, OrderStatusValues, RoleValues } from '../../constants/type.js'
 
-// ─── Shared Sub-schemas ────────────────────────────────────────────────────────
+// Shared Sub-schemas
 
 const DishSnapshotSchema = z.object({
   id: z.number(),
@@ -12,7 +12,7 @@ const DishSnapshotSchema = z.object({
   status: z.enum(DishStatusValues),
   dishId: z.number().nullable(),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
 })
 
 const AccountSchema = z.object({
@@ -20,7 +20,7 @@ const AccountSchema = z.object({
   name: z.string(),
   email: z.string(),
   role: z.string(),
-  avatar: z.string().nullable()
+  avatar: z.string().nullable(),
 })
 
 export const OrderSchema = z.object({
@@ -32,7 +32,7 @@ export const OrderSchema = z.object({
       name: z.string(),
       tableNumber: z.number().nullable(),
       createdAt: z.date(),
-      updatedAt: z.date()
+      updatedAt: z.date(),
     })
     .nullable(),
   tableNumber: z.number().nullable(),
@@ -43,16 +43,16 @@ export const OrderSchema = z.object({
   orderHandler: AccountSchema.nullable(),
   status: z.enum(OrderStatusValues),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
 })
 
-// ─── Guest Login ───────────────────────────────────────────────────────────────
+// Guest Login───────
 
 export const GuestLoginBody = z
   .object({
     name: z.string().min(2).max(50),
     tableNumber: z.number(),
-    token: z.string()
+    token: z.string(),
   })
   .strict()
 
@@ -68,20 +68,20 @@ export const GuestLoginRes = z.object({
       role: z.enum(RoleValues),
       tableNumber: z.number().nullable(),
       createdAt: z.date(),
-      updatedAt: z.date()
-    })
+      updatedAt: z.date(),
+    }),
   }),
-  message: z.string()
+  message: z.string(),
 })
 
 export type GuestLoginResType = z.TypeOf<typeof GuestLoginRes>
 
-// ─── Guest Logout ──────────────────────────────────────────────────────────────
+// Guest Logout──────
 
 export const GuestLogoutBody = z.object({ refreshToken: z.string() }).strict()
 export type GuestLogoutBodyType = z.TypeOf<typeof GuestLogoutBody>
 
-// ─── Guest Refresh Token ───────────────────────────────────────────────────────
+// Guest Refresh Token
 
 export const GuestRefreshTokenBody = z.object({ refreshToken: z.string() }).strict()
 export type GuestRefreshTokenBodyType = z.TypeOf<typeof GuestRefreshTokenBody>
@@ -90,17 +90,17 @@ export const GuestRefreshTokenRes = z.object({
   message: z.string(),
   data: z.object({
     accessToken: z.string(),
-    refreshToken: z.string()
-  })
+    refreshToken: z.string(),
+  }),
 })
 export type GuestRefreshTokenResType = z.TypeOf<typeof GuestRefreshTokenRes>
 
-// ─── Guest Create Orders ───────────────────────────────────────────────────────
+// Guest Create Orders
 
 export const GuestCreateOrdersBody = z.array(
   z.object({
     dishId: z.number(),
-    quantity: z.number()
+    quantity: z.number(),
   })
 )
 
@@ -108,12 +108,12 @@ export type GuestCreateOrdersBodyType = z.TypeOf<typeof GuestCreateOrdersBody>
 
 export const GuestCreateOrdersRes = z.object({
   message: z.string(),
-  data: z.array(OrderSchema)
+  data: z.array(OrderSchema),
 })
 
 export type GuestCreateOrdersResType = z.TypeOf<typeof GuestCreateOrdersRes>
 
-// ─── Guest Get Orders ──────────────────────────────────────────────────────────
+// Guest Get Orders──
 
 export const GuestGetOrdersRes = GuestCreateOrdersRes
 export type GuestGetOrdersResType = z.TypeOf<typeof GuestGetOrdersRes>

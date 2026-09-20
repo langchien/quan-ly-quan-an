@@ -1,5 +1,5 @@
-import * as React from 'react'
 import { Lock, Palette, User } from 'lucide-react'
+import * as React from 'react'
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import {
@@ -13,11 +13,11 @@ import {
   SidebarProvider,
 } from '@/components/ui/sidebar'
 import { useSettingsStore, type SettingsTab } from '@/store/useSettingsStore'
+import { SettingsPreferencesTab } from './settings-preferences-tab'
 import { SettingsProfileTab } from './settings-profile-tab'
 import { SettingsSecurityTab } from './settings-security-tab'
-import { SettingsPreferencesTab } from './settings-preferences-tab'
 
-// ─── Cấu hình các Tab ────────────────────────────────────────────────────────
+// Cấu hình các Tab
 const TABS: { id: SettingsTab; label: string; icon: React.ElementType; description: string }[] = [
   {
     id: 'profile',
@@ -39,7 +39,7 @@ const TABS: { id: SettingsTab; label: string; icon: React.ElementType; descripti
   },
 ]
 
-// ─── Nội dung từng tab ───────────────────────────────────────────────────────
+// Nội dung từng tab
 function TabContent({ tab }: { tab: SettingsTab }) {
   switch (tab) {
     case 'profile':
@@ -51,7 +51,7 @@ function TabContent({ tab }: { tab: SettingsTab }) {
   }
 }
 
-// ─── Component chính ─────────────────────────────────────────────────────────
+// Component chính─
 export function SettingsDialog() {
   const { open, activeTab, setOpen, setActiveTab } = useSettingsStore()
 

@@ -6,7 +6,7 @@ import { useAuthStore } from '@/store/useAuthStore'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { SearchX } from 'lucide-react'
 
-// ─── Route ────────────────────────────────────────────────────────────────────
+// Route────────────
 
 export const Route = createFileRoute('/_public/menu')({
   beforeLoad: () => {
@@ -19,7 +19,7 @@ export const Route = createFileRoute('/_public/menu')({
   component: MenuPage,
 })
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// Component────────
 
 function MenuPage() {
   const dishes = Route.useLoaderData()

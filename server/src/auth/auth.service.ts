@@ -1,12 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
+import { JwtService, type JwtSignOptions } from '@nestjs/jwt'
 import * as bcrypt from 'bcryptjs'
-import { PrismaService } from '../prisma/prisma.service.js'
+import { EntityErrorException } from '../common/index.js'
 import type { EnvType } from '../config/env.config.js'
 import { TokenType, type RoleType, type TokenPayload } from '../constants/type.js'
+import { PrismaService } from '../prisma/prisma.service.js'
 import type { LoginBodyType } from './dto/auth.schema.js'
-import { EntityErrorException } from '../common/index.js'
 
 @Injectable()
 export class AuthService {
@@ -16,14 +16,12 @@ export class AuthService {
     private readonly configService: ConfigService<EnvType, true>
   ) {}
 
-  // ─── Ký Token ──────────────────────────────────────────────────────────────
-
   private signAccessToken(payload: Pick<TokenPayload, 'userId' | 'role'>) {
     return this.jwtService.sign(
       { ...payload, tokenType: TokenType.AccessToken },
       {
         secret: this.configService.get('ACCESS_TOKEN_SECRET', { infer: true }),
-        expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRES_IN', { infer: true })
+        expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRES_IN', { infer: true }) as JwtSignOptions['expiresIn'],
       }
     )
   }
@@ -35,7 +33,7 @@ export class AuthService {
       return this.jwtService.sign(
         { ...rest, tokenType: TokenType.RefreshToken, exp },
         {
-          secret: this.configService.get('REFRESH_TOKEN_SECRET', { infer: true })
+          secret: this.configService.get('REFRESH_TOKEN_SECRET', { infer: true }),
         }
       )
     }
@@ -43,7 +41,7 @@ export class AuthService {
       { ...rest, tokenType: TokenType.RefreshToken },
       {
         secret: this.configService.get('REFRESH_TOKEN_SECRET', { infer: true }),
-        expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES_IN', { infer: true })
+        expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES_IN', { infer: true }) as JwtSignOptions['expiresIn'],
       }
     )
   }
@@ -51,18 +49,16 @@ export class AuthService {
   private verifyRefreshToken(token: string): TokenPayload {
     try {
       return this.jwtService.verify<TokenPayload>(token, {
-        secret: this.configService.get('REFRESH_TOKEN_SECRET', { infer: true })
+        secret: this.configService.get('REFRESH_TOKEN_SECRET', { infer: true }),
       })
     } catch {
       throw new UnauthorizedException('Refresh token không hợp lệ')
     }
   }
 
-  // ─── Các action ───────────────────────────────────────────────────────────
-
   async login(body: LoginBodyType) {
     const account = await this.prisma.account.findUnique({
-      where: { email: body.email }
+      where: { email: body.email },
     })
 
     if (!account) {
@@ -71,11 +67,16 @@ export class AuthService {
 
     const isPasswordMatch = await bcrypt.compare(body.password, account.password)
     if (!isPasswordMatch) {
-      throw new EntityErrorException([{ field: 'password', message: 'Email hoặc mật khẩu không đúng' }])
+      throw new EntityErrorException([
+        { field: 'password', message: 'Email hoặc mật khẩu không đúng' },
+      ])
     }
 
     const accessToken = this.signAccessToken({ userId: account.id, role: account.role as RoleType })
-    const refreshToken = this.signRefreshToken({ userId: account.id, role: account.role as RoleType })
+    const refreshToken = this.signRefreshToken({
+      userId: account.id,
+      role: account.role as RoleType,
+    })
 
     const decodedRefreshToken = this.verifyRefreshToken(refreshToken)
     const refreshTokenExpiresAt = new Date(decodedRefreshToken.exp * 1000)
@@ -84,8 +85,8 @@ export class AuthService {
       data: {
         accountId: account.id,
         token: refreshToken,
-        expiresAt: refreshTokenExpiresAt
-      }
+        expiresAt: refreshTokenExpiresAt,
+      },
     })
 
     return { account, accessToken, refreshToken }
@@ -93,7 +94,7 @@ export class AuthService {
 
   async logout(refreshToken: string) {
     await this.prisma.refreshToken.delete({
-      where: { token: refreshToken }
+      where: { token: refreshToken },
     })
     return 'Đăng xuất thành công'
   }
@@ -103,7 +104,7 @@ export class AuthService {
 
     const refreshTokenDoc = await this.prisma.refreshToken.findUnique({
       where: { token },
-      include: { account: true }
+      include: { account: true },
     })
 
     if (!refreshTokenDoc) {
@@ -112,11 +113,14 @@ export class AuthService {
 
     const { account } = refreshTokenDoc
 
-    const newAccessToken = this.signAccessToken({ userId: account.id, role: account.role as RoleType })
+    const newAccessToken = this.signAccessToken({
+      userId: account.id,
+      role: account.role as RoleType,
+    })
     const newRefreshToken = this.signRefreshToken({
       userId: account.id,
       role: account.role as RoleType,
-      exp: decoded.exp
+      exp: decoded.exp,
     })
 
     // Xóa token cũ, lưu token mới (rotation)
@@ -125,8 +129,8 @@ export class AuthService {
       data: {
         accountId: account.id,
         token: newRefreshToken,
-        expiresAt: refreshTokenDoc.expiresAt
-      }
+        expiresAt: refreshTokenDoc.expiresAt,
+      },
     })
 
     return { accessToken: newAccessToken, refreshToken: newRefreshToken }

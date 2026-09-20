@@ -1,37 +1,26 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  UseGuards,
-  HttpCode,
-  HttpStatus
-} from '@nestjs/common'
-import { AccountService } from './account.service.js'
-import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
+import { Controller, Delete, Get, HttpCode, HttpStatus, Post, Put, UseGuards } from '@nestjs/common'
 import { ActiveUser } from '../auth/decorators/active-user.decorator.js'
+import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
 import { ZodBody, ZodParam } from '../common/index.js'
 import type { TokenPayload } from '../constants/type.js'
+import { AccountService } from './account.service.js'
 import {
+  AccountIdParam,
+  type AccountIdParamType,
+  ChangePasswordBody,
+  type ChangePasswordBodyType,
   CreateEmployeeAccountBody,
   type CreateEmployeeAccountBodyType,
   UpdateEmployeeAccountBody,
   type UpdateEmployeeAccountBodyType,
   UpdateMeBody,
   type UpdateMeBodyType,
-  ChangePasswordBody,
-  type ChangePasswordBodyType,
-  AccountIdParam,
-  type AccountIdParamType
 } from './dto/account.schema.js'
 
 @Controller()
 @UseGuards(AccessTokenGuard)
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
-
-  // ─── /accounts/me ─────────────────────────────────────────────────────────
 
   /**
    * GET /accounts/me
@@ -48,10 +37,7 @@ export class AccountController {
    * Cập nhật thông tin cá nhân
    */
   @Put('accounts/me')
-  async updateMe(
-    @ActiveUser() user: TokenPayload,
-    @ZodBody(UpdateMeBody) body: UpdateMeBodyType
-  ) {
+  async updateMe(@ActiveUser() user: TokenPayload, @ZodBody(UpdateMeBody) body: UpdateMeBodyType) {
     const account = await this.accountService.updateMe(user.userId, body)
     return { message: 'Cập nhật thành công', data: account }
   }
@@ -69,8 +55,6 @@ export class AccountController {
     return { message: 'Đổi mật khẩu thành công', data: account }
   }
 
-  // ─── /accounts (danh sách mọi người trừ mình) ─────────────────────────────
-
   /**
    * GET /accounts
    * Lấy danh sách tất cả tài khoản (trừ tài khoản hiện tại)
@@ -80,8 +64,6 @@ export class AccountController {
     const accounts = await this.accountService.getAccountList(user.userId)
     return { message: 'Lấy danh sách thành công', data: accounts }
   }
-
-  // ─── /employees ───────────────────────────────────────────────────────────
 
   /**
    * GET /employees
