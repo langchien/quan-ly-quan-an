@@ -9,6 +9,12 @@ import { PrismaModule } from './prisma/prisma.module.js'
 import { validateEnv } from './config/env.config.js'
 import { AuthModule } from './auth/auth.module.js'
 import { MediaModule } from './media/media.module.js'
+import { AccountModule } from './account/account.module.js'
+import { TableModule } from './table/table.module.js'
+import { DishModule } from './dish/dish.module.js'
+import { EventsModule } from './events/events.module.js'
+import { GuestModule } from './guest/guest.module.js'
+import { OrderModule } from './order/order.module.js'
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule()
 
@@ -36,6 +42,14 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule()
     PrismaModule,
     AuthModule,
     MediaModule,
+    // ─── Giai đoạn 3: Master Data ───────────────────────────────────────────
+    AccountModule,
+    TableModule,
+    DishModule,
+    // ─── Giai đoạn 4: Nghiệp vụ phức tạp & Realtime ─────────────────────────
+    EventsModule,
+    GuestModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

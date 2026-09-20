@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { ConfigService } from '@nestjs/config'
 import { Logger } from '@nestjs/common'
+import { IoAdapter } from '@nestjs/platform-socket.io'
 import { AppModule, ObserveInstrument } from './app.module.js'
 import { ZodValidationPipe, GlobalExceptionFilter } from './common/index.js'
 import type { EnvType } from './config/env.config.js'
@@ -12,6 +13,9 @@ async function bootstrap() {
 
   app.useGlobalFilters(new GlobalExceptionFilter())
   app.useGlobalPipes(new ZodValidationPipe())
+
+  // Sử dụng Socket.IO adapter (thay vì ws mặc định)
+  app.useWebSocketAdapter(new IoAdapter(app))
 
   const configService = app.get(ConfigService<EnvType, true>)
   const port = configService.get('PORT', { infer: true })
