@@ -25,7 +25,8 @@ import {
 } from '@tanstack/react-table'
 import { UserX } from 'lucide-react'
 import { useState } from 'react'
-import { StaffTableToolbar } from './staff-table-toolbar'
+import { StaffGridView } from './staff-grid-view'
+import { StaffTableToolbar, type ViewMode } from './staff-table-toolbar'
 
 const PAGE_SIZE = 10
 
@@ -34,6 +35,8 @@ interface StaffDataTableProps {
   data: AccountType[]
   isLoading?: boolean
   onAddStaff: () => void
+  onEdit: (staff: AccountType) => void
+  onDelete: (staff: AccountType) => void
 }
 
 function LoadingSkeleton({ colCount }: { colCount: number }) {
@@ -52,12 +55,20 @@ function LoadingSkeleton({ colCount }: { colCount: number }) {
   )
 }
 
-export function StaffDataTable({ columns, data, isLoading, onAddStaff }: StaffDataTableProps) {
+export function StaffDataTable({
+  columns,
+  data,
+  isLoading,
+  onAddStaff,
+  onEdit,
+  onDelete,
+}: StaffDataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
   const [globalFilter, setGlobalFilter] = useState('')
+  const [viewMode, setViewMode] = useState<ViewMode>('table')
 
   const table = useReactTable({
     data,
@@ -89,82 +100,109 @@ export function StaffDataTable({ columns, data, isLoading, onAddStaff }: StaffDa
   const from = pageIndex * pageSize + 1
   const to = Math.min((pageIndex + 1) * pageSize, totalFiltered)
 
+  // Extract role filter for grid view
+  const roleColumn = table.getColumn('role')
+  const roleFilterRaw = roleColumn?.getFilterValue()
+  const roleFilter: string[] = Array.isArray(roleFilterRaw) ? roleFilterRaw : []
+
   return (
     <div className='space-y-4'>
-      <StaffTableToolbar table={table} onAddStaff={onAddStaff} />
+      <StaffTableToolbar
+        table={table}
+        onAddStaff={onAddStaff}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+      />
 
-      {/* Table */}
-      <div className='overflow-hidden rounded-md border'>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <TableHead key={header.id} colSpan={header.colSpan}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
+      {viewMode === 'table' ? (
+        <>
+          {/* Table view */}
+          <div className='overflow-hidden rounded-md border'>
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map(header => (
+                      <TableHead key={header.id} colSpan={header.colSpan}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableHead>
+                    ))}
+                  </TableRow>
                 ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <LoadingSkeleton colCount={columns.length} />
-            ) : table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map(row => (
-                <TableRow key={row.id} data-state={row.getIsSelected() ? 'selected' : undefined}>
-                  {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  <LoadingSkeleton colCount={columns.length} />
+                ) : table.getRowModel().rows.length ? (
+                  table.getRowModel().rows.map(row => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() ? 'selected' : undefined}
+                    >
+                      {row.getVisibleCells().map(cell => (
+                        <TableCell key={cell.id}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length}>
+                      <div className='flex flex-col items-center justify-center gap-2 py-12 text-center'>
+                        <UserX className='size-10 text-muted-foreground/40' />
+                        <p className='text-sm text-muted-foreground'>
+                          {globalFilter || columnFilters.length
+                            ? 'Không tìm thấy kết quả phù hợp'
+                            : 'Chưa có nhân viên nào'}
+                        </p>
+                      </div>
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length}>
-                  <div className='flex flex-col items-center justify-center gap-2 py-12 text-center'>
-                    <UserX className='size-10 text-muted-foreground/40' />
-                    <p className='text-sm text-muted-foreground'>
-                      {globalFilter || columnFilters.length
-                        ? 'Không tìm thấy kết quả phù hợp'
-                        : 'Chưa có nhân viên nào'}
-                    </p>
-                  </div>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
 
-      {/* Footer: selection info + pagination */}
-      {(pageCount > 1 || table.getFilteredSelectedRowModel().rows.length > 0) && (
-        <div className='flex items-center justify-between text-sm text-muted-foreground'>
-          {/* Selection info */}
-          <span>
-            {table.getFilteredSelectedRowModel().rows.length > 0
-              ? `${table.getFilteredSelectedRowModel().rows.length} / ${totalFiltered} dòng được chọn`
-              : totalFiltered > 0
-                ? `${from}\u2013${to} / ${totalFiltered} nhân viên`
-                : ''}
-          </span>
+          {/* Footer: selection info + pagination */}
+          {(pageCount > 1 || table.getFilteredSelectedRowModel().rows.length > 0) && (
+            <div className='flex items-center justify-between text-sm text-muted-foreground'>
+              {/* Selection info */}
+              <span>
+                {table.getFilteredSelectedRowModel().rows.length > 0
+                  ? `${table.getFilteredSelectedRowModel().rows.length} / ${totalFiltered} dòng được chọn`
+                  : totalFiltered > 0
+                    ? `${from}\u2013${to} / ${totalFiltered} nhân viên`
+                    : ''}
+              </span>
 
-          {/* Pagination */}
-          {pageCount > 1 && (
-            <DataTablePagination
-              pageIndex={pageIndex}
-              pageCount={pageCount}
-              canPreviousPage={table.getCanPreviousPage()}
-              canNextPage={table.getCanNextPage()}
-              onPageChange={table.setPageIndex}
-              onPreviousPage={() => table.previousPage()}
-              onNextPage={() => table.nextPage()}
-            />
+              {/* Pagination */}
+              {pageCount > 1 && (
+                <DataTablePagination
+                  pageIndex={pageIndex}
+                  pageCount={pageCount}
+                  canPreviousPage={table.getCanPreviousPage()}
+                  canNextPage={table.getCanNextPage()}
+                  onPageChange={table.setPageIndex}
+                  onPreviousPage={() => table.previousPage()}
+                  onNextPage={() => table.nextPage()}
+                />
+              )}
+            </div>
           )}
-        </div>
+        </>
+      ) : (
+        /* Grid view */
+        <StaffGridView
+          data={data}
+          isLoading={isLoading}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          globalFilter={globalFilter}
+          roleFilter={roleFilter}
+        />
       )}
     </div>
   )

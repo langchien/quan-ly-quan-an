@@ -1,4 +1,4 @@
-﻿import { CreateStaffDialog } from '@/components/manage/staffs/create-staff-dialog'
+import { CreateStaffDialog } from '@/components/manage/staffs/create-staff-dialog'
 import { DeleteStaffDialog } from '@/components/manage/staffs/delete-staff-dialog'
 import { EditStaffDialog } from '@/components/manage/staffs/edit-staff-dialog'
 import { getStaffColumns } from '@/components/manage/staffs/staff-columns'
@@ -42,6 +42,8 @@ export function StaffTable() {
         data={staffList ?? []}
         isLoading={isLoading}
         onAddStaff={() => setCreateOpen(true)}
+        onEdit={staff => setEditTarget(staff)}
+        onDelete={staff => setDeleteTarget(staff)}
       />
 
       <CreateStaffDialog open={createOpen} onOpenChange={setCreateOpen} />

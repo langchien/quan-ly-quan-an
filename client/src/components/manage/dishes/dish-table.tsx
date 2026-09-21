@@ -42,6 +42,8 @@ export function DishTable() {
         data={dishList ?? []}
         isLoading={isLoading}
         onAddDish={() => setCreateOpen(true)}
+        onEdit={dish => setEditTarget(dish)}
+        onDelete={dish => setDeleteTarget(dish)}
       />
 
       <CreateDishDialog open={createOpen} onOpenChange={setCreateOpen} />

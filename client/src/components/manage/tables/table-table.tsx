@@ -43,6 +43,8 @@ export function TableTable() {
         data={tableList ?? []}
         isLoading={isLoading}
         onAddTable={() => setCreateOpen(true)}
+        onEdit={table => setEditTarget(table)}
+        onDelete={table => setDeleteTarget(table)}
       />
 
       <CreateTableDialog open={createOpen} onOpenChange={setCreateOpen} />

@@ -13,17 +13,27 @@ import {
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import type { AccountType } from '@/schemaValidations/account.schema'
 import type { Table } from '@tanstack/react-table'
-import { CirclePlus, Search, Settings2, UserPlus, X } from 'lucide-react'
+import { CirclePlus, LayoutGrid, List, Search, Settings2, UserPlus, X } from 'lucide-react'
 import { ROLE_OPTIONS } from './staff-columns'
+
+export type ViewMode = 'table' | 'grid'
 
 interface StaffTableToolbarProps {
   table: Table<AccountType>
   onAddStaff: () => void
+  viewMode: ViewMode
+  onViewModeChange: (mode: ViewMode) => void
 }
 
-export function StaffTableToolbar({ table, onAddStaff }: StaffTableToolbarProps) {
+export function StaffTableToolbar({
+  table,
+  onAddStaff,
+  viewMode,
+  onViewModeChange,
+}: StaffTableToolbarProps) {
   const isFiltered = table.getState().columnFilters.length > 0 || !!table.getState().globalFilter
 
   const roleColumn = table.getColumn('role')
@@ -128,48 +138,84 @@ export function StaffTableToolbar({ table, onAddStaff }: StaffTableToolbarProps)
         )}
       </div>
 
-      {/* Right: view + add */}
+      {/* Right: view toggle + column visibility + add */}
       <div className='flex items-center gap-2'>
-        {/* Column visibility */}
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            className={buttonVariants({
-              variant: 'outline',
-              size: 'sm',
-              className: 'ml-auto hidden h-8 lg:flex',
-            })}
-          >
-            <Settings2 className='mr-2 size-4' />
-            Hiển thị
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='w-40'>
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {table
-                .getAllColumns()
-                .filter(col => col.getCanHide())
-                .map(col => (
-                  <DropdownMenuCheckboxItem
-                    key={col.id}
-                    className='capitalize'
-                    checked={col.getIsVisible()}
-                    onCheckedChange={value => col.toggleVisibility(!!value)}
-                  >
-                    {col.id === 'name'
-                      ? 'Nhân viên'
-                      : col.id === 'email'
-                        ? 'Email'
-                        : col.id === 'role'
-                          ? 'Vai trò'
-                          : col.id === 'createdAt'
-                            ? 'Ngày tạo'
-                            : col.id}
-                  </DropdownMenuCheckboxItem>
-                ))}
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* View mode toggle */}
+        <div className='flex h-8 items-center rounded-md border bg-muted p-0.5'>
+          <Tooltip>
+            <TooltipTrigger
+              id='staff-view-mode-table'
+              className={`inline-flex h-7 w-8 items-center justify-center rounded-sm text-sm font-medium transition-all ${
+                viewMode === 'table'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+              onClick={() => onViewModeChange('table')}
+            >
+              <List className='size-4' />
+              <span className='sr-only'>Chế độ bảng</span>
+            </TooltipTrigger>
+            <TooltipContent>Chế độ bảng</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger
+              id='staff-view-mode-grid'
+              className={`inline-flex h-7 w-8 items-center justify-center rounded-sm text-sm font-medium transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+              onClick={() => onViewModeChange('grid')}
+            >
+              <LayoutGrid className='size-4' />
+              <span className='sr-only'>Chế độ lưới</span>
+            </TooltipTrigger>
+            <TooltipContent>Chế độ lưới</TooltipContent>
+          </Tooltip>
+        </div>
+
+        {/* Column visibility (only show in table mode) */}
+        {viewMode === 'table' && (
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className={buttonVariants({
+                variant: 'outline',
+                size: 'sm',
+                className: 'ml-auto hidden h-8 lg:flex',
+              })}
+            >
+              <Settings2 className='mr-2 size-4' />
+              Hiển thị
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end' className='w-40'>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {table
+                  .getAllColumns()
+                  .filter(col => col.getCanHide())
+                  .map(col => (
+                    <DropdownMenuCheckboxItem
+                      key={col.id}
+                      className='capitalize'
+                      checked={col.getIsVisible()}
+                      onCheckedChange={value => col.toggleVisibility(!!value)}
+                    >
+                      {col.id === 'name'
+                        ? 'Nhân viên'
+                        : col.id === 'email'
+                          ? 'Email'
+                          : col.id === 'role'
+                            ? 'Vai trò'
+                            : col.id === 'createdAt'
+                              ? 'Ngày tạo'
+                              : col.id}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
 
         {/* Add staff */}
         <Button id='open-create-staff-dialog' size='sm' className='h-8' onClick={onAddStaff}>

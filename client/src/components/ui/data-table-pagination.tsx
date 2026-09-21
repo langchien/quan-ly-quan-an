@@ -38,7 +38,7 @@ interface DataTablePaginationProps {
  */
 function getPageRange(
   pageIndex: number,
-  pageCount: number,
+  pageCount: number
 ): (number | 'ellipsis-start' | 'ellipsis-end')[] {
   if (pageCount <= 1) return []
 
@@ -109,9 +109,7 @@ export function DataTablePagination({
           <PaginationPrevious
             text='Trước'
             onClick={canPreviousPage ? onPreviousPage : undefined}
-            className={
-              !canPreviousPage ? 'pointer-events-none opacity-50' : 'cursor-pointer'
-            }
+            className={!canPreviousPage ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
           />
         </PaginationItem>
 
@@ -130,7 +128,7 @@ export function DataTablePagination({
                 {page + 1}
               </PaginationLink>
             </PaginationItem>
-          ),
+          )
         )}
 
         <PaginationItem>
