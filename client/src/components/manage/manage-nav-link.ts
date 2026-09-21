@@ -28,7 +28,7 @@ export const manageNavLink: NavLinkItem[] = [
   },
   {
     title: 'Phân tích',
-    href: '/manage/statistics',
+    href: '/manage/analytics',
     Icon: LineChart,
   },
   {
