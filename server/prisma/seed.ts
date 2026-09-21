@@ -12,6 +12,7 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { createHash } from 'crypto'
 import 'dotenv/config'
 import { PrismaClient } from '../src/generated/prisma/client.js'
+import { dishesData } from './dishes.data.js'
 
 const DATABASE_URL = process.env['DATABASE_URL']
 if (!DATABASE_URL) {
@@ -50,8 +51,8 @@ async function seedAccounts() {
 
   const owner = await prisma.account.create({
     data: {
-      name: 'Duoc Hello 1',
-      email: 'admin@order.com',
+      name: 'Lăng Tiến',
+      email: process.env['INITIAL_EMAIL_OWNER'] ?? 'admin@gmail.com',
       password: BCRYPT_HASH_123456,
       role: 'Owner',
     },
@@ -110,84 +111,19 @@ async function seedAccounts() {
 async function seedDishes() {
   console.log('Tao mon an...')
 
-  const dishes = [
-    // ✅ 2 anh goc giu nguyen tu SQLite
-    {
-      name: 'Beef Steak',
-      price: 190000,
-      desc: 'Bo bit tet My thuong hang, ap chao vang deu, phuc vu kem khoai tay chien va sot tieu den.',
-      img: '4f2867ef88214b4b961e72cf05e093b4.jpg',
-    },
-    {
-      name: 'Spaghetti Y',
-      price: 75000,
-      desc: 'Mi Y sot ca chua bo bam, rac pho mai parmesan va hung que tuoi.',
-      img: 'e0001b7e08604e0dbabf0d8f95e6174a.jpg',
-    },
-    // Cac mon moi
-    {
-      name: 'Banh Mi Viet Nam',
-      price: 35000,
-      desc: 'Banh mi gion rum nhan thit nguoi, cha lua, dua leo, rau thom va tuong ot.',
-      img: '6d05d144f70f4eadbd3a89428645e346.png',
-    },
-    {
-      name: 'Pho Bo Dac Biet',
-      price: 65000,
-      desc: 'Pho bo nuoc trong vat, thit tai chin, gan, gau. An kem gia song, rau mui, chanh ot.',
-      img: '207722ef5e92427fbaa9051f1fc06078.png',
-    },
-    {
-      name: 'Com Tam Suon Bi',
-      price: 55000,
-      desc: 'Com tam suon nuong mat ong, bi, cha trung hap, mo hanh va nuoc mam chua ngot.',
-      img: 'd1d8056c3bd649dc91b30a47105df993.png',
-    },
-    {
-      name: 'Bun Bo Hue',
-      price: 60000,
-      desc: 'Bun bo Hue chuan vi, nuoc leo dam da tu xa ot, thit bo va cha cua.',
-      img: 'c3e190967ed146889f9e5708a9790fa2.png',
-    },
-    {
-      name: 'Ga Nuong Mat Ong',
-      price: 130000,
-      desc: 'Dui ga ta nuong than, uop mat ong va sa, da vang gion, thit mem ngot.',
-      img: 'c2a24cf5dd02423a8103e63f1838375f.png',
-    },
-    {
-      name: 'Lau Thai Hai San',
-      price: 250000,
-      desc: 'Lau Thai chua cay, hai san tuoi: tom, muc, ngheu, nam kim cham va rau du loai.',
-      img: '6af7612e0b5848fcbc968465189f11bf.png',
-    },
-    {
-      name: 'Cha Gio Ran',
-      price: 45000,
-      desc: 'Cha gio vang gion nhan tom thit, rau cu. An kem bun tuoi, rau song va nuoc cham.',
-      img: '73133e3c103c404b96e4c18b5568753c.png',
-    },
-    {
-      name: 'Ca Phe Sua Da',
-      price: 25000,
-      desc: 'Ca phe phin truyen thong pha voi sua dac, rot len da bao min. Dam da, mat lanh.',
-      img: 'bc8f57d7e32c4b298cf11742d9f175cb.png',
-    },
-  ]
-
-  for (const d of dishes) {
+  for (const d of dishesData) {
     await prisma.dish.create({
       data: {
         name: d.name,
         price: d.price,
-        description: d.desc,
-        image: `${BASE_URL}/static/${d.img}`,
+        description: d.description,
+        image: `${BASE_URL}/static/${d.image}`,
         status: 'Available',
       },
     })
   }
 
-  console.log(`=> Da tao ${dishes.length} mon an.\n`)
+  console.log(`=> Da tao ${dishesData.length} mon an tu dishes.data.ts.\n`)
 }
 
 // BAN AN──────────
@@ -238,7 +174,7 @@ async function main() {
   console.log('=========================================')
   console.log('  SEED HOAN TAT!')
   console.log('=========================================')
-  console.log('  Email Owner : admin@order.com')
+  console.log(`  Email Owner : ${process.env['INITIAL_EMAIL_OWNER'] ?? 'admin@gmail.com'}`)
   console.log('  Mat khau    : 123456')
   console.log('=========================================')
 }
