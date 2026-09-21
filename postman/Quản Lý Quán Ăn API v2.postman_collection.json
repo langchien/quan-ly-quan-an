@@ -31,13 +31,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
             }
           },
           "response": []
@@ -63,13 +58,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/refresh-token",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "refresh-token"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh-token"]
             }
           },
           "response": []
@@ -95,13 +85,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/logout",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "logout"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
             }
           },
           "response": []
@@ -119,13 +104,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/accounts/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "me"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "me"]
             }
           },
           "response": []
@@ -151,13 +131,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/accounts/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "me"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "me"]
             }
           },
           "response": []
@@ -183,13 +158,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/accounts/change-password",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "change-password"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "change-password"]
             }
           },
           "response": []
@@ -201,12 +171,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/accounts",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts"]
             }
           },
           "response": []
@@ -232,12 +198,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/accounts",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts"]
             }
           },
           "response": []
@@ -249,14 +211,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/accounts/detail/{{employeeId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "detail",
-                "{{employeeId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "detail", "{{employeeId}}"]
             }
           },
           "response": []
@@ -282,14 +238,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/accounts/detail/{{employeeId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "detail",
-                "{{employeeId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "detail", "{{employeeId}}"]
             }
           },
           "response": []
@@ -301,14 +251,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/accounts/detail/{{employeeId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "detail",
-                "{{employeeId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "detail", "{{employeeId}}"]
             }
           },
           "response": []
@@ -320,13 +264,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/accounts/guests",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "guests"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "guests"],
               "query": [
                 {
                   "key": "fromDate",
@@ -362,13 +301,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/accounts/guests",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "guests"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "guests"]
             }
           },
           "response": []
@@ -389,12 +323,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/dishes",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "dishes"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["dishes"]
             }
           },
           "response": []
@@ -409,13 +339,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/dishes/{{dishId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "dishes",
-                "{{dishId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["dishes", "{{dishId}}"]
             }
           },
           "response": []
@@ -441,12 +366,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/dishes",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "dishes"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["dishes"]
             }
           },
           "response": []
@@ -472,13 +393,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/dishes/{{dishId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "dishes",
-                "{{dishId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["dishes", "{{dishId}}"]
             }
           },
           "response": []
@@ -490,13 +406,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/dishes/{{dishId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "dishes",
-                "{{dishId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["dishes", "{{dishId}}"]
             }
           },
           "response": []
@@ -517,12 +428,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tables",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tables"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tables"]
             }
           },
           "response": []
@@ -537,13 +444,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tables/{{tableNumber}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tables",
-                "{{tableNumber}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tables", "{{tableNumber}}"]
             }
           },
           "response": []
@@ -569,12 +471,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/tables",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tables"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tables"]
             }
           },
           "response": []
@@ -600,13 +498,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/tables/{{tableNumber}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tables",
-                "{{tableNumber}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tables", "{{tableNumber}}"]
             }
           },
           "response": []
@@ -618,13 +511,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/tables/{{tableNumber}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tables",
-                "{{tableNumber}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["tables", "{{tableNumber}}"]
             }
           },
           "response": []
@@ -642,12 +530,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/orders",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "orders"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"],
               "query": [
                 {
                   "value": "2024-01-01",
@@ -669,13 +553,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/orders/{{orderId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "orders",
-                "{{orderId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}"]
             }
           },
           "response": []
@@ -701,12 +580,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/orders",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "orders"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
             }
           },
           "response": []
@@ -732,13 +607,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/orders/{{orderId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "orders",
-                "{{orderId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}"]
             }
           },
           "response": []
@@ -764,13 +634,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/orders/pay",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "orders",
-                "pay"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "pay"]
             }
           },
           "response": []
@@ -805,14 +670,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/guest/auth/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "guest",
-                "auth",
-                "login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["guest", "auth", "login"]
             }
           },
           "response": []
@@ -841,14 +700,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/guest/auth/refresh-token",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "guest",
-                "auth",
-                "refresh-token"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["guest", "auth", "refresh-token"]
             }
           },
           "response": []
@@ -877,14 +730,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/guest/auth/logout",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "guest",
-                "auth",
-                "logout"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["guest", "auth", "logout"]
             }
           },
           "response": []
@@ -913,13 +760,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/guest/orders",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "guest",
-                "orders"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["guest", "orders"]
             }
           },
           "response": []
@@ -934,13 +776,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/guest/orders",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "guest",
-                "orders"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["guest", "orders"]
             }
           },
           "response": []
@@ -962,13 +799,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/media/upload",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "media",
-                "upload"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["media", "upload"]
             }
           },
           "response": []
@@ -983,13 +815,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/static/ten-file-anh.jpg",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "static",
-                "ten-file-anh.jpg"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["static", "ten-file-anh.jpg"]
             }
           },
           "response": []
@@ -1025,7 +852,7 @@
           "    pm.sendRequest({ url: base + '/auth/login', method: 'POST',",
           "      header: {'Content-Type': 'application/json'},",
           "      body: { mode: 'raw', raw: JSON.stringify({",
-          "        email: pm.environment.get('ownerEmail') || 'admin@order.com',",
+          "        email: pm.environment.get('ownerEmail') || 'admin@gmail.com',",
           "        password: pm.environment.get('ownerPassword') || '123456'",
           "      })}}, function(err, res) {",
           "      if (!err && res.json().data) {",

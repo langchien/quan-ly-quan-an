@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { z } from 'zod'
-import { ZodValidationPipe } from './zod-validation.pipe.js'
 import { createZodDto } from '../dto/zod.dto.js'
 import { EntityErrorException } from '../exceptions/entity-error.exception.js'
+import { ZodValidationPipe } from './zod-validation.pipe.js'
 
 describe('ZodValidationPipe', () => {
   const TestSchema = z.object({
@@ -76,7 +76,7 @@ describe('ZodValidationPipe', () => {
     const globalPipe = new ZodValidationPipe()
 
     it('nên tự động phát hiện Zod Schema từ DTO class', () => {
-      const input = { email: 'admin@order.com', age: '30' }
+      const input = { email: 'admin@gmail.com', age: '30' }
       const output = globalPipe.transform(input, {
         type: 'body',
         metatype: TestDto,
@@ -84,7 +84,7 @@ describe('ZodValidationPipe', () => {
       })
 
       expect(output).toEqual({
-        email: 'admin@order.com',
+        email: 'admin@gmail.com',
         age: 30,
       })
     })

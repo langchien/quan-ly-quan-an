@@ -1,11 +1,4 @@
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
+import { DataTablePagination } from '@/components/ui/data-table-pagination'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
@@ -161,41 +154,15 @@ export function DishDataTable({ columns, data, isLoading, onAddDish }: DishDataT
 
           {/* Pagination */}
           {pageCount > 1 && (
-            <Pagination className='mx-0 w-auto'>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    text='Trước'
-                    onClick={table.getCanPreviousPage() ? () => table.previousPage() : undefined}
-                    className={
-                      !table.getCanPreviousPage()
-                        ? 'pointer-events-none opacity-50'
-                        : 'cursor-pointer'
-                    }
-                  />
-                </PaginationItem>
-                {Array.from({ length: pageCount }, (_, i) => i).map(idx => (
-                  <PaginationItem key={idx}>
-                    <PaginationLink
-                      isActive={idx === pageIndex}
-                      onClick={() => table.setPageIndex(idx)}
-                      className='cursor-pointer'
-                    >
-                      {idx + 1}
-                    </PaginationLink>
-                  </PaginationItem>
-                ))}
-                <PaginationItem>
-                  <PaginationNext
-                    text='Sau'
-                    onClick={table.getCanNextPage() ? () => table.nextPage() : undefined}
-                    className={
-                      !table.getCanNextPage() ? 'pointer-events-none opacity-50' : 'cursor-pointer'
-                    }
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
+            <DataTablePagination
+              pageIndex={pageIndex}
+              pageCount={pageCount}
+              canPreviousPage={table.getCanPreviousPage()}
+              canNextPage={table.getCanNextPage()}
+              onPageChange={table.setPageIndex}
+              onPreviousPage={() => table.previousPage()}
+              onNextPage={() => table.nextPage()}
+            />
           )}
         </div>
       )}

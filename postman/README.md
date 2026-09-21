@@ -11,6 +11,6 @@
 
 Vì ownerPassword bị xóa khi export secret, người nhận cần tự điền lại trong Environment:
 
-ownerEmail = admin@order.com
+ownerEmail = admin@gmail.com
 ownerPassword = 123456
 baseUrl = http://localhost:4000

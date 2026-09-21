@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { validateEnv, envSchema } from './env.config.js'
+import { describe, expect, it } from 'vitest'
+import { envSchema, validateEnv } from './env.config.js'
 
 describe('env.config', () => {
   const validEnv = {
@@ -13,7 +13,7 @@ describe('env.config', () => {
     GUEST_REFRESH_TOKEN_EXPIRES_IN: '12h',
     REFRESH_TOKEN_SECRET: 'refresh_secret_key',
     REFRESH_TOKEN_EXPIRES_IN: '1d',
-    INITIAL_EMAIL_OWNER: 'admin@order.com',
+    INITIAL_EMAIL_OWNER: 'admin@gmail.com',
     INITIAL_PASSWORD_OWNER: '123456',
     DOMAIN: 'localhost',
     PROTOCOL: 'http',
@@ -24,7 +24,7 @@ describe('env.config', () => {
     const result = validateEnv(validEnv)
     expect(result.PORT).toBe(4000)
     expect(result.DATABASE_URL).toBe(validEnv.DATABASE_URL)
-    expect(result.INITIAL_EMAIL_OWNER).toBe('admin@order.com')
+    expect(result.INITIAL_EMAIL_OWNER).toBe('admin@gmail.com')
   })
 
   it('nên ném lỗi khi thiếu biến bắt buộc (DATABASE_URL)', () => {
