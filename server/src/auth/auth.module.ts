@@ -10,11 +10,11 @@ import { PrismaModule } from '../prisma/prisma.module.js'
     PrismaModule,
     // Không cấu hình global secret ở đây, mỗi sign/verify tự truyền secret riêng
     // để hỗ trợ cả ACCESS_TOKEN_SECRET và REFRESH_TOKEN_SECRET
-    JwtModule.register({})
+    JwtModule.register({}),
   ],
   controllers: [AuthController],
   providers: [AuthService, AccessTokenGuard],
   // Export để các module khác (MediaModule, AccountModule...) có thể dùng Guard
-  exports: [AuthService, AccessTokenGuard, JwtModule]
+  exports: [AuthService, AccessTokenGuard, JwtModule],
 })
 export class AuthModule {}

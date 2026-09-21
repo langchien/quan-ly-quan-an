@@ -8,9 +8,9 @@ import { AuthModule } from '../auth/auth.module.js'
   imports: [
     PrismaModule,
     // Import AuthModule để dùng AccessTokenGuard
-    AuthModule
+    AuthModule,
   ],
   controllers: [TableController],
-  providers: [TableService]
+  providers: [TableService],
 })
 export class TableModule {}

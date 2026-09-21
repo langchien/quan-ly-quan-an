@@ -4,7 +4,7 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
-  BadRequestException
+  BadRequestException,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
@@ -13,7 +13,11 @@ import { ConfigService } from '@nestjs/config'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
 import type { EnvType } from '../config/env.config.js'
 
-function generateFilename(_req: any, file: Express.Multer.File, callback: (error: Error | null, filename: string) => void) {
+function generateFilename(
+  _req: any,
+  file: Express.Multer.File,
+  callback: (error: Error | null, filename: string) => void
+) {
   const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`
   const ext = extname(file.originalname)
   callback(null, `${uniqueSuffix}${ext}`)
@@ -38,17 +42,17 @@ export class MediaController {
           const uploadFolder = process.env.UPLOAD_FOLDER ?? 'uploads'
           cb(null, resolve(uploadFolder))
         },
-        filename: generateFilename
+        filename: generateFilename,
       }),
       limits: {
-        fileSize: 1024 * 1024 * 10 // 10MB
+        fileSize: 1024 * 1024 * 10, // 10MB
       },
       fileFilter: (_req, file, callback) => {
         if (!file.mimetype.startsWith('image/')) {
           return callback(new BadRequestException('Chỉ chấp nhận file ảnh (image/*)'), false)
         }
         callback(null, true)
-      }
+      },
     })
   )
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
@@ -64,7 +68,7 @@ export class MediaController {
 
     return {
       message: 'Upload ảnh thành công',
-      data: url
+      data: url,
     }
   }
 }

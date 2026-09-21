@@ -19,7 +19,7 @@ export class TableService {
    */
   getTableList() {
     return this.prisma.table.findMany({
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     })
   }
 
@@ -37,7 +37,7 @@ export class TableService {
     const token = randomId()
     try {
       return await this.prisma.table.create({
-        data: { ...data, token }
+        data: { ...data, token },
       })
     } catch (error: any) {
       if (error?.code === 'P2002') {
@@ -58,16 +58,16 @@ export class TableService {
         data: {
           status: data.status,
           capacity: data.capacity,
-          token
-        }
+          token,
+        },
       })
     }
     return this.prisma.table.update({
       where: { number },
       data: {
         status: data.status,
-        capacity: data.capacity
-      }
+        capacity: data.capacity,
+      },
     })
   }
 

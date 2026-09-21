@@ -10,6 +10,7 @@ import { validateEnv } from './config/env.config.js'
 import { DishModule } from './dish/dish.module.js'
 import { EventsModule } from './events/events.module.js'
 import { GuestModule } from './guest/guest.module.js'
+import { IndicatorModule } from './indicator/indicator.module.js'
 import { MediaModule } from './media/media.module.js'
 import { OrderModule } from './order/order.module.js'
 import { PrismaModule } from './prisma/prisma.module.js'
@@ -38,6 +39,7 @@ import { TableModule } from './table/table.module.js'
     EventsModule,
     GuestModule,
     OrderModule,
+    IndicatorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

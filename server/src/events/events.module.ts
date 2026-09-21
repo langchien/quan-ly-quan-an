@@ -7,10 +7,10 @@ import { PrismaModule } from '../prisma/prisma.module.js'
   imports: [
     PrismaModule,
     // JwtModule cần thiết để verify token trong gateway
-    JwtModule.register({})
+    JwtModule.register({}),
   ],
   providers: [EventsGateway],
   // Export để GuestModule và OrderModule inject EventsGateway
-  exports: [EventsGateway]
+  exports: [EventsGateway],
 })
 export class EventsModule {}

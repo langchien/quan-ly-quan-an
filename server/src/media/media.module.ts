@@ -5,8 +5,8 @@ import { AuthModule } from '../auth/auth.module.js'
 @Module({
   imports: [
     // Import AuthModule để dùng AccessTokenGuard và JwtService
-    AuthModule
+    AuthModule,
   ],
-  controllers: [MediaController]
+  controllers: [MediaController],
 })
 export class MediaModule {}

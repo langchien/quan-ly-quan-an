@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  UseGuards,
-  HttpCode,
-  HttpStatus
-} from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, UseGuards, HttpCode, HttpStatus } from '@nestjs/common'
 import { TableService } from './table.service.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
 import { ZodBody, ZodParam } from '../common/index.js'
@@ -17,7 +8,7 @@ import {
   UpdateTableBody,
   type UpdateTableBodyType,
   TableParams,
-  type TableParamsType
+  type TableParamsType,
 } from './dto/table.schema.js'
 
 @Controller('tables')

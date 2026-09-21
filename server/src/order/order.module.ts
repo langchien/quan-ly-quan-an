@@ -6,12 +6,8 @@ import { AuthModule } from '../auth/auth.module.js'
 import { EventsModule } from '../events/events.module.js'
 
 @Module({
-  imports: [
-    PrismaModule,
-    AuthModule,
-    EventsModule
-  ],
+  imports: [PrismaModule, AuthModule, EventsModule],
   controllers: [OrderController],
-  providers: [OrderService]
+  providers: [OrderService],
 })
 export class OrderModule {}

@@ -9,7 +9,7 @@ import {
   LogoutBody,
   type LogoutBodyType,
   RefreshTokenBody,
-  type RefreshTokenBodyType
+  type RefreshTokenBodyType,
 } from './dto/auth.schema.js'
 import type { TokenPayload } from '../constants/type.js'
 
@@ -32,11 +32,11 @@ export class AuthController {
           id: account.id,
           name: account.name,
           email: account.email,
-          role: account.role
+          role: account.role,
         },
         accessToken,
-        refreshToken
-      }
+        refreshToken,
+      },
     }
   }
 
@@ -62,7 +62,7 @@ export class AuthController {
     const result = await this.authService.refreshToken(body.refreshToken)
     return {
       message: 'Lấy token mới thành công',
-      data: result
+      data: result,
     }
   }
 }

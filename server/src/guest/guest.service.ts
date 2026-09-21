@@ -24,7 +24,9 @@ export class GuestService {
       { userId, role: Role.Guest, tokenType: TokenType.AccessToken },
       {
         secret: this.configService.get('GUEST_ACCESS_TOKEN_SECRET', { infer: true }),
-        expiresIn: this.configService.get('GUEST_ACCESS_TOKEN_EXPIRES_IN', { infer: true }) as JwtSignOptions['expiresIn'],
+        expiresIn: this.configService.get('GUEST_ACCESS_TOKEN_EXPIRES_IN', {
+          infer: true,
+        }) as JwtSignOptions['expiresIn'],
       }
     )
   }
@@ -39,7 +41,9 @@ export class GuestService {
     }
     return this.jwtService.sign(payload, {
       secret: this.configService.get('GUEST_REFRESH_TOKEN_SECRET', { infer: true }),
-      expiresIn: this.configService.get('GUEST_REFRESH_TOKEN_EXPIRES_IN', { infer: true }) as JwtSignOptions['expiresIn'],
+      expiresIn: this.configService.get('GUEST_REFRESH_TOKEN_EXPIRES_IN', {
+        infer: true,
+      }) as JwtSignOptions['expiresIn'],
     })
   }
 

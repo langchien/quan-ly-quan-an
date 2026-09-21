@@ -2,7 +2,7 @@
   WebSocketGateway,
   WebSocketServer,
   OnGatewayConnection,
-  OnGatewayDisconnect
+  OnGatewayDisconnect,
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
 import { JwtService } from '@nestjs/jwt'
@@ -14,8 +14,8 @@ import { ManagerRoom, Role, TokenType, type TokenPayload } from '../constants/ty
 @WebSocketGateway({
   cors: {
     origin: '*',
-    credentials: true
-  }
+    credentials: true,
+  },
 })
 export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -42,12 +42,12 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       try {
         payload = this.jwtService.verify<TokenPayload>(token, {
-          secret: this.configService.get('GUEST_ACCESS_TOKEN_SECRET', { infer: true })
+          secret: this.configService.get('GUEST_ACCESS_TOKEN_SECRET', { infer: true }),
         })
       } catch {
         try {
           payload = this.jwtService.verify<TokenPayload>(token, {
-            secret: this.configService.get('ACCESS_TOKEN_SECRET', { infer: true })
+            secret: this.configService.get('ACCESS_TOKEN_SECRET', { infer: true }),
           })
         } catch {
           socket.disconnect()
@@ -66,13 +66,13 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         await this.prisma.socket.upsert({
           where: { guestId: userId },
           update: { socketId: socket.id },
-          create: { guestId: userId, socketId: socket.id }
+          create: { guestId: userId, socketId: socket.id },
         })
       } else {
         await this.prisma.socket.upsert({
           where: { accountId: userId },
           update: { socketId: socket.id },
-          create: { accountId: userId, socketId: socket.id }
+          create: { accountId: userId, socketId: socket.id },
         })
         socket.join(ManagerRoom)
       }
@@ -86,9 +86,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleDisconnect(socket: Socket) {
     console.log(`Socket disconnected: ${socket.id}`)
-    await this.prisma.socket
-      .deleteMany({ where: { socketId: socket.id } })
-      .catch(() => {})
+    await this.prisma.socket.deleteMany({ where: { socketId: socket.id } }).catch(() => {})
   }
 
   emitNewOrder(orders: any[], guestSocketId?: string) {

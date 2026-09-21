@@ -21,7 +21,9 @@ export class AuthService {
       { ...payload, tokenType: TokenType.AccessToken },
       {
         secret: this.configService.get('ACCESS_TOKEN_SECRET', { infer: true }),
-        expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRES_IN', { infer: true }) as JwtSignOptions['expiresIn'],
+        expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRES_IN', {
+          infer: true,
+        }) as JwtSignOptions['expiresIn'],
       }
     )
   }
@@ -41,7 +43,9 @@ export class AuthService {
       { ...rest, tokenType: TokenType.RefreshToken },
       {
         secret: this.configService.get('REFRESH_TOKEN_SECRET', { infer: true }),
-        expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES_IN', { infer: true }) as JwtSignOptions['expiresIn'],
+        expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRES_IN', {
+          infer: true,
+        }) as JwtSignOptions['expiresIn'],
       }
     )
   }

@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  UseGuards,
-  HttpCode,
-  HttpStatus
-} from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, UseGuards, HttpCode, HttpStatus } from '@nestjs/common'
 import { DishService } from './dish.service.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
 import { ZodBody, ZodParam } from '../common/index.js'
@@ -17,7 +8,7 @@ import {
   UpdateDishBody,
   type UpdateDishBodyType,
   DishParams,
-  type DishParamsType
+  type DishParamsType,
 } from './dto/dish.schema.js'
 
 @Controller('dishes')

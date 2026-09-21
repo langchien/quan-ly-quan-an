@@ -1,3 +1,4 @@
+import { DashboardMain } from '@/components/manage/dashboard/dashboard-main'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/manage/dashboard')({
@@ -5,5 +6,5 @@ export const Route = createFileRoute('/manage/dashboard')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/manage/dashboard"!</div>
+  return <DashboardMain />
 }

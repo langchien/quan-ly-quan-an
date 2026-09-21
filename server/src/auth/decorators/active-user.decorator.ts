@@ -9,9 +9,11 @@ import type { TokenPayload } from '../../constants/type.js'
  *   @ActiveUser() user: TokenPayload
  *   @ActiveUser('userId') userId: number
  */
-export const ActiveUser = createParamDecorator((field: keyof TokenPayload | undefined, ctx: ExecutionContext) => {
-  const request = ctx.switchToHttp().getRequest()
-  const user = request.user as TokenPayload
+export const ActiveUser = createParamDecorator(
+  (field: keyof TokenPayload | undefined, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest()
+    const user = request.user as TokenPayload
 
-  return field ? user?.[field] : user
-})
+    return field ? user?.[field] : user
+  }
+)

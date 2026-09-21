@@ -11,7 +11,7 @@ export class DishService {
    */
   getDishList() {
     return this.prisma.dish.findMany({
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     })
   }
 

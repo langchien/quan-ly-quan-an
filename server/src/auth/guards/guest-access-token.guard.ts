@@ -26,7 +26,7 @@ export class GuestAccessTokenGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync<TokenPayload>(token, {
-        secret: this.configService.get('GUEST_ACCESS_TOKEN_SECRET', { infer: true })
+        secret: this.configService.get('GUEST_ACCESS_TOKEN_SECRET', { infer: true }),
       })
 
       if (payload.tokenType !== TokenType.AccessToken) {

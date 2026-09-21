@@ -14,9 +14,9 @@ import { EventsModule } from '../events/events.module.js'
     AuthModule,
     // JwtModule riêng với register({}) để GuestService tự cấu hình secret khi sign
     JwtModule.register({}),
-    EventsModule
+    EventsModule,
   ],
   controllers: [GuestController],
-  providers: [GuestService, GuestAccessTokenGuard]
+  providers: [GuestService, GuestAccessTokenGuard],
 })
 export class GuestModule {}

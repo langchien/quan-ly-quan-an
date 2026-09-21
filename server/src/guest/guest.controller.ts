@@ -1,11 +1,4 @@
-﻿import {
-  Controller,
-  Get,
-  Post,
-  HttpCode,
-  HttpStatus,
-  UseGuards
-} from '@nestjs/common'
+﻿import { Controller, Get, Post, HttpCode, HttpStatus, UseGuards } from '@nestjs/common'
 import { GuestService } from './guest.service.js'
 import { GuestAccessTokenGuard } from '../auth/guards/guest-access-token.guard.js'
 import { ActiveUser } from '../auth/decorators/active-user.decorator.js'
@@ -18,7 +11,7 @@ import {
   GuestRefreshTokenBody,
   type GuestRefreshTokenBodyType,
   GuestCreateOrdersBody,
-  type GuestCreateOrdersBodyType
+  type GuestCreateOrdersBodyType,
 } from './dto/guest.schema.js'
 import { EventsGateway } from '../events/events.gateway.js'
 
@@ -46,11 +39,11 @@ export class GuestController {
           role: 'Guest',
           tableNumber: result.guest.tableNumber,
           createdAt: result.guest.createdAt,
-          updatedAt: result.guest.updatedAt
+          updatedAt: result.guest.updatedAt,
         },
         accessToken: result.accessToken,
-        refreshToken: result.refreshToken
-      }
+        refreshToken: result.refreshToken,
+      },
     }
   }
 

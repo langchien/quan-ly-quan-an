@@ -1,13 +1,4 @@
-﻿import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  HttpCode,
-  HttpStatus,
-  UseGuards,
-  Query
-} from '@nestjs/common'
+﻿import { Controller, Get, Post, Put, HttpCode, HttpStatus, UseGuards, Query } from '@nestjs/common'
 import { OrderService } from './order.service.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
 import { ActiveUser } from '../auth/decorators/active-user.decorator.js'
@@ -22,7 +13,7 @@ import {
   CreateOrdersBody,
   type CreateOrdersBodyType,
   PayGuestOrdersBody,
-  type PayGuestOrdersBodyType
+  type PayGuestOrdersBodyType,
 } from './dto/order.schema.js'
 import { EventsGateway } from '../events/events.gateway.js'
 
@@ -48,7 +39,7 @@ export class OrderController {
     this.eventsGateway.emitNewOrder(orders, guestSocketId)
     return {
       message: `Tạo thành công ${orders.length} đơn hàng cho khách hàng`,
-      data: orders
+      data: orders,
     }
   }
 
@@ -84,7 +75,7 @@ export class OrderController {
   ) {
     const { order, guestSocketId } = await this.orderService.updateOrder(params.orderId, {
       ...body,
-      orderHandlerId: accountId
+      orderHandlerId: accountId,
     })
     this.eventsGateway.emitUpdateOrder(order, guestSocketId)
     return { message: 'Cập nhật đơn hàng thành công', data: order }
@@ -102,12 +93,12 @@ export class OrderController {
   ) {
     const { orders, guestSocketId } = await this.orderService.payGuestOrders({
       ...body,
-      orderHandlerId: accountId
+      orderHandlerId: accountId,
     })
     this.eventsGateway.emitPayment(orders, guestSocketId)
     return {
       message: `Thanh toán thành công ${orders.length} đơn`,
-      data: orders
+      data: orders,
     }
   }
 }
