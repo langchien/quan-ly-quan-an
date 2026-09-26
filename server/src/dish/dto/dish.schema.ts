@@ -1,7 +1,7 @@
 import z from 'zod'
 import { DishStatusValues } from '../../constants/type.js'
 
-// Dish Schema──────
+// Dish Schema
 
 export const DishSchema = z.object({
   id: z.number(),
@@ -28,7 +28,7 @@ export const DishListRes = z.object({
 
 export type DishListResType = z.TypeOf<typeof DishListRes>
 
-// Create Dish──────
+// Create Dish
 
 export const CreateDishBody = z.object({
   name: z.string().min(1).max(256),
@@ -40,12 +40,12 @@ export const CreateDishBody = z.object({
 
 export type CreateDishBodyType = z.TypeOf<typeof CreateDishBody>
 
-// Update Dish──────
+// Update Dish
 
 export const UpdateDishBody = CreateDishBody
 export type UpdateDishBodyType = CreateDishBodyType
 
-// Params──────────
+// Params
 
 export const DishParams = z.object({
   id: z.coerce.number(),

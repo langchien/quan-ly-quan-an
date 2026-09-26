@@ -38,7 +38,7 @@ export function useLiveOrders() {
 
   const { data: tables, isLoading: isLoadingTables } = useGetTableList()
 
-  // ── Socket events ──
+  // Socket events
   useEffect(() => {
     function handleNewOrder() {
       toast.info('🔔 Có đơn hàng mới!', {
@@ -68,7 +68,7 @@ export function useLiveOrders() {
     }
   }, [queryClient, audioChime])
 
-  // ── Computed KPIs ──
+  // Computed KPIs
   const liveOrders = orders ?? []
 
   const pendingOrders = useMemo(

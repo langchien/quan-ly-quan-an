@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Role, TokenType } from '../../constants/type.js'
 import { GuestAccessTokenGuard } from './guest-access-token.guard.js'
 
-// Helper tạo mock ExecutionContext ──────────────────────────────────────────
+// Helper tạo mock ExecutionContext
 
 const createMockContext = (authHeader?: string): ExecutionContext =>
   ({

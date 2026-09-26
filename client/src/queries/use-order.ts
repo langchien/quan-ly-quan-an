@@ -12,11 +12,11 @@ import type {
 } from '@/schemaValidations/order.schema'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-// Query Keys────────
+// Query Keys
 
 export const adminOrdersQueryKey = ['admin', 'orders'] as const
 
-// Query Options Factory ─────────────────────────────────────────────────────
+// Query Options Factory
 
 export function ordersQueryOptions(params?: GetOrdersQueryParamsType) {
   return queryOptions({
@@ -32,7 +32,7 @@ export function ordersQueryOptions(params?: GetOrdersQueryParamsType) {
   })
 }
 
-// Query Hooks───────
+// Query Hooks
 
 /** Lấy danh sách đơn hàng (admin) */
 export function useGetOrdersQuery(params?: GetOrdersQueryParamsType) {
@@ -51,7 +51,7 @@ export function useGetOrderDetailQuery(orderId: number) {
   })
 }
 
-// Mutation Hooks────
+// Mutation Hooks
 
 /** Cập nhật trạng thái / số lượng đơn hàng */
 export function useUpdateOrderMutation() {

@@ -47,7 +47,7 @@ export const OrderSchema = z.object({
   updatedAt: z.date(),
 })
 
-// Guest Login───────
+// Guest Login
 
 export const GuestLoginBody = z
   .object({
@@ -77,7 +77,7 @@ export const GuestLoginRes = z.object({
 
 export type GuestLoginResType = z.TypeOf<typeof GuestLoginRes>
 
-// Guest Logout──────
+// Guest Logout
 
 export const GuestLogoutBody = z.object({ refreshToken: z.string() }).strict()
 export type GuestLogoutBodyType = z.TypeOf<typeof GuestLogoutBody>
@@ -115,7 +115,7 @@ export const GuestCreateOrdersRes = z.object({
 
 export type GuestCreateOrdersResType = z.TypeOf<typeof GuestCreateOrdersRes>
 
-// Guest Get Orders──
+// Guest Get Orders
 
 export const GuestGetOrdersRes = GuestCreateOrdersRes
 export type GuestGetOrdersResType = z.TypeOf<typeof GuestGetOrdersRes>

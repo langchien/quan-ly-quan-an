@@ -45,7 +45,7 @@ async function clearAll() {
   console.log('=> Da xoa sach.\n')
 }
 
-// TAI KHOAN──────
+// TAI KHOAN
 async function seedAccounts() {
   console.log('Tao tai khoan...')
 
@@ -107,7 +107,7 @@ async function seedAccounts() {
   console.log(`=> Da tao 1 Owner + ${employeeList.length} Employees.\n`)
 }
 
-// MON AN──────────
+// MON AN
 async function seedDishes() {
   console.log('Tao mon an...')
 
@@ -126,7 +126,7 @@ async function seedDishes() {
   console.log(`=> Da tao ${dishesData.length} mon an tu dishes.data.ts.\n`)
 }
 
-// BAN AN──────────
+// BAN AN
 async function seedTables() {
   console.log('Tao ban an...')
 
@@ -160,7 +160,7 @@ async function seedTables() {
   console.log(`=> Da tao ${tableData.length} ban an.\n`)
 }
 
-// MAIN────────────
+// MAIN
 async function main() {
   console.log('=========================================')
   console.log('  SEED DATABASE POSTGRESQL (NestJS)')

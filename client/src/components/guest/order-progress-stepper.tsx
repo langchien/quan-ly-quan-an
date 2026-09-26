@@ -1,7 +1,7 @@
 import { OrderStatus } from '@/constants/type'
 import { Check, ChefHat, Clock, CreditCard, UtensilsCrossed } from 'lucide-react'
 
-// ── Types ───────────────────────────────────────────────────────────────────────
+// Types
 
 interface OrderProgressStepperProps {
   orders: { status: string }[]
@@ -13,7 +13,7 @@ interface StepConfig {
   icon: React.ReactNode
 }
 
-// ── Constants ───────────────────────────────────────────────────────────────────
+// Constants
 
 const STEPS: StepConfig[] = [
   { key: OrderStatus.Pending, label: 'Chờ xác nhận', icon: <Clock className='h-4 w-4' /> },
@@ -38,7 +38,7 @@ const STATUS_WEIGHT: Record<string, number> = {
   [OrderStatus.Paid]: 3,
 }
 
-// ── Helpers ─────────────────────────────────────────────────────────────────────
+// Helpers
 
 /**
  * Xác định step hiện tại dựa trên trạng thái **thấp nhất** của tất cả orders.
@@ -58,7 +58,7 @@ function computeCurrentStep(orders: { status: string }[]): number {
   let minWeight = Infinity
   for (const order of activeOrders) {
     const weight = STATUS_WEIGHT[order.status]
-    if (weight !== undefined && weight < minWeight) {
+    if (weight < minWeight) {
       minWeight = weight
     }
   }
@@ -66,7 +66,7 @@ function computeCurrentStep(orders: { status: string }[]): number {
   return minWeight === Infinity ? -1 : minWeight
 }
 
-// ── Component ───────────────────────────────────────────────────────────────────
+// Component
 
 /**
  * Stepper trực quan hiển thị tiến trình tổng thể đơn hàng của khách.

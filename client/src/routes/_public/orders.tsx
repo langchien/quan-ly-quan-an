@@ -13,7 +13,7 @@ import type z from 'zod'
 
 type OrderType = z.TypeOf<typeof OrderSchema>
 
-// Route────────────
+// Route
 
 export const Route = createFileRoute('/_public/orders')({
   beforeLoad: () => {
@@ -25,7 +25,7 @@ export const Route = createFileRoute('/_public/orders')({
   component: OrdersPage,
 })
 
-// Component────────
+// Component
 
 function OrdersPage() {
   const navigate = useNavigate()
@@ -36,7 +36,7 @@ function OrdersPage() {
   const logoutMutation = useGuestLogoutMutation()
   const refreshToken = useAuthStore(s => s.refreshToken)
 
-  // ── Lắng nghe socket events ──────────────────────────────────────────────────
+  // Lắng nghe socket events
   useEffect(() => {
     function handleUpdateOrder(updatedOrder: OrderType) {
       // Cập nhật query cache khi order được cập nhật
@@ -62,7 +62,7 @@ function OrdersPage() {
     }
   }, [refetch])
 
-  // ── Logout──────────
+  // Logout
   async function handleLogout() {
     try {
       await logoutMutation.mutateAsync({ refreshToken: refreshToken ?? '' })

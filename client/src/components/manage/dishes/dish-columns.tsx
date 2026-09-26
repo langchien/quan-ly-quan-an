@@ -54,7 +54,7 @@ interface GetDishColumnsOptions {
 
 export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): ColumnDef<DishType>[] {
   return [
-    // ── Checkbox select ──
+    // Checkbox select
     {
       id: 'select',
       header: ({ table }) => (
@@ -75,7 +75,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
       enableHiding: false,
     },
 
-    // ── Ảnh + Tên ──
+    // Ảnh + Tên
     {
       id: 'name',
       accessorKey: 'name',
@@ -106,7 +106,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
       },
     },
 
-    // ── Giá ──
+    // Giá
     {
       accessorKey: 'price',
       header: ({ column }) => (
@@ -125,7 +125,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
       ),
     },
 
-    // ── Mô tả ──
+    // Mô tả
     {
       accessorKey: 'description',
       header: 'Mô tả',
@@ -139,7 +139,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
       },
     },
 
-    // ── Trạng thái ──
+    // Trạng thái
     {
       accessorKey: 'status',
       header: 'Trạng thái',
@@ -147,7 +147,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
       filterFn: (row, id, value: string[]) => value.includes(row.getValue(id)),
     },
 
-    // ── Actions ──
+    // Actions
     {
       id: 'actions',
       header: () => <span className='sr-only'>Thao tác</span>,

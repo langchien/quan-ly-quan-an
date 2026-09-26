@@ -141,7 +141,7 @@ export function LiveTableGrid({ orders, isLoading }: LiveTableGridProps) {
   )
 }
 
-// ── Table Card ──
+// Table Card
 
 function TableCard({
   group,

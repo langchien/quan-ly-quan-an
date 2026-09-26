@@ -106,7 +106,7 @@ export function getOrderColumns({
   onPay,
 }: GetOrderColumnsOptions): ColumnDef<OrderSchemaType>[] {
   return [
-    // ── ID ──
+    // ID
     {
       accessorKey: 'id',
       header: ({ column }) => (
@@ -126,7 +126,7 @@ export function getOrderColumns({
       enableHiding: false,
     },
 
-    // ── Khách ──
+    // Khách
     {
       id: 'guest',
       accessorFn: row => row.guest?.name ?? '',
@@ -146,7 +146,7 @@ export function getOrderColumns({
       },
     },
 
-    // ── Món ăn ──
+    // Món ăn
     {
       id: 'dish',
       accessorFn: row => row.dishSnapshot.name,
@@ -177,7 +177,7 @@ export function getOrderColumns({
       },
     },
 
-    // ── Số lượng ──
+    // Số lượng
     {
       accessorKey: 'quantity',
       header: 'SL',
@@ -186,7 +186,7 @@ export function getOrderColumns({
       ),
     },
 
-    // ── Tổng tiền ──
+    // Tổng tiền
     {
       id: 'total',
       header: ({ column }) => (
@@ -207,7 +207,7 @@ export function getOrderColumns({
       },
     },
 
-    // ── Trạng thái ──
+    // Trạng thái
     {
       accessorKey: 'status',
       header: 'Trạng thái',
@@ -215,7 +215,7 @@ export function getOrderColumns({
       filterFn: (row, id, value: string[]) => value.includes(row.getValue(id)),
     },
 
-    // ── Nhân viên xử lý ──
+    // Nhân viên xử lý
     {
       id: 'handler',
       accessorFn: row => row.orderHandler?.name ?? '',
@@ -239,7 +239,7 @@ export function getOrderColumns({
       },
     },
 
-    // ── Thời gian ──
+    // Thời gian
     {
       accessorKey: 'createdAt',
       header: ({ column }) => (
@@ -260,7 +260,7 @@ export function getOrderColumns({
       ),
     },
 
-    // ── Actions ──
+    // Actions
     {
       id: 'actions',
       header: () => <span className='sr-only'>Thao tác</span>,

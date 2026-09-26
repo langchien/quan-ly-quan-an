@@ -10,11 +10,11 @@ import type {
 } from '@/schemaValidations/guest.schema'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-// Query Keys────────
+// Query Keys
 
 export const guestOrdersQueryKey = ['guest', 'orders'] as const
 
-// Mutation Hooks────
+// Mutation Hooks
 
 /** Đăng nhập khách (lấy token từ QR bàn) */
 export function useGuestLoginMutation() {
@@ -45,7 +45,7 @@ export function useGuestCreateOrdersMutation() {
   })
 }
 
-// Query Hooks───────
+// Query Hooks
 
 /** Lấy danh sách đơn hàng của khách đang đăng nhập */
 export function useGuestGetOrdersQuery(enabled = true) {

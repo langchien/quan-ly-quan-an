@@ -1,7 +1,7 @@
 import z from 'zod'
 import { RoleValues } from '../../constants/type.js'
 
-// Account Schema─
+// Account Schema
 
 export const AccountSchema = z.object({
   id: z.number(),
@@ -29,7 +29,7 @@ export const AccountRes = z
 
 export type AccountResType = z.TypeOf<typeof AccountRes>
 
-// Create Employee─
+// Create Employee
 
 export const CreateEmployeeAccountBody = z
   .object({
@@ -52,7 +52,7 @@ export const CreateEmployeeAccountBody = z
 
 export type CreateEmployeeAccountBodyType = z.TypeOf<typeof CreateEmployeeAccountBody>
 
-// Update Employee─
+// Update Employee
 
 export const UpdateEmployeeAccountBody = z
   .object({
@@ -84,7 +84,7 @@ export const UpdateEmployeeAccountBody = z
 
 export type UpdateEmployeeAccountBodyType = z.TypeOf<typeof UpdateEmployeeAccountBody>
 
-// Update Me───────
+// Update Me
 
 export const UpdateMeBody = z
   .object({
@@ -95,7 +95,7 @@ export const UpdateMeBody = z
 
 export type UpdateMeBodyType = z.TypeOf<typeof UpdateMeBody>
 
-// Change Password─
+// Change Password
 
 export const ChangePasswordBody = z
   .object({
@@ -116,7 +116,7 @@ export const ChangePasswordBody = z
 
 export type ChangePasswordBodyType = z.TypeOf<typeof ChangePasswordBody>
 
-// Params──────────
+// Params
 
 export const AccountIdParam = z.object({
   id: z.coerce.number(),

@@ -9,7 +9,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { Search, SearchX, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
-// Route────────────
+// Route
 
 export const Route = createFileRoute('/_public/menu')({
   beforeLoad: () => {
@@ -22,7 +22,7 @@ export const Route = createFileRoute('/_public/menu')({
   component: MenuPage,
 })
 
-// Component────────
+// Component
 
 function MenuPage() {
   const dishes = Route.useLoaderData()

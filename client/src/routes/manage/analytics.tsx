@@ -18,7 +18,7 @@ export const Route = createFileRoute('/manage/analytics')({
   component: AnalyticsPage,
 })
 
-// ── Date defaults ──
+// Date defaults
 function getDefaultFromDate() {
   const now = new Date()
   return new Date(now.getFullYear(), now.getMonth(), 1)
@@ -149,7 +149,7 @@ function AnalyticsPage() {
   )
 }
 
-// ─── KPI Card Component ───────────────────────────────────────────────
+// KPI Card Component
 
 function KPICard({
   title,
@@ -182,7 +182,7 @@ function KPICard({
   )
 }
 
-// ─── Date Picker Component ────────────────────────────────────────────
+// Date Picker Component
 
 function DatePicker({
   date,

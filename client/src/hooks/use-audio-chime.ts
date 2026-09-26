@@ -38,7 +38,7 @@ export function useAudioChime() {
       const ctx = getAudioContext()
       const now = ctx.currentTime
 
-      // ── Ding (note cao) ──
+      // Ding (note cao)
       const osc1 = ctx.createOscillator()
       const gain1 = ctx.createGain()
       osc1.type = 'sine'
@@ -50,7 +50,7 @@ export function useAudioChime() {
       osc1.start(now)
       osc1.stop(now + 0.6)
 
-      // ── Dong (note thấp hơn, delay 150ms) ──
+      // Dong (note thấp hơn, delay 150ms)
       const osc2 = ctx.createOscillator()
       const gain2 = ctx.createGain()
       osc2.type = 'sine'

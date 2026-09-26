@@ -1,7 +1,7 @@
 import z from 'zod'
 import { TableStatusValues } from '../../constants/type.js'
 
-// Table Schema─────
+// Table Schema
 
 export const TableSchema = z.object({
   number: z.coerce.number(),
@@ -26,7 +26,7 @@ export const TableListRes = z.object({
 
 export type TableListResType = z.TypeOf<typeof TableListRes>
 
-// Create Table─────
+// Create Table
 
 export const CreateTableBody = z.object({
   number: z.coerce.number().positive(),
@@ -36,7 +36,7 @@ export const CreateTableBody = z.object({
 
 export type CreateTableBodyType = z.TypeOf<typeof CreateTableBody>
 
-// Update Table─────
+// Update Table
 
 export const UpdateTableBody = z.object({
   changeToken: z.boolean(),
@@ -46,7 +46,7 @@ export const UpdateTableBody = z.object({
 
 export type UpdateTableBodyType = z.TypeOf<typeof UpdateTableBody>
 
-// Params──────────
+// Params
 
 export const TableParams = z.object({
   number: z.coerce.number(),

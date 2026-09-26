@@ -3,7 +3,7 @@ import { StatusError } from '../common/index.js'
 import { DishStatus, OrderStatus, TableStatus } from '../constants/type.js'
 import { OrderService } from './order.service.js'
 
-// Factories─────────
+// Factories
 
 const makeOrder = (overrides = {}) => ({
   id: 1,
@@ -64,7 +64,7 @@ const makeTable = (overrides = {}) => ({
   ...overrides,
 })
 
-// Mock Prisma───────
+// Mock Prisma
 
 const makePrisma = () => ({
   order: {

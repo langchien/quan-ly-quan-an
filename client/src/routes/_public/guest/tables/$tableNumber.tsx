@@ -13,13 +13,13 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import z from 'zod'
 
-// Search params schema ──────────────────────────────────────────────────────
+// Search params schema
 
 const searchSchema = z.object({
   token: z.string().catch(''),
 })
 
-// Route────────────
+// Route
 
 export const Route = createFileRoute('/_public/guest/tables/$tableNumber')({
   validateSearch: search => searchSchema.parse(search),
@@ -32,7 +32,7 @@ export const Route = createFileRoute('/_public/guest/tables/$tableNumber')({
   component: GuestLoginPage,
 })
 
-// Component────────
+// Component
 
 function GuestLoginPage() {
   const { tableNumber } = Route.useParams()

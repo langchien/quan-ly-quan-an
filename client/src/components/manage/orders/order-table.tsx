@@ -20,7 +20,7 @@ export function OrderTable() {
   const [updateTarget, setUpdateTarget] = useState<OrderSchemaType | null>(null)
   const [payTarget, setPayTarget] = useState<OrderSchemaType | null>(null)
 
-  // ── Lắng nghe socket events realtime ──────────────────────────────────────────
+  // Lắng nghe socket events realtime
   useEffect(() => {
     function handleNewOrder() {
       toast.info('Có đơn hàng mới!', {

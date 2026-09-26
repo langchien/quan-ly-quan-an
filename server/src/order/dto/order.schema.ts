@@ -47,12 +47,12 @@ export const OrderSchema = z.object({
   updatedAt: z.date(),
 })
 
-// Params───────────
+// Params
 
 export const OrderParam = z.object({ orderId: z.coerce.number() })
 export type OrderParamType = z.TypeOf<typeof OrderParam>
 
-// Get Orders (Manager) ─────────────────────────────────────────────────────
+// Get Orders (Manager)
 
 export const GetOrdersQueryParams = z.object({
   fromDate: z.coerce.date().optional(),
@@ -66,7 +66,7 @@ export const GetOrdersRes = z.object({
 })
 export type GetOrdersResType = z.TypeOf<typeof GetOrdersRes>
 
-// Get Order Detail─
+// Get Order Detail
 
 const TableSchema = z.object({
   number: z.number(),
@@ -83,7 +83,7 @@ export const GetOrderDetailRes = z.object({
 })
 export type GetOrderDetailResType = z.TypeOf<typeof GetOrderDetailRes>
 
-// Update Order─────
+// Update Order
 
 export const UpdateOrderBody = z.object({
   status: z.enum(OrderStatusValues),
@@ -98,7 +98,7 @@ export const UpdateOrderRes = z.object({
 })
 export type UpdateOrderResType = z.TypeOf<typeof UpdateOrderRes>
 
-// Create Orders (Manager tạo cho guest) ───────────────────────────────────
+// Create Orders (Manager tạo cho guest)
 
 export const CreateOrdersBody = z
   .object({
@@ -120,7 +120,7 @@ export const CreateOrdersRes = z.object({
 })
 export type CreateOrdersResType = z.TypeOf<typeof CreateOrdersRes>
 
-// Pay Guest Orders─
+// Pay Guest Orders
 
 export const PayGuestOrdersBody = z.object({ guestId: z.number() })
 export type PayGuestOrdersBodyType = z.TypeOf<typeof PayGuestOrdersBody>

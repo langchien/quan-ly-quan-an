@@ -32,7 +32,7 @@ export function DashboardMain() {
   return (
     <TooltipProvider>
       <div className='space-y-4'>
-        {/* ── Tầng 1: Live Stats Bar ── */}
+        {/* Tầng 1: Live Stats Bar */}
         <LiveStatsBar
           pendingCount={pendingCount}
           processingCount={processingCount}
@@ -44,7 +44,7 @@ export function DashboardMain() {
           onToggleAudio={audioChime.toggleEnabled}
         />
 
-        {/* ── Tầng 2 & 3: View Switcher + Không gian điều hành ── */}
+        {/* Tầng 2 & 3: View Switcher + Không gian điều hành */}
         <Tabs value={activeView} onValueChange={setActiveView}>
           <TabsList>
             <TabsTrigger value='tables' className='gap-1.5'>

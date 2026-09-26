@@ -35,7 +35,7 @@ export function formatCurrencyCompact(value: number): string {
   return value.toLocaleString('vi-VN')
 }
 
-// ── Text Utilities ──────────────────────────────────────────────────────────────
+// Text Utilities
 
 /**
  * Loại bỏ dấu tiếng Việt (diacritics) để hỗ trợ tìm kiếm.

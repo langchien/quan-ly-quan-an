@@ -12,7 +12,7 @@ import { ChefHat, CheckCircle2, Clock, Truck, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-// ── SLA Thresholds (phút) ──
+// SLA Thresholds (phút)
 const SLA_WARNING_MINUTES = 5
 const SLA_DANGER_MINUTES = 15
 
@@ -124,7 +124,7 @@ export function OrderCard({ order, variant = 'kanban', showTableNumber = true }:
   const timerClass = getSlaTimerClass(waitMinutes, order.status)
 
   if (!isKanban) {
-    // ── Compact variant cho hiển thị trong Table Grid ──
+    // Compact variant cho hiển thị trong Table Grid
     return (
       <div className='flex items-center justify-between gap-2 py-1.5'>
         <div className='flex min-w-0 items-center gap-2'>
@@ -163,7 +163,7 @@ export function OrderCard({ order, variant = 'kanban', showTableNumber = true }:
     )
   }
 
-  // ── Kanban Card variant ──
+  // Kanban Card variant
   return (
     <Card
       className={cn(
@@ -242,7 +242,7 @@ export function OrderCard({ order, variant = 'kanban', showTableNumber = true }:
   )
 }
 
-// ── Status Dot mini ──
+// Status Dot mini
 function StatusDot({ status }: { status: string }) {
   const config: Record<string, { color: string; label: string }> = {
     [OrderStatus.Pending]: { color: 'bg-amber-500', label: 'Chờ' },

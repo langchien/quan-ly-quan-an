@@ -51,7 +51,7 @@ function TabContent({ tab }: { tab: SettingsTab }) {
   }
 }
 
-// Component chính─
+// Component chính
 export function SettingsDialog() {
   const { open, activeTab, setOpen, setActiveTab } = useSettingsStore()
 
@@ -72,7 +72,7 @@ export function SettingsDialog() {
           className='h-full items-start'
           style={{ '--sidebar-width': '200px' } as React.CSSProperties}
         >
-          {/* ── Sidebar trái ── */}
+          {/* Sidebar trái */}
           <Sidebar collapsible='none' className='hidden border-r md:flex'>
             <SidebarContent className='py-3'>
               {/* Tiêu đề nhỏ ở đầu sidebar */}
@@ -104,7 +104,7 @@ export function SettingsDialog() {
             </SidebarContent>
           </Sidebar>
 
-          {/* ── Phần nội dung chính ── */}
+          {/* Phần nội dung chính */}
           <main className='flex h-full flex-1 flex-col overflow-hidden'>
             {/* Header của content area */}
             <header className='flex h-14 shrink-0 items-center justify-between border-b px-6'>

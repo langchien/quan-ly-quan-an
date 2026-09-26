@@ -12,7 +12,7 @@ type EntityErrorPayload = {
   }[]
 }
 
-// Custom Error Classes ─────────────────────────────────────────────────────
+// Custom Error Classes
 
 export class HttpError extends Error {
   status: number
@@ -93,7 +93,7 @@ axiosInstance.interceptors.response.use(
       throw new EntityError(error.response.data as EntityErrorPayload)
     }
 
-    // ── 401 Unauthorized → thử refresh access token ──
+    // 401 Unauthorized → thử refresh access token
     if (error.response?.status === 401 && !originalRequest._retry) {
       // Nếu đang refresh rồi thì đưa request vào queue chờ
       if (isRefreshing) {
@@ -112,7 +112,7 @@ axiosInstance.interceptors.response.use(
         const { refreshToken, guest } = useAuthStore.getState()
         if (!refreshToken) throw new Error('Không có refresh token')
 
-        // ── Chọn đúng endpoint theo role ──
+        // Chọn đúng endpoint theo role
         // Guest dùng /guest/auth/refresh-token
         // Owner/Employee dùng /auth/refresh-token
         const isGuest = guest?.role === 'Guest'
