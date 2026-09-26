@@ -11,6 +11,7 @@ export class DishService {
    */
   getDishList() {
     return this.prisma.dish.findMany({
+      include: { category: true },
       orderBy: { createdAt: 'desc' },
     })
   }
@@ -19,7 +20,10 @@ export class DishService {
    * Lấy chi tiết một món ăn theo id
    */
   getDishDetail(id: number) {
-    return this.prisma.dish.findUniqueOrThrow({ where: { id } })
+    return this.prisma.dish.findUniqueOrThrow({
+      where: { id },
+      include: { category: true },
+    })
   }
 
   /**

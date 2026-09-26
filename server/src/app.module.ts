@@ -6,6 +6,7 @@ import { AccountModule } from './account/account.module.js'
 import { AppController } from './app.controller.js'
 import { AppService } from './app.service.js'
 import { AuthModule } from './auth/auth.module.js'
+import { CategoryModule } from './category/category.module.js'
 import { validateEnv } from './config/env.config.js'
 import { DishModule } from './dish/dish.module.js'
 import { EventsModule } from './events/events.module.js'
@@ -35,6 +36,7 @@ import { TableModule } from './table/table.module.js'
     MediaModule,
     AccountModule,
     TableModule,
+    CategoryModule,
     DishModule,
     EventsModule,
     GuestModule,

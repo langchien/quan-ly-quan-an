@@ -50,6 +50,7 @@ export type OrderMinAggregateOutputType = {
   tableNumber: number | null
   dishSnapshotId: number | null
   quantity: number | null
+  note: string | null
   orderHandlerId: number | null
   status: string | null
   createdAt: Date | null
@@ -62,6 +63,7 @@ export type OrderMaxAggregateOutputType = {
   tableNumber: number | null
   dishSnapshotId: number | null
   quantity: number | null
+  note: string | null
   orderHandlerId: number | null
   status: string | null
   createdAt: Date | null
@@ -74,6 +76,7 @@ export type OrderCountAggregateOutputType = {
   tableNumber: number
   dishSnapshotId: number
   quantity: number
+  note: number
   orderHandlerId: number
   status: number
   createdAt: number
@@ -106,6 +109,7 @@ export type OrderMinAggregateInputType = {
   tableNumber?: true
   dishSnapshotId?: true
   quantity?: true
+  note?: true
   orderHandlerId?: true
   status?: true
   createdAt?: true
@@ -118,6 +122,7 @@ export type OrderMaxAggregateInputType = {
   tableNumber?: true
   dishSnapshotId?: true
   quantity?: true
+  note?: true
   orderHandlerId?: true
   status?: true
   createdAt?: true
@@ -130,6 +135,7 @@ export type OrderCountAggregateInputType = {
   tableNumber?: true
   dishSnapshotId?: true
   quantity?: true
+  note?: true
   orderHandlerId?: true
   status?: true
   createdAt?: true
@@ -229,6 +235,7 @@ export type OrderGroupByOutputType = {
   tableNumber: number | null
   dishSnapshotId: number
   quantity: number
+  note: string | null
   orderHandlerId: number | null
   status: string
   createdAt: Date
@@ -264,6 +271,7 @@ export type OrderWhereInput = {
   tableNumber?: Prisma.IntNullableFilter<"Order"> | number | null
   dishSnapshotId?: Prisma.IntFilter<"Order"> | number
   quantity?: Prisma.IntFilter<"Order"> | number
+  note?: Prisma.StringNullableFilter<"Order"> | string | null
   orderHandlerId?: Prisma.IntNullableFilter<"Order"> | number | null
   status?: Prisma.StringFilter<"Order"> | string
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -280,6 +288,7 @@ export type OrderOrderByWithRelationInput = {
   tableNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   dishSnapshotId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  note?: Prisma.SortOrderInput | Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -299,6 +308,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   guestId?: Prisma.IntNullableFilter<"Order"> | number | null
   tableNumber?: Prisma.IntNullableFilter<"Order"> | number | null
   quantity?: Prisma.IntFilter<"Order"> | number
+  note?: Prisma.StringNullableFilter<"Order"> | string | null
   orderHandlerId?: Prisma.IntNullableFilter<"Order"> | number | null
   status?: Prisma.StringFilter<"Order"> | string
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -315,6 +325,7 @@ export type OrderOrderByWithAggregationInput = {
   tableNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   dishSnapshotId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  note?: Prisma.SortOrderInput | Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -335,6 +346,7 @@ export type OrderScalarWhereWithAggregatesInput = {
   tableNumber?: Prisma.IntNullableWithAggregatesFilter<"Order"> | number | null
   dishSnapshotId?: Prisma.IntWithAggregatesFilter<"Order"> | number
   quantity?: Prisma.IntWithAggregatesFilter<"Order"> | number
+  note?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   orderHandlerId?: Prisma.IntNullableWithAggregatesFilter<"Order"> | number | null
   status?: Prisma.StringWithAggregatesFilter<"Order"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
@@ -343,6 +355,7 @@ export type OrderScalarWhereWithAggregatesInput = {
 
 export type OrderCreateInput = {
   quantity: number
+  note?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -358,6 +371,7 @@ export type OrderUncheckedCreateInput = {
   tableNumber?: number | null
   dishSnapshotId: number
   quantity: number
+  note?: string | null
   orderHandlerId?: number | null
   status?: string
   createdAt?: Date | string
@@ -366,6 +380,7 @@ export type OrderUncheckedCreateInput = {
 
 export type OrderUpdateInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -381,6 +396,7 @@ export type OrderUncheckedUpdateInput = {
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -393,6 +409,7 @@ export type OrderCreateManyInput = {
   tableNumber?: number | null
   dishSnapshotId: number
   quantity: number
+  note?: string | null
   orderHandlerId?: number | null
   status?: string
   createdAt?: Date | string
@@ -401,6 +418,7 @@ export type OrderCreateManyInput = {
 
 export type OrderUpdateManyMutationInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -412,6 +430,7 @@ export type OrderUncheckedUpdateManyInput = {
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -439,6 +458,7 @@ export type OrderCountOrderByAggregateInput = {
   tableNumber?: Prisma.SortOrder
   dishSnapshotId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  note?: Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -460,6 +480,7 @@ export type OrderMaxOrderByAggregateInput = {
   tableNumber?: Prisma.SortOrder
   dishSnapshotId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  note?: Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -472,6 +493,7 @@ export type OrderMinOrderByAggregateInput = {
   tableNumber?: Prisma.SortOrder
   dishSnapshotId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  note?: Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -647,6 +669,7 @@ export type OrderUncheckedUpdateManyWithoutGuestNestedInput = {
 
 export type OrderCreateWithoutOrderHandlerInput = {
   quantity: number
+  note?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -661,6 +684,7 @@ export type OrderUncheckedCreateWithoutOrderHandlerInput = {
   tableNumber?: number | null
   dishSnapshotId: number
   quantity: number
+  note?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -701,6 +725,7 @@ export type OrderScalarWhereInput = {
   tableNumber?: Prisma.IntNullableFilter<"Order"> | number | null
   dishSnapshotId?: Prisma.IntFilter<"Order"> | number
   quantity?: Prisma.IntFilter<"Order"> | number
+  note?: Prisma.StringNullableFilter<"Order"> | string | null
   orderHandlerId?: Prisma.IntNullableFilter<"Order"> | number | null
   status?: Prisma.StringFilter<"Order"> | string
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -709,6 +734,7 @@ export type OrderScalarWhereInput = {
 
 export type OrderCreateWithoutDishSnapshotInput = {
   quantity: number
+  note?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -722,6 +748,7 @@ export type OrderUncheckedCreateWithoutDishSnapshotInput = {
   guestId?: number | null
   tableNumber?: number | null
   quantity: number
+  note?: string | null
   orderHandlerId?: number | null
   status?: string
   createdAt?: Date | string
@@ -746,6 +773,7 @@ export type OrderUpdateToOneWithWhereWithoutDishSnapshotInput = {
 
 export type OrderUpdateWithoutDishSnapshotInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -759,6 +787,7 @@ export type OrderUncheckedUpdateWithoutDishSnapshotInput = {
   guestId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -767,6 +796,7 @@ export type OrderUncheckedUpdateWithoutDishSnapshotInput = {
 
 export type OrderCreateWithoutTableInput = {
   quantity: number
+  note?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -780,6 +810,7 @@ export type OrderUncheckedCreateWithoutTableInput = {
   guestId?: number | null
   dishSnapshotId: number
   quantity: number
+  note?: string | null
   orderHandlerId?: number | null
   status?: string
   createdAt?: Date | string
@@ -814,6 +845,7 @@ export type OrderUpdateManyWithWhereWithoutTableInput = {
 
 export type OrderCreateWithoutGuestInput = {
   quantity: number
+  note?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -827,6 +859,7 @@ export type OrderUncheckedCreateWithoutGuestInput = {
   tableNumber?: number | null
   dishSnapshotId: number
   quantity: number
+  note?: string | null
   orderHandlerId?: number | null
   status?: string
   createdAt?: Date | string
@@ -865,6 +898,7 @@ export type OrderCreateManyOrderHandlerInput = {
   tableNumber?: number | null
   dishSnapshotId: number
   quantity: number
+  note?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -872,6 +906,7 @@ export type OrderCreateManyOrderHandlerInput = {
 
 export type OrderUpdateWithoutOrderHandlerInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -886,6 +921,7 @@ export type OrderUncheckedUpdateWithoutOrderHandlerInput = {
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -897,6 +933,7 @@ export type OrderUncheckedUpdateManyWithoutOrderHandlerInput = {
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -907,6 +944,7 @@ export type OrderCreateManyTableInput = {
   guestId?: number | null
   dishSnapshotId: number
   quantity: number
+  note?: string | null
   orderHandlerId?: number | null
   status?: string
   createdAt?: Date | string
@@ -915,6 +953,7 @@ export type OrderCreateManyTableInput = {
 
 export type OrderUpdateWithoutTableInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -928,6 +967,7 @@ export type OrderUncheckedUpdateWithoutTableInput = {
   guestId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -939,6 +979,7 @@ export type OrderUncheckedUpdateManyWithoutTableInput = {
   guestId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -950,6 +991,7 @@ export type OrderCreateManyGuestInput = {
   tableNumber?: number | null
   dishSnapshotId: number
   quantity: number
+  note?: string | null
   orderHandlerId?: number | null
   status?: string
   createdAt?: Date | string
@@ -958,6 +1000,7 @@ export type OrderCreateManyGuestInput = {
 
 export type OrderUpdateWithoutGuestInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -971,6 +1014,7 @@ export type OrderUncheckedUpdateWithoutGuestInput = {
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -982,6 +1026,7 @@ export type OrderUncheckedUpdateManyWithoutGuestInput = {
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -996,6 +1041,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   tableNumber?: boolean
   dishSnapshotId?: boolean
   quantity?: boolean
+  note?: boolean
   orderHandlerId?: boolean
   status?: boolean
   createdAt?: boolean
@@ -1012,6 +1058,7 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   tableNumber?: boolean
   dishSnapshotId?: boolean
   quantity?: boolean
+  note?: boolean
   orderHandlerId?: boolean
   status?: boolean
   createdAt?: boolean
@@ -1028,6 +1075,7 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   tableNumber?: boolean
   dishSnapshotId?: boolean
   quantity?: boolean
+  note?: boolean
   orderHandlerId?: boolean
   status?: boolean
   createdAt?: boolean
@@ -1044,13 +1092,14 @@ export type OrderSelectScalar = {
   tableNumber?: boolean
   dishSnapshotId?: boolean
   quantity?: boolean
+  note?: boolean
   orderHandlerId?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "guestId" | "tableNumber" | "dishSnapshotId" | "quantity" | "orderHandlerId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "guestId" | "tableNumber" | "dishSnapshotId" | "quantity" | "note" | "orderHandlerId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   guest?: boolean | Prisma.Order$guestArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
@@ -1084,6 +1133,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     tableNumber: number | null
     dishSnapshotId: number
     quantity: number
+    note: string | null
     orderHandlerId: number | null
     status: string
     createdAt: Date
@@ -1520,6 +1570,7 @@ export interface OrderFieldRefs {
   readonly tableNumber: Prisma.FieldRef<"Order", 'Int'>
   readonly dishSnapshotId: Prisma.FieldRef<"Order", 'Int'>
   readonly quantity: Prisma.FieldRef<"Order", 'Int'>
+  readonly note: Prisma.FieldRef<"Order", 'String'>
   readonly orderHandlerId: Prisma.FieldRef<"Order", 'Int'>
   readonly status: Prisma.FieldRef<"Order", 'String'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>

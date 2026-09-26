@@ -3,6 +3,14 @@ import { DishStatusValues } from '../../constants/type.js'
 
 // Dish Schema
 
+const CategoryInDish = z.object({
+  id: z.number(),
+  name: z.string(),
+  order: z.number(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+})
+
 export const DishSchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -10,6 +18,8 @@ export const DishSchema = z.object({
   description: z.string(),
   image: z.string(),
   status: z.enum(DishStatusValues),
+  categoryId: z.number().nullable(),
+  category: CategoryInDish.nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 })
@@ -36,6 +46,7 @@ export const CreateDishBody = z.object({
   description: z.string().max(10000),
   image: z.string().url(),
   status: z.enum(DishStatusValues).optional(),
+  categoryId: z.number().nullable().optional(),
 })
 
 export type CreateDishBodyType = z.TypeOf<typeof CreateDishBody>

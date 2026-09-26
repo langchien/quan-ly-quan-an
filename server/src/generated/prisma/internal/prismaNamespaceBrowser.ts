@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Account: 'Account',
+  Category: 'Category',
   Dish: 'Dish',
   DishSnapshot: 'DishSnapshot',
   Table: 'Table',
@@ -92,6 +93,17 @@ export const AccountScalarFieldEnum = {
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
 
 
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
 export const DishScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -99,6 +111,7 @@ export const DishScalarFieldEnum = {
   description: 'description',
   image: 'image',
   status: 'status',
+  categoryId: 'categoryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -139,6 +152,7 @@ export const OrderScalarFieldEnum = {
   tableNumber: 'tableNumber',
   dishSnapshotId: 'dishSnapshotId',
   quantity: 'quantity',
+  note: 'note',
   orderHandlerId: 'orderHandlerId',
   status: 'status',
   createdAt: 'createdAt',

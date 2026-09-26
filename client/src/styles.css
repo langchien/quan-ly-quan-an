@@ -207,3 +207,13 @@ body {
 .animate-count-up {
   animation: count-up 0.3s ease-out;
 }
+
+/* Utility: ẩn scrollbar nhưng giữ scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

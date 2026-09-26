@@ -47,6 +47,11 @@ export { Prisma }
  */
 export type Account = Prisma.AccountModel
 /**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
+/**
  * Model Dish
  * 
  */
