@@ -5,6 +5,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { cn } from '@/lib/utils'
 import { Armchair, Bell, BellOff, ChefHat, Clock, DollarSign } from 'lucide-react'
 
+import { formatCurrencyCompact } from '@/lib/format'
+
 interface LiveStatsBarProps {
   pendingCount: number
   processingCount: number
@@ -14,12 +16,6 @@ interface LiveStatsBarProps {
   isLoading: boolean
   isAudioEnabled: boolean
   onToggleAudio: () => void
-}
-
-function formatCurrency(value: number): string {
-  if (value >= 1_000_000) return (value / 1_000_000).toFixed(1) + 'M'
-  if (value >= 1_000) return Math.floor(value / 1_000) + 'K'
-  return value.toLocaleString('vi-VN')
 }
 
 export function LiveStatsBar({
@@ -57,7 +53,7 @@ export function LiveStatsBar({
     },
     {
       label: 'Doanh thu hôm nay',
-      value: formatCurrency(todayRevenue) + ' đ',
+      value: formatCurrencyCompact(todayRevenue) + ' đ',
       icon: DollarSign,
       color: 'text-violet-600 dark:text-violet-400',
       bgColor: 'bg-violet-500/10',
@@ -112,15 +108,15 @@ export function LiveStatsBar({
 
       {/* Audio Toggle */}
       <Tooltip>
-        <TooltipTrigger asChild>
-          <div className='flex items-center gap-2 rounded-lg border px-3 py-2'>
-            {isAudioEnabled ? (
-              <Bell className='size-4 text-amber-500' />
-            ) : (
-              <BellOff className='size-4 text-muted-foreground' />
-            )}
-            <Switch size='sm' checked={isAudioEnabled} onCheckedChange={onToggleAudio} />
-          </div>
+        <TooltipTrigger
+          render={<div className='flex items-center gap-2 rounded-lg border px-3 py-2' />}
+        >
+          {isAudioEnabled ? (
+            <Bell className='size-4 text-amber-500' />
+          ) : (
+            <BellOff className='size-4 text-muted-foreground' />
+          )}
+          <Switch size='sm' checked={isAudioEnabled} onCheckedChange={onToggleAudio} />
         </TooltipTrigger>
         <TooltipContent>{isAudioEnabled ? 'Tắt chuông báo' : 'Bật chuông báo'}</TooltipContent>
       </Tooltip>

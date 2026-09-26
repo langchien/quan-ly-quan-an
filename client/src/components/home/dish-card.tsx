@@ -3,12 +3,9 @@ import { Card, CardContent } from '@/components/ui/card'
 import { DishStatus } from '@/constants/type'
 import type { DishType } from '@/schemaValidations/dish.schema'
 
-export function formatCurrencyVND(value: number) {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-  }).format(value)
-}
+import { formatCurrencyVND } from '@/lib/format'
+
+export { formatCurrencyVND }
 
 function getStatusBadge(status: string) {
   switch (status) {

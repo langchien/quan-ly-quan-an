@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { StatusError } from '../common/index.js'
 import { DishStatus, OrderStatus, TableStatus } from '../constants/type.js'
 import { PrismaService } from '../prisma/prisma.service.js'
@@ -8,6 +8,21 @@ import type {
   PayGuestOrdersBodyType,
   UpdateOrderBodyType,
 } from './dto/order.schema.js'
+
+/**
+ * Tham số cho hàm tạo đơn hàng dùng chung
+ */
+export interface CreateOrdersForGuestParams {
+  guestId: number
+  orders: { dishId: number; quantity: number }[]
+  orderHandlerId: number | null
+  /**
+   * Nếu true, cho phép tạo đơn kể cả khi bàn ở trạng thái Reserved.
+   * Manager (nhân viên) được phép tạo hộ → true.
+   * Guest tự đặt → false (bàn Reserved thì chặn).
+   */
+  allowReservedTable?: boolean
+}
 
 @Injectable()
 export class OrderService {
@@ -75,9 +90,21 @@ export class OrderService {
     return { order: updatedOrder, guestSocketId: socketRecord?.socketId }
   }
 
-  async createOrders(orderHandlerId: number, body: CreateOrdersBodyType) {
-    const { guestId, orders } = body
+  /**
+   * Logic dùng chung: tạo đơn hàng cho guest.
+   * Được gọi bởi cả OrderController (manager tạo hộ) và GuestController (guest tự đặt).
+   *
+   * Flow:
+   * 1. Validate guest tồn tại + có bàn hợp lệ
+   * 2. Validate trạng thái bàn (Hidden → chặn, Reserved → tùy `allowReservedTable`)
+   * 3. Validate từng món (Unavailable/Hidden → chặn)
+   * 4. Tạo DishSnapshot + Order record trong transaction
+   * 5. Tìm socketId của guest để emit realtime
+   */
+  async createOrdersForGuest(params: CreateOrdersForGuestParams) {
+    const { guestId, orders, orderHandlerId, allowReservedTable = true } = params
 
+    // 1. Validate guest
     const guest = await this.prisma.guest.findUniqueOrThrow({ where: { id: guestId } })
     if (guest.tableNumber === null) {
       throw new StatusError({
@@ -86,16 +113,24 @@ export class OrderService {
       })
     }
 
+    // 2. Validate table
     const table = await this.prisma.table.findUniqueOrThrow({
       where: { number: guest.tableNumber },
     })
     if (table.status === TableStatus.Hidden) {
       throw new StatusError({
-        message: `Bàn ${table.number} gắn liền với khách hàng đã bị ẩn, vui lòng chọn khách hàng khác!`,
+        message: `Bàn ${table.number} đã bị ẩn, vui lòng chọn bàn khác`,
+        status: 400,
+      })
+    }
+    if (!allowReservedTable && table.status === TableStatus.Reserved) {
+      throw new StatusError({
+        message: `Bàn ${table.number} đã được đặt trước, vui lòng đăng xuất và chọn bàn khác`,
         status: 400,
       })
     }
 
+    // 3-4. Transaction: validate dishes + create snapshots + create orders
     const ordersRecord = await this.prisma.$transaction(async tx =>
       Promise.all(
         orders.map(async orderItem => {
@@ -131,11 +166,24 @@ export class OrderService {
       )
     )
 
+    // 5. Tìm socketId của guest để emit realtime
     const socketRecord = await this.prisma.socket
       .findUnique({ where: { guestId } })
       .catch(() => null)
 
     return { orders: ordersRecord, guestSocketId: socketRecord?.socketId }
+  }
+
+  /**
+   * Manager tạo đơn hàng cho khách (delegate sang createOrdersForGuest)
+   */
+  async createOrders(orderHandlerId: number, body: CreateOrdersBodyType) {
+    return this.createOrdersForGuest({
+      guestId: body.guestId,
+      orders: body.orders,
+      orderHandlerId,
+      allowReservedTable: true, // Manager được phép tạo đơn cho bàn Reserved
+    })
   }
 
   async payGuestOrders(body: PayGuestOrdersBodyType & { orderHandlerId: number }) {

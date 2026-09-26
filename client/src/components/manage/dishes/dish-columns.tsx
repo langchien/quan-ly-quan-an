@@ -16,12 +16,7 @@ import type { DishType } from '@/schemaValidations/dish.schema'
 import type { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
 
-export function formatCurrency(value: number) {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-  }).format(value)
-}
+import { formatCurrency } from '@/lib/format'
 
 export function getInitials(name: string) {
   return name

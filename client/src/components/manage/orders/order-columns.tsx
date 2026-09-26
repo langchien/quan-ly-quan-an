@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { OrderStatus } from '@/constants/type'
+import { formatCurrency } from '@/lib/format'
 import type { OrderSchemaType } from '@/schemaValidations/order.schema'
 import type { ColumnDef } from '@tanstack/react-table'
 import {
@@ -24,12 +25,7 @@ import {
   RefreshCcw,
 } from 'lucide-react'
 
-export function formatCurrency(value: number) {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-  }).format(value)
-}
+export { formatCurrency } from '@/lib/format'
 
 export function getInitials(name: string) {
   return name

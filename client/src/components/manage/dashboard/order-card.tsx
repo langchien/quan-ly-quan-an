@@ -199,11 +199,13 @@ export function OrderCard({ order, variant = 'kanban', showTableNumber = true }:
           </div>
           {/* Timer */}
           <Tooltip>
-            <TooltipTrigger asChild>
-              <div className={cn('flex shrink-0 items-center gap-1 text-xs', timerClass)}>
-                <Clock className='size-3' />
-                {formatWaitTime(waitMinutes)}
-              </div>
+            <TooltipTrigger
+              render={
+                <div className={cn('flex shrink-0 items-center gap-1 text-xs', timerClass)} />
+              }
+            >
+              <Clock className='size-3' />
+              {formatWaitTime(waitMinutes)}
             </TooltipTrigger>
             <TooltipContent>Thời gian chờ từ lúc đặt món</TooltipContent>
           </Tooltip>
@@ -252,9 +254,9 @@ function StatusDot({ status }: { status: string }) {
   const c = config[status] ?? { color: 'bg-gray-400', label: status }
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <span className={cn('inline-block size-2 shrink-0 rounded-full', c.color)} />
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={<span className={cn('inline-block size-2 shrink-0 rounded-full', c.color)} />}
+      />
       <TooltipContent>{c.label}</TooltipContent>
     </Tooltip>
   )

@@ -1,4 +1,4 @@
-﻿import { UnauthorizedException } from '@nestjs/common'
+import { UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -69,7 +69,9 @@ describe('GuestService', () => {
       get: vi.fn().mockReturnValue('test_secret'),
     } as unknown as ConfigService
 
-    service = new GuestService(prisma as any, jwtService, configService as any)
+    const orderService = {} as any // OrderService mock — not used in auth tests
+
+    service = new GuestService(prisma as any, jwtService, configService as any, orderService)
   })
 
   describe('login()', () => {

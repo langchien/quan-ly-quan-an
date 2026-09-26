@@ -11,6 +11,7 @@ import { useDashboardIndicator } from '@/queries/use-indicator'
 import { RevenueLineChart } from '@/components/manage/dashboard/revenue-line-chart'
 import { DishBarChart } from '@/components/manage/dashboard/dish-bar-chart'
 import { cn } from '@/lib/utils'
+import { formatCurrency } from '@/lib/format'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/manage/analytics')({
@@ -38,10 +39,6 @@ function AnalyticsPage() {
   const handleReset = () => {
     setFromDate(getDefaultFromDate())
     setToDate(getDefaultToDate())
-  }
-
-  const formatCurrency = (value: number) => {
-    return value.toLocaleString('vi-VN') + ' đ'
   }
 
   return (

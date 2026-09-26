@@ -3,7 +3,8 @@ import { ConfigService } from '@nestjs/config'
 import { JwtService, type JwtSignOptions } from '@nestjs/jwt'
 import { StatusError } from '../common/index.js'
 import type { EnvType } from '../config/env.config.js'
-import { DishStatus, OrderStatus, Role, TableStatus, TokenType } from '../constants/type.js'
+import { Role, TableStatus, TokenType } from '../constants/type.js'
+import { OrderService } from '../order/order.service.js'
 import { PrismaService } from '../prisma/prisma.service.js'
 import type {
   GuestCreateOrdersBodyType,
@@ -16,7 +17,8 @@ export class GuestService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService<EnvType, true>
+    private readonly configService: ConfigService<EnvType, true>,
+    private readonly orderService: OrderService
   ) {}
 
   private signGuestAccessToken(userId: number) {
@@ -140,78 +142,16 @@ export class GuestService {
     })
   }
 
+  /**
+   * Guest tự đặt món — delegate sang OrderService.createOrdersForGuest()
+   * với allowReservedTable=false (khách không được đặt vào bàn Reserved)
+   */
   async createOrders(guestId: number, body: GuestCreateOrdersBodyType) {
-    const result = await this.prisma.$transaction(async tx => {
-      const guest = await tx.guest.findUniqueOrThrow({ where: { id: guestId } })
-
-      if (guest.tableNumber === null) {
-        throw new StatusError({
-          message: 'Bàn của bạn đã bị xóa, vui lòng đăng xuất và đăng nhập lại một bàn mới',
-          status: 400,
-        })
-      }
-
-      const table = await tx.table.findUniqueOrThrow({ where: { number: guest.tableNumber } })
-
-      if (table.status === TableStatus.Hidden) {
-        throw new StatusError({
-          message: `Bàn ${table.number} đã bị ẩn, vui lòng đăng xuất và chọn bàn khác`,
-          status: 400,
-        })
-      }
-      if (table.status === TableStatus.Reserved) {
-        throw new StatusError({
-          message: `Bàn ${table.number} đã được đặt trước, vui lòng đăng xuất và chọn bàn khác`,
-          status: 400,
-        })
-      }
-
-      const orders = await Promise.all(
-        body.map(async orderItem => {
-          const dish = await tx.dish.findUniqueOrThrow({ where: { id: orderItem.dishId } })
-
-          if (dish.status === DishStatus.Unavailable) {
-            throw new StatusError({ message: `Món ${dish.name} đã hết`, status: 400 })
-          }
-          if (dish.status === DishStatus.Hidden) {
-            throw new StatusError({
-              message: `Món ${dish.name} không thể đặt`,
-              status: 400,
-            })
-          }
-
-          const dishSnapshot = await tx.dishSnapshot.create({
-            data: {
-              description: dish.description,
-              image: dish.image,
-              name: dish.name,
-              price: dish.price,
-              dishId: dish.id,
-              status: dish.status,
-            },
-          })
-
-          return tx.order.create({
-            data: {
-              dishSnapshotId: dishSnapshot.id,
-              guestId,
-              quantity: orderItem.quantity,
-              tableNumber: guest.tableNumber,
-              orderHandlerId: null,
-              status: OrderStatus.Pending,
-            },
-            include: { dishSnapshot: true, guest: true, orderHandler: true },
-          })
-        })
-      )
-      return orders
+    return this.orderService.createOrdersForGuest({
+      guestId,
+      orders: body,
+      orderHandlerId: null, // Khách tự đặt → không có nhân viên xử lý
+      allowReservedTable: false, // Khách không được đặt vào bàn đã được đặt trước
     })
-
-    // Lấy socketId của guest để emit về đúng socket (nếu cần)
-    const socketRecord = await this.prisma.socket
-      .findUnique({ where: { guestId } })
-      .catch(() => null)
-
-    return { orders: result, guestSocketId: socketRecord?.socketId }
   }
 }
