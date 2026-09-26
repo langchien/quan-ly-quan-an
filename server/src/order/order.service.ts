@@ -14,7 +14,7 @@ import type {
  */
 export interface CreateOrdersForGuestParams {
   guestId: number
-  orders: { dishId: number; quantity: number }[]
+  orders: { dishId: number; quantity: number; note?: string }[]
   orderHandlerId: number | null
   /**
    * Nếu true, cho phép tạo đơn kể cả khi bàn ở trạng thái Reserved.
@@ -156,6 +156,7 @@ export class OrderService {
               dishSnapshotId: dishSnapshot.id,
               guestId,
               quantity: orderItem.quantity,
+              note: orderItem.note?.trim() || null,
               tableNumber: guest.tableNumber,
               orderHandlerId,
               status: OrderStatus.Pending,

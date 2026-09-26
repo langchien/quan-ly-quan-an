@@ -34,6 +34,7 @@ export const GuestCreateOrdersBody = z.array(
   z.object({
     dishId: z.number(),
     quantity: z.number(),
+    note: z.string().max(200).optional(),
   })
 )
 

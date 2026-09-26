@@ -8,6 +8,7 @@ export interface CartItem {
   dishImage: string
   price: number
   quantity: number
+  note?: string
 }
 
 interface CartState {
@@ -15,9 +16,10 @@ interface CartState {
 }
 
 interface CartActions {
-  addItem: (item: Omit<CartItem, 'quantity'>) => void
+  addItem: (item: Omit<CartItem, 'quantity' | 'note'>) => void
   removeItem: (dishId: number) => void
   updateQuantity: (dishId: number, quantity: number) => void
+  updateNote: (dishId: number, note: string) => void
   clearCart: () => void
 }
 
@@ -59,6 +61,11 @@ export const useCartStore = create<CartStore>()(set => ({
         items: state.items.map(i => (i.dishId === dishId ? { ...i, quantity } : i)),
       }
     }),
+
+  updateNote: (dishId, note) =>
+    set(state => ({
+      items: state.items.map(i => (i.dishId === dishId ? { ...i, note } : i)),
+    })),
 
   clearCart: () => set({ items: [] }),
 }))

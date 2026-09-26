@@ -1,4 +1,5 @@
 import { formatCurrencyVND } from '@/components/home/dish-card'
+import { OrderProgressStepper } from '@/components/guest/order-progress-stepper'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -39,7 +40,7 @@ function OrderItem({ order }: { order: Order }) {
   const snapshot = order.dishSnapshot
   return (
     <Card className='overflow-hidden'>
-      <CardContent className='flex items-center gap-4 p-4'>
+      <CardContent className='flex items-start gap-4 p-4'>
         {/* Ảnh */}
         <div className='h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted'>
           {snapshot.image ? (
@@ -58,6 +59,13 @@ function OrderItem({ order }: { order: Order }) {
           <p className='text-sm font-semibold text-primary'>
             {formatCurrencyVND(snapshot.price * order.quantity)}
           </p>
+          {/* Ghi chú (nếu có) */}
+          {order.note && (
+            <p className='mt-1 flex items-center gap-1 text-xs text-muted-foreground italic'>
+              <span className='shrink-0'>📝</span>
+              <span className='line-clamp-2'>{order.note}</span>
+            </p>
+          )}
         </div>
 
         {/* Trạng thái */}
@@ -94,6 +102,9 @@ export function OrdersList({ orders }: OrdersListProps) {
 
   return (
     <div className='space-y-6'>
+      {/* Stepper tiến trình tổng thể */}
+      <OrderProgressStepper orders={orders} />
+
       {Object.entries(grouped).map(([status, group]) => (
         <section key={status} id={`orders-section-${status.toLowerCase()}`}>
           <div className='mb-3 flex items-center gap-2'>

@@ -1,4 +1,4 @@
-﻿import z from 'zod'
+import z from 'zod'
 import { DishStatusValues, OrderStatusValues, RoleValues } from '../../constants/type.js'
 
 // Shared Sub-schemas
@@ -39,6 +39,7 @@ export const OrderSchema = z.object({
   dishSnapshotId: z.number(),
   dishSnapshot: DishSnapshotSchema,
   quantity: z.number(),
+  note: z.string().nullable(),
   orderHandlerId: z.number().nullable(),
   orderHandler: AccountSchema.nullable(),
   status: z.enum(OrderStatusValues),
@@ -101,6 +102,7 @@ export const GuestCreateOrdersBody = z.array(
   z.object({
     dishId: z.number(),
     quantity: z.number(),
+    note: z.string().max(200).trim().optional(),
   })
 )
 

@@ -34,3 +34,22 @@ export function formatCurrencyCompact(value: number): string {
   if (value >= 1_000) return Math.floor(value / 1_000) + 'K'
   return value.toLocaleString('vi-VN')
 }
+
+// ── Text Utilities ──────────────────────────────────────────────────────────────
+
+/**
+ * Loại bỏ dấu tiếng Việt (diacritics) để hỗ trợ tìm kiếm.
+ * Sử dụng Unicode NFD decomposition + strip combining marks.
+ * Xử lý riêng đ/Đ vì không phải combining mark.
+ *
+ * @example removeDiacritics('Phở bò') → 'pho bo'
+ * @example removeDiacritics('Bánh mì') → 'banh mi'
+ */
+export function removeDiacritics(str: string): string {
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Strip combining diacritical marks
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase()
+}

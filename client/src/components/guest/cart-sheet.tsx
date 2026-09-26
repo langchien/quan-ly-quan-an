@@ -9,9 +9,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { Textarea } from '@/components/ui/textarea'
 import { selectCartTotal, selectCartTotalItems, useCartStore } from '@/hooks/use-cart'
 import { useGuestCreateOrdersMutation } from '@/queries/use-guest'
-import { ShoppingCart, Trash2 } from 'lucide-react'
+import { MessageSquare, ShoppingCart, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { QuantityControl } from './quantity-control'
 
@@ -21,16 +23,37 @@ export function CartSheet() {
   const totalPrice = useCartStore(selectCartTotal)
   const removeItem = useCartStore(s => s.removeItem)
   const updateQuantity = useCartStore(s => s.updateQuantity)
+  const updateNote = useCartStore(s => s.updateNote)
   const clearCart = useCartStore(s => s.clearCart)
 
   const createOrdersMutation = useGuestCreateOrdersMutation()
 
+  // Track which items have the note input expanded
+  const [expandedNotes, setExpandedNotes] = useState<Set<number>>(new Set())
+
+  function toggleNoteExpand(dishId: number) {
+    setExpandedNotes(prev => {
+      const next = new Set(prev)
+      if (next.has(dishId)) {
+        next.delete(dishId)
+      } else {
+        next.add(dishId)
+      }
+      return next
+    })
+  }
+
   async function handleOrder() {
     if (items.length === 0) return
     try {
-      const orders = items.map(i => ({ dishId: i.dishId, quantity: i.quantity }))
+      const orders = items.map(i => ({
+        dishId: i.dishId,
+        quantity: i.quantity,
+        ...(i.note?.trim() ? { note: i.note.trim() } : {}),
+      }))
       await createOrdersMutation.mutateAsync(orders)
       clearCart()
+      setExpandedNotes(new Set())
       toast.success('Đặt món thành công! 🎉', {
         description: `Đã đặt ${orders.length} món. Vui lòng đợi nhà bếp xử lý.`,
       })
@@ -83,51 +106,102 @@ export function CartSheet() {
             </div>
           ) : (
             <ul className='space-y-4'>
-              {items.map(item => (
-                <li key={item.dishId} className='flex items-start gap-3'>
-                  {/* Ảnh */}
-                  <div className='h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted'>
-                    {item.dishImage ? (
-                      <img
-                        src={item.dishImage}
-                        alt={item.dishName}
-                        className='h-full w-full object-cover'
-                      />
-                    ) : (
-                      <div className='flex h-full w-full items-center justify-center text-2xl'>
-                        🍽️
+              {items.map(item => {
+                const isNoteExpanded = expandedNotes.has(item.dishId)
+                const hasNote = !!item.note?.trim()
+
+                return (
+                  <li key={item.dishId} className='space-y-2'>
+                    <div className='flex items-start gap-3'>
+                      {/* Ảnh */}
+                      <div className='h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted'>
+                        {item.dishImage ? (
+                          <img
+                            src={item.dishImage}
+                            alt={item.dishName}
+                            className='h-full w-full object-cover'
+                          />
+                        ) : (
+                          <div className='flex h-full w-full items-center justify-center text-2xl'>
+                            🍽️
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Thông tin */}
+                      <div className='min-w-0 flex-1'>
+                        <p className='truncate text-sm font-medium'>{item.dishName}</p>
+                        <p className='text-sm font-semibold text-primary'>
+                          {formatCurrencyVND(item.price)}
+                        </p>
+                        <div className='mt-1.5 flex items-center justify-between'>
+                          <QuantityControl
+                            quantity={item.quantity}
+                            onDecrease={() =>
+                              item.quantity === 1
+                                ? removeItem(item.dishId)
+                                : updateQuantity(item.dishId, item.quantity - 1)
+                            }
+                            onIncrease={() => updateQuantity(item.dishId, item.quantity + 1)}
+                            min={1}
+                          />
+                          <div className='flex items-center gap-1'>
+                            {/* Nút toggle ghi chú */}
+                            <button
+                              onClick={() => toggleNoteExpand(item.dishId)}
+                              className={`rounded-full p-1 transition-colors ${
+                                isNoteExpanded || hasNote
+                                  ? 'text-orange-500 hover:text-orange-600'
+                                  : 'text-muted-foreground hover:text-foreground'
+                              }`}
+                              aria-label={`Ghi chú cho ${item.dishName}`}
+                              title='Thêm ghi chú'
+                            >
+                              <MessageSquare className='h-4 w-4' />
+                            </button>
+                            <button
+                              onClick={() => removeItem(item.dishId)}
+                              className='text-muted-foreground transition-colors hover:text-destructive'
+                              aria-label={`Xóa ${item.dishName} khỏi giỏ`}
+                            >
+                              <Trash2 className='h-4 w-4' />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Ô ghi chú (mở rộng) */}
+                    {isNoteExpanded && (
+                      <div className='ml-[76px]'>
+                        <Textarea
+                          placeholder='Ví dụ: không hành, ít cay, thêm ớt...'
+                          value={item.note ?? ''}
+                          onChange={e => updateNote(item.dishId, e.target.value)}
+                          maxLength={200}
+                          rows={2}
+                          className='resize-none text-sm'
+                          id={`cart-note-${item.dishId}`}
+                        />
+                        <p className='mt-1 text-right text-[11px] text-muted-foreground/60'>
+                          {item.note?.length ?? 0}/200
+                        </p>
                       </div>
                     )}
-                  </div>
 
-                  {/* Thông tin */}
-                  <div className='min-w-0 flex-1'>
-                    <p className='truncate text-sm font-medium'>{item.dishName}</p>
-                    <p className='text-sm font-semibold text-primary'>
-                      {formatCurrencyVND(item.price)}
-                    </p>
-                    <div className='mt-1.5 flex items-center justify-between'>
-                      <QuantityControl
-                        quantity={item.quantity}
-                        onDecrease={() =>
-                          item.quantity === 1
-                            ? removeItem(item.dishId)
-                            : updateQuantity(item.dishId, item.quantity - 1)
-                        }
-                        onIncrease={() => updateQuantity(item.dishId, item.quantity + 1)}
-                        min={1}
-                      />
+                    {/* Hiển thị ghi chú thu gọn khi không expanded */}
+                    {!isNoteExpanded && hasNote && (
                       <button
-                        onClick={() => removeItem(item.dishId)}
-                        className='text-muted-foreground transition-colors hover:text-destructive'
-                        aria-label={`Xóa ${item.dishName} khỏi giỏ`}
+                        onClick={() => toggleNoteExpand(item.dishId)}
+                        className='ml-[76px] flex items-center gap-1 rounded-md bg-orange-50 px-2 py-1 text-xs text-orange-700 hover:bg-orange-100 dark:bg-orange-950/30 dark:text-orange-400 dark:hover:bg-orange-950/50'
                       >
-                        <Trash2 className='h-4 w-4' />
+                        <MessageSquare className='h-3 w-3' />
+                        <span className='max-w-[200px] truncate'>{item.note}</span>
                       </button>
-                    </div>
-                  </div>
-                </li>
-              ))}
+                    )}
+                  </li>
+                )
+              })}
             </ul>
           )}
         </div>

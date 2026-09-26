@@ -30,6 +30,7 @@ export const OrderSchema = z.object({
   dishSnapshotId: z.number(),
   dishSnapshot: DishSnapshotSchema,
   quantity: z.number(),
+  note: z.string().nullable(),
   orderHandlerId: z.number().nullable(),
   orderHandler: AccountSchema.nullable(),
   status: z.enum(OrderStatusValues),
@@ -100,6 +101,7 @@ export const CreateOrdersBody = z
       z.object({
         dishId: z.number(),
         quantity: z.number(),
+        note: z.string().max(200).optional(),
       })
     ),
   })
