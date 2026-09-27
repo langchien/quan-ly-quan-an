@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { useGetCategoryList } from '@/queries/use-category'
 import type { DishType } from '@/schemaValidations/dish.schema'
 import type { Table } from '@tanstack/react-table'
 import { CirclePlus, LayoutGrid, List, Search, Settings2, UtensilsCrossed, X } from 'lucide-react'
@@ -28,22 +29,56 @@ interface DishTableToolbarProps {
   onViewModeChange: (mode: ViewMode) => void
 }
 
+const COLUMN_LABEL_MAP: Record<string, string> = {
+  name: 'Món ăn',
+  price: 'Giá',
+  description: 'Mô tả',
+  category: 'Danh mục',
+  status: 'Trạng thái',
+}
+
 export function DishTableToolbar({
   table,
   onAddDish,
   viewMode,
   onViewModeChange,
 }: DishTableToolbarProps) {
+  const { data: categories } = useGetCategoryList()
   const isFiltered = table.getState().columnFilters.length > 0 || !!table.getState().globalFilter
 
+  // Status filter
   const statusColumn = table.getColumn('status')
   const filterValue = statusColumn?.getFilterValue()
   const statusFilterValue: string[] = Array.isArray(filterValue) ? filterValue : []
+
+  // Category filter
+  const categoryColumn = table.getColumn('category')
+  const catFilterRaw = categoryColumn?.getFilterValue()
+  const categoryFilterValue: string[] = Array.isArray(catFilterRaw) ? catFilterRaw : []
+
+  // Build category options dynamically
+  const categoryOptions = (() => {
+    if (!categories) return []
+    const opts = categories.map(c => ({ value: c.name, label: c.name }))
+    // Check if any dish has no category
+    const data = table.getCoreRowModel().rows
+    const hasUncategorized = data.some(r => r.original.category == null)
+    if (hasUncategorized) {
+      opts.push({ value: '__uncategorized__', label: 'Chưa phân loại' })
+    }
+    return opts
+  })()
 
   function toggleStatusFilter(value: string) {
     const current = statusFilterValue
     const next = current.includes(value) ? current.filter(v => v !== value) : [...current, value]
     statusColumn?.setFilterValue(next.length ? next : undefined)
+  }
+
+  function toggleCategoryFilter(value: string) {
+    const current = categoryFilterValue
+    const next = current.includes(value) ? current.filter(v => v !== value) : [...current, value]
+    categoryColumn?.setFilterValue(next.length ? next : undefined)
   }
 
   function resetFilters() {
@@ -124,6 +159,67 @@ export function DishTableToolbar({
           </PopoverContent>
         </Popover>
 
+        {/* Filter: Danh mục */}
+        {categoryOptions.length > 0 && (
+          <Popover>
+            <PopoverTrigger
+              className={buttonVariants({
+                variant: 'outline',
+                size: 'sm',
+                className: 'h-8 border-dashed',
+              })}
+            >
+              <CirclePlus className='mr-2 size-4' />
+              Danh mục
+              {categoryFilterValue.length > 0 && (
+                <>
+                  <Separator orientation='vertical' className='mx-2 h-4' />
+                  <Badge variant='secondary' className='rounded-sm px-1 font-normal lg:hidden'>
+                    {categoryFilterValue.length}
+                  </Badge>
+                  <div className='hidden space-x-1 lg:flex'>
+                    {categoryFilterValue.length > 1 ? (
+                      <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
+                        {categoryFilterValue.length} đã chọn
+                      </Badge>
+                    ) : (
+                      categoryOptions
+                        .filter(o => categoryFilterValue.includes(o.value))
+                        .map(o => (
+                          <Badge
+                            key={o.value}
+                            variant='secondary'
+                            className='rounded-sm px-1 font-normal'
+                          >
+                            {o.label}
+                          </Badge>
+                        ))
+                    )}
+                  </div>
+                </>
+              )}
+            </PopoverTrigger>
+            <PopoverContent className='w-52 p-2' align='start'>
+              <div className='space-y-1'>
+                {categoryOptions.map(option => (
+                  <div
+                    key={option.value}
+                    className='flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 hover:bg-accent'
+                    onClick={() => toggleCategoryFilter(option.value)}
+                  >
+                    <Checkbox
+                      checked={categoryFilterValue.includes(option.value)}
+                      onCheckedChange={() => toggleCategoryFilter(option.value)}
+                      aria-label={option.label}
+                    />
+                    <span className='text-sm'>{option.label}</span>
+                  </div>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+        )}
+
         {/* Reset button */}
         {isFiltered && (
           <Button
@@ -201,15 +297,7 @@ export function DishTableToolbar({
                       checked={col.getIsVisible()}
                       onCheckedChange={value => col.toggleVisibility(!!value)}
                     >
-                      {col.id === 'name'
-                        ? 'Món ăn'
-                        : col.id === 'price'
-                          ? 'Giá'
-                          : col.id === 'description'
-                            ? 'Mô tả'
-                            : col.id === 'status'
-                              ? 'Trạng thái'
-                              : col.id}
+                      {COLUMN_LABEL_MAP[col.id] ?? col.id}
                     </DropdownMenuCheckboxItem>
                   ))}
               </DropdownMenuGroup>

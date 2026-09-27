@@ -21,7 +21,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { DishStatus } from '@/constants/type'
 import type { DishType } from '@/schemaValidations/dish.schema'
 import { MoreHorizontal, Pencil, Trash2, UtensilsCrossed } from 'lucide-react'
-import { formatCurrency } from './dish-columns'
+import { formatCurrency } from '@/lib/format'
 
 function getStatusConfig(status: string) {
   switch (status) {
@@ -75,6 +75,7 @@ interface DishGridViewProps {
   onDelete: (dish: DishType) => void
   globalFilter: string
   statusFilter: string[]
+  categoryFilter: string[]
 }
 
 function GridSkeleton() {
@@ -104,6 +105,7 @@ export function DishGridView({
   onDelete,
   globalFilter,
   statusFilter,
+  categoryFilter,
 }: DishGridViewProps) {
   if (isLoading) {
     return <GridSkeleton />
@@ -122,6 +124,11 @@ export function DishGridView({
     if (statusFilter.length > 0 && !statusFilter.includes(dish.status)) {
       return false
     }
+    // Category filter
+    if (categoryFilter.length > 0) {
+      const catName = dish.category?.name ?? '__uncategorized__'
+      if (!categoryFilter.includes(catName)) return false
+    }
     return true
   })
 
@@ -130,7 +137,7 @@ export function DishGridView({
       <div className='flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-16 text-center'>
         <UtensilsCrossed className='size-10 text-muted-foreground/40' />
         <p className='text-sm text-muted-foreground'>
-          {globalFilter || statusFilter.length
+          {globalFilter || statusFilter.length || categoryFilter.length
             ? 'Không tìm thấy kết quả phù hợp'
             : 'Chưa có món ăn nào'}
         </p>
@@ -215,6 +222,11 @@ export function DishGridView({
               <p className='line-clamp-2 text-xs text-muted-foreground'>
                 {dish.description || <span className='italic opacity-50'>Chưa có mô tả</span>}
               </p>
+              {dish.category && (
+                <Badge variant='outline' className='mt-1.5 text-[10px] font-normal'>
+                  {dish.category.name}
+                </Badge>
+              )}
             </CardContent>
 
             <CardFooter className='justify-between border-t pt-3'>

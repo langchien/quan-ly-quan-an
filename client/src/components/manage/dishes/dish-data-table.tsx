@@ -105,6 +105,11 @@ export function DishDataTable({
   const statusFilterRaw = statusColumn?.getFilterValue()
   const statusFilter: string[] = Array.isArray(statusFilterRaw) ? statusFilterRaw : []
 
+  // Extract category filter for grid view
+  const categoryColumn = table.getColumn('category')
+  const catFilterRaw = categoryColumn?.getFilterValue()
+  const categoryFilter: string[] = Array.isArray(catFilterRaw) ? catFilterRaw : []
+
   return (
     <div className='space-y-4'>
       <DishTableToolbar
@@ -202,6 +207,7 @@ export function DishDataTable({
           onDelete={onDelete}
           globalFilter={globalFilter}
           statusFilter={statusFilter}
+          categoryFilter={categoryFilter}
         />
       )}
     </div>

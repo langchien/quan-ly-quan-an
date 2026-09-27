@@ -1,6 +1,6 @@
 /**
  * Seed script cho PostgreSQL (NestJS server)
- * Du lieu day du: Owner, Employees (6), Dishes (10), Tables (10)
+ * Du lieu day du: Owner, Employees (6), Categories (6), Dishes (36), Tables (10)
  *
  * 2 anh goc giu lai tu SQLite:
  *   - 4f2867ef88214b4b961e72cf05e093b4.jpg  => Beef Steak
@@ -39,6 +39,7 @@ async function clearAll() {
   await prisma.guest.deleteMany()
   await prisma.table.deleteMany()
   await prisma.dish.deleteMany()
+  await prisma.category.deleteMany()
   // Account co self-relation ownerId, phai reset truoc khi xoa
   await prisma.account.updateMany({ data: { ownerId: null } })
   await prisma.account.deleteMany()
@@ -107,11 +108,91 @@ async function seedAccounts() {
   console.log(`=> Da tao 1 Owner + ${employeeList.length} Employees.\n`)
 }
 
+// DANH MUC
+const CATEGORY_DATA = [
+  { name: 'Phở & Bún', order: 1 },
+  { name: 'Cơm & Xôi', order: 2 },
+  { name: 'Đặc sản vùng miền', order: 3 },
+  { name: 'Bánh', order: 4 },
+  { name: 'Đồ uống & Tráng miệng', order: 5 },
+  { name: 'Món nướng & Lẩu', order: 6 },
+] as const
+
+// Map tên món → tên danh mục
+const DISH_CATEGORY_MAP: Record<string, string> = {
+  // Phở & Bún
+  'Phở Hà Nội': 'Phở & Bún',
+  'Bún Chả Hà Nội': 'Phở & Bún',
+  'Bún Bò Huế': 'Phở & Bún',
+  'Bún Cá Nha Trang': 'Phở & Bún',
+  'Bún Quậy Phú Quốc': 'Phở & Bún',
+  'Phở Chua Lạng Sơn': 'Phở & Bún',
+  'Mì Quảng Hội An': 'Phở & Bún',
+  'Cao Lầu Hội An': 'Phở & Bún',
+  'Hủ Tiếu Mỹ Tho': 'Phở & Bún',
+  'Bánh Đa Cua Hải Phòng': 'Phở & Bún',
+  'Bánh Canh Hẹ Phú Yên': 'Phở & Bún',
+
+  // Cơm & Xôi
+  'Cơm Cháy Ninh Bình': 'Cơm & Xôi',
+  'Xôi Nếp Nương Điện Biên': 'Cơm & Xôi',
+  'Mèn Mén Hà Giang': 'Cơm & Xôi',
+
+  // Đặc sản vùng miền
+  'Chả Mực Hạ Long': 'Đặc sản vùng miền',
+  'Thắng Cố Lào Cai': 'Đặc sản vùng miền',
+  'Vịt Quay 7 Vị Cao Bằng': 'Đặc sản vùng miền',
+  'Nem Nắm Giao Thủy': 'Đặc sản vùng miền',
+  'Gỏi Cá Nam Ô Đà Nẵng': 'Đặc sản vùng miền',
+  'Mắt Cá Ngừ Đại Dương Phú Yên': 'Đặc sản vùng miền',
+  'Bánh Tráng Cuốn Thịt Heo Hai Da Đà Nẵng': 'Đặc sản vùng miền',
+  'Canh Don Quảng Ngãi': 'Đặc sản vùng miền',
+  'Gỏi Cá Trích Phú Quốc': 'Đặc sản vùng miền',
+  'Bò Tơ Tây Ninh': 'Đặc sản vùng miền',
+  'Mắm Châu Đốc': 'Đặc sản vùng miền',
+
+  // Bánh
+  'Bánh Bèo Huế': 'Bánh',
+  'Bánh Căn Nha Trang': 'Bánh',
+  'Bánh Mì Xíu Mại Đà Lạt': 'Bánh',
+  'Bánh Mì Sài Gòn': 'Bánh',
+  'Bánh Cống Cần Thơ': 'Bánh',
+  'Bánh Khọt Vũng Tàu': 'Bánh',
+  'Bánh Đúc Lá Dứa Miền Tây': 'Bánh',
+  'Bánh Pía Sóc Trăng': 'Bánh',
+
+  // Đồ uống & Tráng miệng
+  'Chè Tân Cương Thái Nguyên': 'Đồ uống & Tráng miệng',
+  'Kẹo Dừa Bến Tre': 'Đồ uống & Tráng miệng',
+
+  // Món nướng & Lẩu
+  'Lẩu Mắm Miền Tây': 'Món nướng & Lẩu',
+}
+
+async function seedCategories() {
+  console.log('Tao danh muc...')
+
+  const categoryMap = new Map<string, number>()
+
+  for (const cat of CATEGORY_DATA) {
+    const created = await prisma.category.create({
+      data: { name: cat.name, order: cat.order },
+    })
+    categoryMap.set(cat.name, created.id)
+  }
+
+  console.log(`=> Da tao ${CATEGORY_DATA.length} danh muc.\n`)
+  return categoryMap
+}
+
 // MON AN
-async function seedDishes() {
+async function seedDishes(categoryMap: Map<string, number>) {
   console.log('Tao mon an...')
 
   for (const d of dishesData) {
+    const categoryName = DISH_CATEGORY_MAP[d.name]
+    const categoryId = categoryName ? categoryMap.get(categoryName) ?? null : null
+
     await prisma.dish.create({
       data: {
         name: d.name,
@@ -119,6 +200,7 @@ async function seedDishes() {
         description: d.description,
         image: `${BASE_URL}/static/${d.image}`,
         status: 'Available',
+        categoryId,
       },
     })
   }
@@ -168,7 +250,8 @@ async function main() {
 
   await clearAll()
   await seedAccounts()
-  await seedDishes()
+  const categoryMap = await seedCategories()
+  await seedDishes(categoryMap)
   await seedTables()
 
   console.log('=========================================')

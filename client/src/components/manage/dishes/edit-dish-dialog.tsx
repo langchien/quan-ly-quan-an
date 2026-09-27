@@ -21,6 +21,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { DishStatus } from '@/constants/type'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useUploadAvatarMutation } from '@/queries/use-account'
+import { useGetCategoryList } from '@/queries/use-category'
 import { useUpdateDishMutation } from '@/queries/use-dish'
 import {
   UpdateDishBody,
@@ -43,6 +44,7 @@ export function EditDishDialog({ dish, open, onOpenChange }: EditDishDialogProps
   const [file, setFile] = useState<File | null>(null)
   const updateDishMutation = useUpdateDishMutation()
   const uploadImageMutation = useUploadAvatarMutation()
+  const { data: categories } = useGetCategoryList()
   const imageInputRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<UpdateDishBodyType, unknown, UpdateDishBodyType>({
@@ -53,6 +55,7 @@ export function EditDishDialog({ dish, open, onOpenChange }: EditDishDialogProps
       description: '',
       image: '',
       status: DishStatus.Available,
+      categoryId: null,
     },
   })
 
@@ -80,6 +83,7 @@ export function EditDishDialog({ dish, open, onOpenChange }: EditDishDialogProps
         description: dish.description,
         image: dish.image,
         status: dish.status,
+        categoryId: dish.categoryId ?? null,
       })
       setFile(null)
     }
@@ -194,6 +198,33 @@ export function EditDishDialog({ dish, open, onOpenChange }: EditDishDialogProps
                 aria-invalid={!!errors.description}
               />
               <FieldError errors={[errors.description]} />
+            </Field>
+
+            {/* Danh mục */}
+            <Field>
+              <FieldLabel htmlFor='edit-dish-category'>Danh mục</FieldLabel>
+              <Controller
+                name='categoryId'
+                control={form.control}
+                render={({ field }) => (
+                  <Select
+                    value={field.value != null ? String(field.value) : '__none__'}
+                    onValueChange={v => field.onChange(v === '__none__' ? null : Number(v))}
+                  >
+                    <SelectTrigger id='edit-dish-category' className='w-full'>
+                      <SelectValue placeholder='Chọn danh mục' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='__none__'>Không có danh mục</SelectItem>
+                      {categories?.map(cat => (
+                        <SelectItem key={cat.id} value={String(cat.id)}>
+                          {cat.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </Field>
 
             {/* Trạng thái */}

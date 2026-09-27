@@ -139,6 +139,27 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
       },
     },
 
+    // Danh mục
+    {
+      id: 'category',
+      accessorFn: row => row.category?.name ?? null,
+      header: 'Danh mục',
+      cell: ({ row }) => {
+        const category = row.original.category
+        return category ? (
+          <Badge variant='outline' className='font-normal'>
+            {category.name}
+          </Badge>
+        ) : (
+          <span className='text-sm text-muted-foreground/50'>—</span>
+        )
+      },
+      filterFn: (row, _id, value: string[]) => {
+        const catName = row.original.category?.name ?? '__uncategorized__'
+        return value.includes(catName)
+      },
+    },
+
     // Trạng thái
     {
       accessorKey: 'status',
