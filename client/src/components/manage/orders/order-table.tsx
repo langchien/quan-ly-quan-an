@@ -14,7 +14,8 @@ import { toast } from 'sonner'
 
 export function OrderTable() {
   const queryClient = useQueryClient()
-  const { data: orders, isLoading, isError } = useGetOrdersQuery()
+  const { data: queryResult, isLoading, isError } = useGetOrdersQuery()
+  const orders = queryResult?.data
 
   const [createOpen, setCreateOpen] = useState(false)
   const [updateTarget, setUpdateTarget] = useState<OrderSchemaType | null>(null)

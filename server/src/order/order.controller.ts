@@ -52,8 +52,12 @@ export class OrderController {
    */
   @Get()
   async getOrderList(@ZodQuery(GetOrdersQueryParams) query: GetOrdersQueryParamsType) {
-    const orders = await this.orderService.getOrderList(query)
-    return { message: 'Lấy danh sách đơn hàng thành công', data: orders }
+    const result = await this.orderService.getOrderList(query)
+    return {
+      message: 'Lấy danh sách đơn hàng thành công',
+      data: result.data,
+      pagination: result.pagination,
+    }
   }
 
   /**

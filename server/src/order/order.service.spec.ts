@@ -1,4 +1,4 @@
-﻿import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { StatusError } from '../common/index.js'
 import { DishStatus, OrderStatus, TableStatus } from '../constants/type.js'
 import { OrderService } from './order.service.js'
@@ -71,6 +71,7 @@ const makePrisma = () => ({
     findMany: vi.fn(),
     findUniqueOrThrow: vi.fn(),
     updateMany: vi.fn(),
+    count: vi.fn(),
   },
   guest: {
     findUniqueOrThrow: vi.fn(),
@@ -96,10 +97,11 @@ describe('OrderService', () => {
   describe('getOrderList()', () => {
     it('nen query dung dieu kien when fromDate va toDate duoc truyen', async () => {
       prisma.order.findMany.mockResolvedValue([])
+      prisma.order.count.mockResolvedValue(0)
       const from = new Date('2024-01-01')
       const to = new Date('2024-01-31')
 
-      await service.getOrderList({ fromDate: from, toDate: to })
+      await service.getOrderList({ fromDate: from, toDate: to, page: 1, limit: 20 })
 
       expect(prisma.order.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -107,21 +109,25 @@ describe('OrderService', () => {
             createdAt: { gte: from, lte: to },
           },
           orderBy: { createdAt: 'desc' },
+          skip: 0,
+          take: 20,
         })
       )
     })
 
     it('nen tra ve tat ca don hang khi khong co filter', async () => {
       prisma.order.findMany.mockResolvedValue([makeOrder()])
+      prisma.order.count.mockResolvedValue(1)
 
-      const result = await service.getOrderList({})
+      const result = await service.getOrderList({ page: 1, limit: 20 })
 
-      expect(result).toHaveLength(1)
-      expect(prisma.order.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: { createdAt: { gte: undefined, lte: undefined } },
-        })
-      )
+      expect(result.data).toHaveLength(1)
+      expect(result.pagination).toEqual({
+        totalItems: 1,
+        totalPages: 1,
+        currentPage: 1,
+        pageSize: 20,
+      })
     })
   })
 

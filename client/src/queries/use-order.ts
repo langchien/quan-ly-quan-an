@@ -25,9 +25,11 @@ export function ordersQueryOptions(params?: GetOrdersQueryParamsType) {
       const searchParams: Record<string, string> = {}
       if (params?.fromDate) searchParams.fromDate = params.fromDate.toISOString()
       if (params?.toDate) searchParams.toDate = params.toDate.toISOString()
+      if (params?.page) searchParams.page = String(params.page)
+      if (params?.limit) searchParams.limit = String(params.limit)
 
       const res = await httpClient.get<GetOrdersResType>('/orders', { params: searchParams })
-      return res.data.data
+      return { data: res.data.data, pagination: res.data.pagination }
     },
   })
 }

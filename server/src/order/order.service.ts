@@ -29,16 +29,36 @@ export class OrderService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getOrderList(query: GetOrdersQueryParamsType) {
-    return this.prisma.order.findMany({
-      include: { dishSnapshot: true, orderHandler: true, guest: true },
-      orderBy: { createdAt: 'desc' },
-      where: {
-        createdAt: {
-          gte: query.fromDate,
-          lte: query.toDate,
-        },
+    const { page, limit, fromDate, toDate } = query
+    const skip = (page - 1) * limit
+
+    const where = {
+      createdAt: {
+        ...(fromDate && { gte: fromDate }),
+        ...(toDate && { lte: toDate }),
       },
-    })
+    }
+
+    const [data, totalItems] = await Promise.all([
+      this.prisma.order.findMany({
+        include: { dishSnapshot: true, orderHandler: true, guest: true },
+        orderBy: { createdAt: 'desc' },
+        where,
+        skip,
+        take: limit,
+      }),
+      this.prisma.order.count({ where }),
+    ])
+
+    return {
+      data,
+      pagination: {
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: page,
+        pageSize: limit,
+      },
+    }
   }
 
   async getOrderDetail(orderId: number) {

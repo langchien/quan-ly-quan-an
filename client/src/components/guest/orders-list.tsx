@@ -4,8 +4,10 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { OrderStatus } from '@/constants/type'
+import { useWaitingTime, formatOrderTime } from '@/hooks/use-waiting-time'
 import type { GuestGetOrdersResType } from '@/schemaValidations/guest.schema'
 import { OrderStatusBadge } from './order-status-badge'
+import { Clock } from 'lucide-react'
 
 type Order = GuestGetOrdersResType['data'][number]
 
@@ -35,6 +37,26 @@ const sectionOrder = [
   OrderStatus.Rejected,
   OrderStatus.Paid,
 ]
+
+function WaitingTimeDisplay({ createdAt, status }: { createdAt: string | Date; status: string }) {
+  const elapsed = useWaitingTime(createdAt)
+  // Chỉ hiển thị đếm ngược cho đơn đang chờ xử lý
+  const isActive = status === OrderStatus.Pending || status === OrderStatus.Processing
+  return (
+    <div className='flex items-center gap-1 text-xs text-muted-foreground'>
+      <Clock className='size-3' />
+      <span>{formatOrderTime(createdAt)}</span>
+      {isActive && (
+        <>
+          <span>·</span>
+          <span className={elapsed.isLong ? 'font-medium text-destructive' : ''}>
+            {elapsed.text}
+          </span>
+        </>
+      )}
+    </div>
+  )
+}
 
 function OrderItem({ order }: { order: Order }) {
   const snapshot = order.dishSnapshot
@@ -66,6 +88,8 @@ function OrderItem({ order }: { order: Order }) {
               <span className='line-clamp-2'>{order.note}</span>
             </p>
           )}
+          {/* Thời gian chờ */}
+          <WaitingTimeDisplay createdAt={order.createdAt} status={order.status} />
         </div>
 
         {/* Trạng thái */}

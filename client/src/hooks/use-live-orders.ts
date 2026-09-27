@@ -73,7 +73,7 @@ export function useLiveOrders() {
   })
 
   // Computed KPIs
-  const liveOrders = orders ?? []
+  const liveOrders = orders?.data ?? []
 
   const pendingOrders = useMemo(
     () => liveOrders.filter(o => o.status === OrderStatus.Pending),

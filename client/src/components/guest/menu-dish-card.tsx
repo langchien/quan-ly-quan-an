@@ -2,10 +2,12 @@ import { formatCurrencyVND } from '@/components/home/dish-card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { DishStatus } from '@/constants/type'
 import { useCartStore } from '@/hooks/use-cart'
 import type { DishType } from '@/schemaValidations/dish.schema'
 import { ShoppingCart } from 'lucide-react'
+import { useState } from 'react'
 import { QuantityControl } from './quantity-control'
 
 interface MenuDishCardProps {
@@ -21,6 +23,8 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
   const cartItem = items.find(i => i.dishId === dish.id)
   const quantity = cartItem?.quantity ?? 0
 
+  const [imageLoaded, setImageLoaded] = useState(false)
+
   function handleAdd() {
     addItem({
       dishId: dish.id,
@@ -32,14 +36,22 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
 
   return (
     <Card className='group overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg'>
-      {/* Ảnh món ăn */}
+      {/* Ảnh món ăn — Lazy Loading + Skeleton */}
       <div className='relative aspect-[4/3] overflow-hidden bg-muted'>
         {dish.image ? (
-          <img
-            src={dish.image}
-            alt={dish.name}
-            className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
-          />
+          <>
+            {/* Skeleton placeholder — ẩn khi ảnh đã tải */}
+            {!imageLoaded && <Skeleton className='absolute inset-0 h-full w-full rounded-none' />}
+            <img
+              src={dish.image}
+              alt={dish.name}
+              loading='lazy'
+              onLoad={() => setImageLoaded(true)}
+              className={`h-full w-full object-cover transition-all duration-500 group-hover:scale-105 ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          </>
         ) : (
           <div className='flex h-full w-full items-center justify-center text-4xl text-muted-foreground/30'>
             🍽️

@@ -64,13 +64,25 @@ export type UpdateOrderResType = z.TypeOf<typeof UpdateOrderRes>
 export const GetOrdersQueryParams = z.object({
   fromDate: z.coerce.date().optional(),
   toDate: z.coerce.date().optional(),
+  page: z.coerce.number().int().min(1).optional(),
+  limit: z.coerce.number().int().min(1).max(100).optional(),
 })
 
 export type GetOrdersQueryParamsType = z.TypeOf<typeof GetOrdersQueryParams>
 
+export const PaginationMeta = z.object({
+  totalItems: z.number(),
+  totalPages: z.number(),
+  currentPage: z.number(),
+  pageSize: z.number(),
+})
+
+export type PaginationMetaType = z.TypeOf<typeof PaginationMeta>
+
 export const GetOrdersRes = z.object({
   message: z.string(),
   data: z.array(OrderSchema),
+  pagination: PaginationMeta,
 })
 
 export type GetOrdersResType = z.TypeOf<typeof GetOrdersRes>

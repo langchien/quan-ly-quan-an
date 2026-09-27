@@ -53,7 +53,7 @@ export function useKitchenOrders() {
     },
   })
 
-  const allOrders = orders ?? []
+  const allOrders = orders?.data ?? []
 
   // Chỉ lấy đơn liên quan đến bếp
   const pendingOrders = useMemo(
