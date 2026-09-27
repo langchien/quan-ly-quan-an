@@ -1,5 +1,14 @@
 import { Role, type RoleType } from '@/constants/type'
-import { Home, LineChart, Salad, ShoppingCart, Table, Users2, type LucideProps } from 'lucide-react'
+import {
+  ChefHat,
+  Home,
+  LineChart,
+  Salad,
+  ShoppingCart,
+  Table,
+  Users2,
+  type LucideProps,
+} from 'lucide-react'
 import type React from 'react'
 
 export type NavLinkItem = {
@@ -18,6 +27,11 @@ export const manageNavLink: NavLinkItem[] = [
     title: 'Đơn hàng',
     href: '/manage/orders',
     Icon: ShoppingCart,
+  },
+  {
+    title: 'Bếp',
+    href: '/manage/kitchen',
+    Icon: ChefHat,
   },
   {
     title: 'Bàn ăn',

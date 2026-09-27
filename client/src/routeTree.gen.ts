@@ -18,6 +18,7 @@ import { Route as PublicOrdersRouteImport } from './routes/_public/orders'
 import { Route as ManageAnalyticsRouteImport } from './routes/manage/analytics'
 import { Route as ManageDashboardRouteImport } from './routes/manage/dashboard'
 import { Route as ManageDishesRouteImport } from './routes/manage/dishes'
+import { Route as ManageKitchenRouteImport } from './routes/manage/kitchen'
 import { Route as ManageOrdersRouteImport } from './routes/manage/orders'
 import { Route as ManageStaffsRouteImport } from './routes/manage/staffs'
 import { Route as ManageTablesRouteImport } from './routes/manage/tables'
@@ -68,6 +69,11 @@ const ManageDishesRoute = ManageDishesRouteImport.update({
   path: '/dishes',
   getParentRoute: () => ManageRoute,
 } as any)
+const ManageKitchenRoute = ManageKitchenRouteImport.update({
+  id: '/kitchen',
+  path: '/kitchen',
+  getParentRoute: () => ManageRoute,
+} as any)
 const ManageOrdersRoute = ManageOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
   '/manage/dishes': typeof ManageDishesRoute
+  '/manage/kitchen': typeof ManageKitchenRoute
   '/manage/orders': typeof ManageOrdersRoute
   '/manage/staffs': typeof ManageStaffsRoute
   '/manage/tables': typeof ManageTablesRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
   '/manage/dishes': typeof ManageDishesRoute
+  '/manage/kitchen': typeof ManageKitchenRoute
   '/manage/orders': typeof ManageOrdersRoute
   '/manage/staffs': typeof ManageStaffsRoute
   '/manage/tables': typeof ManageTablesRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/manage/analytics': typeof ManageAnalyticsRoute
   '/manage/dashboard': typeof ManageDashboardRoute
   '/manage/dishes': typeof ManageDishesRoute
+  '/manage/kitchen': typeof ManageKitchenRoute
   '/manage/orders': typeof ManageOrdersRoute
   '/manage/staffs': typeof ManageStaffsRoute
   '/manage/tables': typeof ManageTablesRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/manage/analytics'
     | '/manage/dashboard'
     | '/manage/dishes'
+    | '/manage/kitchen'
     | '/manage/orders'
     | '/manage/staffs'
     | '/manage/tables'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/manage/analytics'
     | '/manage/dashboard'
     | '/manage/dishes'
+    | '/manage/kitchen'
     | '/manage/orders'
     | '/manage/staffs'
     | '/manage/tables'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/manage/analytics'
     | '/manage/dashboard'
     | '/manage/dishes'
+    | '/manage/kitchen'
     | '/manage/orders'
     | '/manage/staffs'
     | '/manage/tables'
@@ -266,6 +278,13 @@ declare module '@tanstack/react-router' {
       path: '/dishes'
       fullPath: '/manage/dishes'
       preLoaderRoute: typeof ManageDishesRouteImport
+      parentRoute: typeof ManageRoute
+    }
+    '/manage/kitchen': {
+      id: '/manage/kitchen'
+      path: '/kitchen'
+      fullPath: '/manage/kitchen'
+      preLoaderRoute: typeof ManageKitchenRouteImport
       parentRoute: typeof ManageRoute
     }
     '/manage/orders': {
@@ -350,6 +369,7 @@ interface ManageRouteChildren {
   ManageAnalyticsRoute: typeof ManageAnalyticsRoute
   ManageDashboardRoute: typeof ManageDashboardRoute
   ManageDishesRoute: typeof ManageDishesRoute
+  ManageKitchenRoute: typeof ManageKitchenRoute
   ManageOrdersRoute: typeof ManageOrdersRoute
   ManageStaffsRoute: typeof ManageStaffsRoute
   ManageTablesRoute: typeof ManageTablesRoute
@@ -359,6 +379,7 @@ const ManageRouteChildren: ManageRouteChildren = {
   ManageAnalyticsRoute: ManageAnalyticsRoute,
   ManageDashboardRoute: ManageDashboardRoute,
   ManageDishesRoute: ManageDishesRoute,
+  ManageKitchenRoute: ManageKitchenRoute,
   ManageOrdersRoute: ManageOrdersRoute,
   ManageStaffsRoute: ManageStaffsRoute,
   ManageTablesRoute: ManageTablesRoute,
