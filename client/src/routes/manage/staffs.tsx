@@ -1,8 +1,16 @@
 import { StaffTable } from '@/components/manage/staffs/staff-table'
-import { accountListQueryOptions } from '@/queries/use-account'
-import { createFileRoute } from '@tanstack/react-router'
+import { Role } from '@/constants/type'
+import { accountListQueryOptions, accountMeQueryOptions } from '@/queries/use-account'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/manage/staffs')({
+  beforeLoad: async ({ context: { queryClient } }) => {
+    // Lấy account từ cache (đã load ở /manage layout)
+    const account = queryClient.getQueryData(accountMeQueryOptions.queryKey)
+    if (account?.role !== Role.Owner) {
+      throw redirect({ to: '/manage/dashboard' })
+    }
+  },
   loader: ({ context: { queryClient } }) => {
     return queryClient.ensureQueryData(accountListQueryOptions)
   },

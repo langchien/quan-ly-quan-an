@@ -44,7 +44,7 @@ function getStatusBadge(status: string) {
 
 interface GetTableColumnsOptions {
   onEdit: (table: z.infer<typeof TableSchema>) => void
-  onDelete: (table: z.infer<typeof TableSchema>) => void
+  onDelete?: (table: z.infer<typeof TableSchema>) => void
 }
 
 export function getTableColumns({
@@ -180,14 +180,16 @@ export function getTableColumns({
                     <Pencil className='mr-2 size-4' />
                     Chỉnh sửa
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    id={`delete-table-${table.number}`}
-                    onClick={() => onDelete(table)}
-                    className='text-destructive focus:text-destructive'
-                  >
-                    <Trash2 className='mr-2 size-4' />
-                    Xóa
-                  </DropdownMenuItem>
+                  {onDelete && (
+                    <DropdownMenuItem
+                      id={`delete-table-${table.number}`}
+                      onClick={() => onDelete(table)}
+                      className='text-destructive focus:text-destructive'
+                    >
+                      <Trash2 className='mr-2 size-4' />
+                      Xóa
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -3,6 +3,7 @@ import { DeleteTableDialog } from '@/components/manage/tables/delete-table-dialo
 import { EditTableDialog } from '@/components/manage/tables/edit-table-dialog'
 import { getTableColumns } from '@/components/manage/tables/table-columns'
 import { TableDataTable } from '@/components/manage/tables/table-data-table'
+import { useRole } from '@/hooks/useRole'
 import { useGetTableList } from '@/queries/use-table'
 import type { TableSchema } from '@/schemaValidations/table.schema'
 import { LayoutGrid } from 'lucide-react'
@@ -11,6 +12,7 @@ import type { z } from 'zod'
 
 export function TableTable() {
   const { data: tableList, isLoading, isError } = useGetTableList()
+  const { isOwner } = useRole()
   const [createOpen, setCreateOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<z.infer<typeof TableSchema> | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<z.infer<typeof TableSchema> | null>(null)
@@ -19,9 +21,9 @@ export function TableTable() {
     () =>
       getTableColumns({
         onEdit: table => setEditTarget(table),
-        onDelete: table => setDeleteTarget(table),
+        onDelete: isOwner ? table => setDeleteTarget(table) : undefined,
       }),
-    []
+    [isOwner]
   )
 
   if (isError) {
@@ -44,7 +46,7 @@ export function TableTable() {
         isLoading={isLoading}
         onAddTable={() => setCreateOpen(true)}
         onEdit={table => setEditTarget(table)}
-        onDelete={table => setDeleteTarget(table)}
+        onDelete={isOwner ? table => setDeleteTarget(table) : undefined}
       />
 
       <CreateTableDialog open={createOpen} onOpenChange={setCreateOpen} />
@@ -55,11 +57,13 @@ export function TableTable() {
         onOpenChange={open => !open && setEditTarget(null)}
       />
 
-      <DeleteTableDialog
-        table={deleteTarget}
-        open={!!deleteTarget}
-        onOpenChange={open => !open && setDeleteTarget(null)}
-      />
+      {isOwner && (
+        <DeleteTableDialog
+          table={deleteTarget}
+          open={!!deleteTarget}
+          onOpenChange={open => !open && setDeleteTarget(null)}
+        />
+      )}
     </>
   )
 }

@@ -37,7 +37,7 @@ interface TableDataTableProps {
   isLoading?: boolean
   onAddTable: () => void
   onEdit: (table: z.infer<typeof TableSchema>) => void
-  onDelete: (table: z.infer<typeof TableSchema>) => void
+  onDelete?: (table: z.infer<typeof TableSchema>) => void
 }
 
 function LoadingSkeleton({ colCount }: { colCount: number }) {

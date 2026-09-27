@@ -3,6 +3,7 @@ import { DeleteDishDialog } from '@/components/manage/dishes/delete-dish-dialog'
 import { EditDishDialog } from '@/components/manage/dishes/edit-dish-dialog'
 import { getDishColumns } from '@/components/manage/dishes/dish-columns'
 import { DishDataTable } from '@/components/manage/dishes/dish-data-table'
+import { useRole } from '@/hooks/useRole'
 import { useGetDishList } from '@/queries/use-dish'
 import type { DishType } from '@/schemaValidations/dish.schema'
 import { UtensilsCrossed } from 'lucide-react'
@@ -10,6 +11,7 @@ import { useMemo, useState } from 'react'
 
 export function DishTable() {
   const { data: dishList, isLoading, isError } = useGetDishList()
+  const { isOwner } = useRole()
   const [createOpen, setCreateOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<DishType | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<DishType | null>(null)
@@ -18,9 +20,9 @@ export function DishTable() {
     () =>
       getDishColumns({
         onEdit: dish => setEditTarget(dish),
-        onDelete: dish => setDeleteTarget(dish),
+        onDelete: isOwner ? dish => setDeleteTarget(dish) : undefined,
       }),
-    []
+    [isOwner]
   )
 
   if (isError) {
@@ -43,7 +45,7 @@ export function DishTable() {
         isLoading={isLoading}
         onAddDish={() => setCreateOpen(true)}
         onEdit={dish => setEditTarget(dish)}
-        onDelete={dish => setDeleteTarget(dish)}
+        onDelete={isOwner ? dish => setDeleteTarget(dish) : undefined}
       />
 
       <CreateDishDialog open={createOpen} onOpenChange={setCreateOpen} />
@@ -54,11 +56,13 @@ export function DishTable() {
         onOpenChange={open => !open && setEditTarget(null)}
       />
 
-      <DeleteDishDialog
-        dish={deleteTarget}
-        open={!!deleteTarget}
-        onOpenChange={open => !open && setDeleteTarget(null)}
-      />
+      {isOwner && (
+        <DeleteDishDialog
+          dish={deleteTarget}
+          open={!!deleteTarget}
+          onOpenChange={open => !open && setDeleteTarget(null)}
+        />
+      )}
     </>
   )
 }

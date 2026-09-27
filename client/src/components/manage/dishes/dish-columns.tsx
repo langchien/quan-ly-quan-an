@@ -49,7 +49,7 @@ function getStatusBadge(status: string) {
 
 interface GetDishColumnsOptions {
   onEdit: (dish: DishType) => void
-  onDelete: (dish: DishType) => void
+  onDelete?: (dish: DishType) => void
 }
 
 export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): ColumnDef<DishType>[] {
@@ -196,14 +196,16 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
                     <Pencil className='mr-2 size-4' />
                     Chỉnh sửa
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    id={`delete-dish-${dish.id}`}
-                    onClick={() => onDelete(dish)}
-                    className='text-destructive focus:text-destructive'
-                  >
-                    <Trash2 className='mr-2 size-4' />
-                    Xóa
-                  </DropdownMenuItem>
+                  {onDelete && (
+                    <DropdownMenuItem
+                      id={`delete-dish-${dish.id}`}
+                      onClick={() => onDelete(dish)}
+                      className='text-destructive focus:text-destructive'
+                    >
+                      <Trash2 className='mr-2 size-4' />
+                      Xóa
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>

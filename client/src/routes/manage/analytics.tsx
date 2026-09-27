@@ -12,9 +12,17 @@ import { RevenueLineChart } from '@/components/manage/dashboard/revenue-line-cha
 import { DishBarChart } from '@/components/manage/dashboard/dish-bar-chart'
 import { cn } from '@/lib/utils'
 import { formatCurrency } from '@/lib/format'
-import { createFileRoute } from '@tanstack/react-router'
+import { Role } from '@/constants/type'
+import { accountMeQueryOptions } from '@/queries/use-account'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/manage/analytics')({
+  beforeLoad: async ({ context: { queryClient } }) => {
+    const account = queryClient.getQueryData(accountMeQueryOptions.queryKey)
+    if (account?.role !== Role.Owner) {
+      throw redirect({ to: '/manage/dashboard' })
+    }
+  },
   component: AnalyticsPage,
 })
 

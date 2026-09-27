@@ -36,7 +36,7 @@ interface DishDataTableProps {
   isLoading?: boolean
   onAddDish: () => void
   onEdit: (dish: DishType) => void
-  onDelete: (dish: DishType) => void
+  onDelete?: (dish: DishType) => void
 }
 
 function LoadingSkeleton({ colCount }: { colCount: number }) {

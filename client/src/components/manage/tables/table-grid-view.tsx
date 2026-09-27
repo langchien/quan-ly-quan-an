@@ -74,7 +74,7 @@ interface TableGridViewProps {
   data: z.infer<typeof TableSchema>[]
   isLoading?: boolean
   onEdit: (table: z.infer<typeof TableSchema>) => void
-  onDelete: (table: z.infer<typeof TableSchema>) => void
+  onDelete?: (table: z.infer<typeof TableSchema>) => void
   globalFilter: string
   statusFilter: string[]
 }
@@ -191,13 +191,15 @@ export function TableGridView({
                         <Pencil className='mr-2 size-4' />
                         Chỉnh sửa
                       </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => onDelete(table)}
-                        className='text-destructive focus:text-destructive'
-                      >
-                        <Trash2 className='mr-2 size-4' />
-                        Xóa
-                      </DropdownMenuItem>
+                      {onDelete && (
+                        <DropdownMenuItem
+                          onClick={() => onDelete(table)}
+                          className='text-destructive focus:text-destructive'
+                        >
+                          <Trash2 className='mr-2 size-4' />
+                          Xóa
+                        </DropdownMenuItem>
+                      )}
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>

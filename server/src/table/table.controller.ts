@@ -1,7 +1,10 @@
 import { Controller, Get, Post, Put, Delete, UseGuards, HttpCode, HttpStatus } from '@nestjs/common'
 import { TableService } from './table.service.js'
+import { Roles } from '../auth/decorators/roles.decorator.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
+import { RolesGuard } from '../auth/guards/roles.guard.js'
 import { ZodBody, ZodParam } from '../common/index.js'
+import { Role } from '../constants/type.js'
 import {
   CreateTableBody,
   type CreateTableBodyType,
@@ -37,10 +40,10 @@ export class TableController {
 
   /**
    * POST /tables
-   * Tạo bàn mới
+   * Tạo bàn mới — Owner + Employee
    */
   @Post()
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   @HttpCode(HttpStatus.CREATED)
   async createTable(@ZodBody(CreateTableBody) body: CreateTableBodyType) {
     const table = await this.tableService.createTable(body)
@@ -49,10 +52,10 @@ export class TableController {
 
   /**
    * PUT /tables/:number
-   * Cập nhật thông tin bàn (có thể rotate token QR)
+   * Cập nhật thông tin bàn (có thể rotate token QR) — Owner + Employee
    */
   @Put(':number')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   async updateTable(
     @ZodParam(TableParams) params: TableParamsType,
     @ZodBody(UpdateTableBody) body: UpdateTableBodyType
@@ -63,10 +66,11 @@ export class TableController {
 
   /**
    * DELETE /tables/:number
-   * Xóa bàn theo số bàn
+   * Xóa bàn theo số bàn — chỉ Owner
    */
   @Delete(':number')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Roles([Role.Owner])
   @HttpCode(HttpStatus.OK)
   async deleteTable(@ZodParam(TableParams) params: TableParamsType) {
     const table = await this.tableService.deleteTable(params.number)

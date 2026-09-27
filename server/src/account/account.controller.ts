@@ -1,8 +1,10 @@
 import { Controller, Delete, Get, HttpCode, HttpStatus, Post, Put, UseGuards } from '@nestjs/common'
 import { ActiveUser } from '../auth/decorators/active-user.decorator.js'
+import { Roles } from '../auth/decorators/roles.decorator.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
+import { RolesGuard } from '../auth/guards/roles.guard.js'
 import { ZodBody, ZodParam } from '../common/index.js'
-import type { TokenPayload } from '../constants/type.js'
+import { Role, type TokenPayload } from '../constants/type.js'
 import { AccountService } from './account.service.js'
 import {
   AccountIdParam,
@@ -18,7 +20,7 @@ import {
 } from './dto/account.schema.js'
 
 @Controller()
-@UseGuards(AccessTokenGuard)
+@UseGuards(AccessTokenGuard, RolesGuard)
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
@@ -58,8 +60,10 @@ export class AccountController {
   /**
    * GET /accounts
    * Lấy danh sách tất cả tài khoản (trừ tài khoản hiện tại)
+   * Chỉ Owner mới xem được danh sách toàn bộ tài khoản
    */
   @Get('accounts')
+  @Roles([Role.Owner])
   async getAccountList(@ActiveUser() user: TokenPayload) {
     const accounts = await this.accountService.getAccountList(user.userId)
     return { message: 'Lấy danh sách thành công', data: accounts }
@@ -67,7 +71,7 @@ export class AccountController {
 
   /**
    * GET /employees
-   * Lấy danh sách nhân viên
+   * Lấy danh sách nhân viên (Owner + Employee đều xem được)
    */
   @Get('employees')
   async getEmployeeList() {
@@ -87,9 +91,10 @@ export class AccountController {
 
   /**
    * POST /employees
-   * Tạo tài khoản nhân viên mới
+   * Tạo tài khoản nhân viên mới — chỉ Owner
    */
   @Post('employees')
+  @Roles([Role.Owner])
   @HttpCode(HttpStatus.CREATED)
   async createEmployee(@ZodBody(CreateEmployeeAccountBody) body: CreateEmployeeAccountBodyType) {
     const account = await this.accountService.createEmployee(body)
@@ -98,9 +103,10 @@ export class AccountController {
 
   /**
    * PUT /employees/:id
-   * Cập nhật thông tin nhân viên
+   * Cập nhật thông tin nhân viên — chỉ Owner
    */
   @Put('employees/:id')
+  @Roles([Role.Owner])
   async updateEmployee(
     @ZodParam(AccountIdParam) params: AccountIdParamType,
     @ZodBody(UpdateEmployeeAccountBody) body: UpdateEmployeeAccountBodyType
@@ -111,9 +117,10 @@ export class AccountController {
 
   /**
    * DELETE /employees/:id
-   * Xóa tài khoản nhân viên
+   * Xóa tài khoản nhân viên — chỉ Owner
    */
   @Delete('employees/:id')
+  @Roles([Role.Owner])
   @HttpCode(HttpStatus.OK)
   async deleteEmployee(@ZodParam(AccountIdParam) params: AccountIdParamType) {
     const account = await this.accountService.deleteEmployee(params.id)

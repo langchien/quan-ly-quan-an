@@ -1,6 +1,9 @@
 import { Controller, Delete, Get, HttpCode, HttpStatus, Post, Put, UseGuards } from '@nestjs/common'
+import { Roles } from '../auth/decorators/roles.decorator.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
+import { RolesGuard } from '../auth/guards/roles.guard.js'
 import { ZodBody, ZodParam } from '../common/index.js'
+import { Role } from '../constants/type.js'
 import { CategoryService } from './category.service.js'
 import {
   CategoryParams,
@@ -37,10 +40,10 @@ export class CategoryController {
 
   /**
    * POST /categories
-   * Tạo danh mục mới (chỉ nhân viên/owner)
+   * Tạo danh mục mới — Owner + Employee
    */
   @Post()
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   @HttpCode(HttpStatus.CREATED)
   async createCategory(@ZodBody(CreateCategoryBody) body: CreateCategoryBodyType) {
     const category = await this.categoryService.createCategory(body)
@@ -49,10 +52,10 @@ export class CategoryController {
 
   /**
    * PUT /categories/:id
-   * Cập nhật danh mục
+   * Cập nhật danh mục — Owner + Employee
    */
   @Put(':id')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   async updateCategory(
     @ZodParam(CategoryParams) params: CategoryParamsType,
     @ZodBody(UpdateCategoryBody) body: UpdateCategoryBodyType
@@ -63,10 +66,11 @@ export class CategoryController {
 
   /**
    * DELETE /categories/:id
-   * Xóa danh mục (món ăn liên kết sẽ mất categoryId, không bị xóa)
+   * Xóa danh mục — chỉ Owner
    */
   @Delete(':id')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Roles([Role.Owner])
   @HttpCode(HttpStatus.OK)
   async deleteCategory(@ZodParam(CategoryParams) params: CategoryParamsType) {
     const category = await this.categoryService.deleteCategory(params.id)

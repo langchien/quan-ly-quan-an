@@ -1,8 +1,11 @@
-﻿import { Controller, Get, Post, Put, HttpCode, HttpStatus, UseGuards, Query } from '@nestjs/common'
+import { Controller, Get, Post, Put, HttpCode, HttpStatus, UseGuards, Query } from '@nestjs/common'
 import { OrderService } from './order.service.js'
+import { Roles } from '../auth/decorators/roles.decorator.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
+import { RolesGuard } from '../auth/guards/roles.guard.js'
 import { ActiveUser } from '../auth/decorators/active-user.decorator.js'
 import { ZodBody, ZodParam, ZodQuery } from '../common/index.js'
+import { Role } from '../constants/type.js'
 import {
   OrderParam,
   type OrderParamType,
@@ -18,7 +21,7 @@ import {
 import { EventsGateway } from '../events/events.gateway.js'
 
 @Controller('orders')
-@UseGuards(AccessTokenGuard)
+@UseGuards(AccessTokenGuard, RolesGuard)
 export class OrderController {
   constructor(
     private readonly orderService: OrderService,
@@ -83,9 +86,10 @@ export class OrderController {
 
   /**
    * POST /orders/pay
-   * Thanh toán toàn bộ đơn hàng của guest, emit socket payment
+   * Thanh toán toàn bộ đơn hàng của guest — chỉ Owner
    */
   @Post('pay')
+  @Roles([Role.Owner])
   @HttpCode(HttpStatus.OK)
   async payGuestOrders(
     @ZodBody(PayGuestOrdersBody) body: PayGuestOrdersBodyType,

@@ -72,7 +72,7 @@ interface DishGridViewProps {
   data: DishType[]
   isLoading?: boolean
   onEdit: (dish: DishType) => void
-  onDelete: (dish: DishType) => void
+  onDelete?: (dish: DishType) => void
   globalFilter: string
   statusFilter: string[]
   categoryFilter: string[]
@@ -205,13 +205,15 @@ export function DishGridView({
                         <Pencil className='mr-2 size-4' />
                         Chỉnh sửa
                       </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => onDelete(dish)}
-                        className='text-destructive focus:text-destructive'
-                      >
-                        <Trash2 className='mr-2 size-4' />
-                        Xóa
-                      </DropdownMenuItem>
+                      {onDelete && (
+                        <DropdownMenuItem
+                          onClick={() => onDelete(dish)}
+                          className='text-destructive focus:text-destructive'
+                        >
+                          <Trash2 className='mr-2 size-4' />
+                          Xóa
+                        </DropdownMenuItem>
+                      )}
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>

@@ -8,15 +8,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
+import { useRole } from '@/hooks/useRole'
 
 export function NavMain({ items }: { items: NavLinkItem[] }) {
   const { location } = useRouterState()
+  const { role } = useRole()
+
+  // Lọc menu items theo role hiện tại
+  const visibleItems = items.filter(item => {
+    if (!item.requiredRoles) return true
+    return role ? item.requiredRoles.includes(role) : false
+  })
 
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Quản lý</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map(({ title, href, Icon }) => {
+        {visibleItems.map(({ title, href, Icon }) => {
           const isActive = location.pathname.startsWith(href)
           return (
             <SidebarMenuItem key={href}>

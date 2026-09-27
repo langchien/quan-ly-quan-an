@@ -1,7 +1,10 @@
 import { Controller, Get, Post, Put, Delete, UseGuards, HttpCode, HttpStatus } from '@nestjs/common'
 import { DishService } from './dish.service.js'
+import { Roles } from '../auth/decorators/roles.decorator.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
+import { RolesGuard } from '../auth/guards/roles.guard.js'
 import { ZodBody, ZodParam } from '../common/index.js'
+import { Role } from '../constants/type.js'
 import {
   CreateDishBody,
   type CreateDishBodyType,
@@ -37,10 +40,10 @@ export class DishController {
 
   /**
    * POST /dishes
-   * Tạo món ăn mới
+   * Tạo món ăn mới — Owner + Employee
    */
   @Post()
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   @HttpCode(HttpStatus.CREATED)
   async createDish(@ZodBody(CreateDishBody) body: CreateDishBodyType) {
     const dish = await this.dishService.createDish(body)
@@ -49,10 +52,10 @@ export class DishController {
 
   /**
    * PUT /dishes/:id
-   * Cập nhật thông tin món ăn
+   * Cập nhật thông tin món ăn — Owner + Employee
    */
   @Put(':id')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard, RolesGuard)
   async updateDish(
     @ZodParam(DishParams) params: DishParamsType,
     @ZodBody(UpdateDishBody) body: UpdateDishBodyType
@@ -63,10 +66,11 @@ export class DishController {
 
   /**
    * DELETE /dishes/:id
-   * Xóa món ăn
+   * Xóa món ăn — chỉ Owner
    */
   @Delete(':id')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  @Roles([Role.Owner])
   @HttpCode(HttpStatus.OK)
   async deleteDish(@ZodParam(DishParams) params: DishParamsType) {
     const dish = await this.dishService.deleteDish(params.id)
