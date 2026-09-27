@@ -207,6 +207,19 @@ export class OrderService {
       data: { status: OrderStatus.Paid, orderHandlerId },
     })
 
+    // Rotate token QR bàn sau thanh toán — token cũ vô hiệu hóa
+    const guest = await this.prisma.guest.findUnique({ where: { id: guestId } })
+    let tokenRotation: { tableNumber: number; newToken: string } | null = null
+    if (guest?.tableNumber) {
+      const newToken =
+        Math.random().toString(36).substring(2) + Date.now().toString(36)
+      await this.prisma.table.update({
+        where: { number: guest.tableNumber },
+        data: { token: newToken },
+      })
+      tokenRotation = { tableNumber: guest.tableNumber, newToken }
+    }
+
     const [paidOrders, socketRecord] = await Promise.all([
       this.prisma.order.findMany({
         where: { id: { in: orderIds } },
@@ -216,6 +229,6 @@ export class OrderService {
       this.prisma.socket.findUnique({ where: { guestId } }).catch(() => null),
     ])
 
-    return { orders: paidOrders, guestSocketId: socketRecord?.socketId }
+    return { orders: paidOrders, guestSocketId: socketRecord?.socketId, tokenRotation }
   }
 }

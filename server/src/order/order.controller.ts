@@ -95,11 +95,17 @@ export class OrderController {
     @ZodBody(PayGuestOrdersBody) body: PayGuestOrdersBodyType,
     @ActiveUser('userId') accountId: number
   ) {
-    const { orders, guestSocketId } = await this.orderService.payGuestOrders({
+    const { orders, guestSocketId, tokenRotation } = await this.orderService.payGuestOrders({
       ...body,
       orderHandlerId: accountId,
     })
     this.eventsGateway.emitPayment(orders, guestSocketId)
+
+    // Nếu token QR bàn đã được rotate → thông báo manager để cập nhật QR code
+    if (tokenRotation) {
+      this.eventsGateway.emitTableTokenRotated(tokenRotation)
+    }
+
     return {
       message: `Thanh toán thành công ${orders.length} đơn`,
       data: orders,

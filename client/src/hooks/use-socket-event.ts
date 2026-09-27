@@ -12,6 +12,7 @@ export interface ClientSocketEventPayloads {
   'new-order': unknown[]
   'update-order': unknown
   'payment': unknown[]
+  'table-token-rotated': { tableNumber: number; newToken: string }
 }
 
 export type ClientSocketEventName = keyof ClientSocketEventPayloads

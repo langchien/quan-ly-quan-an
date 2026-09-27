@@ -54,6 +54,14 @@ export function useLiveOrders() {
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
       queryClient.invalidateQueries({ queryKey: ['tables', 'list'] })
     },
+    'table-token-rotated': (payload) => {
+      const { tableNumber } = payload as { tableNumber: number }
+      queryClient.invalidateQueries({ queryKey: ['tables', 'list'] })
+      queryClient.invalidateQueries({ queryKey: ['tables', 'detail', tableNumber] })
+      toast.info(`🔑 QR bàn ${tableNumber} đã được làm mới`, {
+        description: 'Token bàn đã thay đổi, mã QR cũ không còn hiệu lực.',
+      })
+    },
   })
 
   // Computed KPIs

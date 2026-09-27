@@ -18,6 +18,16 @@ export type OrderWithRelations = OrderModel & {
 }
 
 /**
+ * Payload gửi khi token QR bàn bị rotate (sau thanh toán).
+ * Manager dashboard cần refresh lại danh sách bàn để hiển thị QR mới.
+ */
+export interface TableTokenRotatedPayload {
+  tableNumber: number
+  /** Token mới đã được sinh — dùng để tạo QR code mới */
+  newToken: string
+}
+
+/**
  * Mapping tên socket event → kiểu payload tương ứng.
  * Dùng chung cho cả server (emit) và client (listen).
  */
@@ -28,6 +38,8 @@ export interface SocketEventPayloads {
   'update-order': OrderWithRelations
   /** Khi thanh toán hoàn tất (1 hoặc nhiều đơn) */
   'payment': OrderWithRelations[]
+  /** Khi token QR bàn được rotate sau thanh toán */
+  'table-token-rotated': TableTokenRotatedPayload
 }
 
 /** Tên các socket events hợp lệ */

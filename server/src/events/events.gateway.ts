@@ -10,7 +10,7 @@ import { ConfigService } from '@nestjs/config'
 import { PrismaService } from '../prisma/prisma.service.js'
 import type { EnvType } from '../config/env.config.js'
 import { ManagerRoom, Role, TokenType, type TokenPayload } from '../constants/type.js'
-import type { OrderWithRelations, SocketEventName, SocketEventPayloads } from './events.types.js'
+import type { OrderWithRelations, SocketEventName, SocketEventPayloads, TableTokenRotatedPayload } from './events.types.js'
 
 /**
  * Socket instance đã xác thực — gắn thêm `decodedAccessToken`
@@ -123,5 +123,13 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   emitPayment(orders: OrderWithRelations[], guestSocketId?: string) {
     this.emitToRooms('payment', orders, guestSocketId)
+  }
+
+  /**
+   * Thông báo manager rằng token QR bàn đã được rotate.
+   * Chỉ gửi tới Manager room (khách không cần biết — họ đã login qua JWT).
+   */
+  emitTableTokenRotated(payload: TableTokenRotatedPayload) {
+    this.server.to(ManagerRoom).emit('table-token-rotated', payload)
   }
 }
