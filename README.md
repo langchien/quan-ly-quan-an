@@ -28,7 +28,7 @@ Dự án lấy cảm hứng từ mô hình giải pháp gọi món tại bàn c�
    - Sử dụng WebSockets (Socket.io) giúp đồng bộ dữ liệu ngay lập tức giữa Khách hàng ⇋ Nhân viên ⇋ Bếp ⇋ Quản lý.
 
 4. **Nền tảng học tập, nghiên cứu và sản phẩm mẫu (Portfolio/Graduation Project)**:
-   - Dự án được xây dựng theo chuẩn mực Full-Stack hiện đại với kiến trúc rõ ràng, áp dụng các công nghệ mới nhất (React 19, TanStack Router/Query, Fastify, Prisma, Zod, Socket.io).
+   - Dự án được xây dựng theo chuẩn mực Full-Stack hiện đại với kiến trúc rõ ràng, áp dụng các công nghệ mới nhất (React 19, TanStack Router/Query, NestJS, Prisma, Zod, Socket.io).
    - Có thể sử dụng làm đồ án tốt nghiệp, dự án portfolio xin việc hoặc tiếp tục phát triển thành sản phẩm thương mại SaaS (Software-as-a-Service).
 
 ---
@@ -99,15 +99,15 @@ graph TD
 - **Form & Validation**: [React Hook Form](https://react-hook-form.com/) kết hợp [Zod](https://zod.dev/)
 - **Giao tiếp Real-time**: [Socket.io-client](https://socket.io/)
 
-### 4.2. Backend (`server0/`)
+### 4.2. Backend (`server/`)
 
 - **Runtime**: [Node.js](https://nodejs.org/) (TypeScript)
-- **Framework**: [Fastify v4](https://fastify.dev/) (Framework web hiệu năng cực cao, nhẹ hơn và nhanh hơn Express)
-- **Database & ORM**: [SQLite](https://www.sqlite.org/) thông qua [Prisma ORM v5](https://www.prisma.io/)
-- **Authentication**: JWT (JSON Web Token) với cơ chế cặp đôi **Access Token** & **Refresh Token**, mã hóa mật khẩu an toàn bằng `bcrypt`.
-- **Validation**: Schema validation thông qua `zod` và `fastify-type-provider-zod`.
-- **File Upload**: Xử lý upload ảnh món ăn / avatar qua `@fastify/multipart` và lưu trữ nội bộ vào thư mục `uploads/`.
-- **Real-time Engine**: [Socket.io](https://socket.io/) được tích hợp qua `fastify-socket.io`.
+- **Framework**: [NestJS v12](https://nestjs.com/) (Framework web linh hoạt, kiến trúc Module mạnh mẽ)
+- **Database & ORM**: [PostgreSQL](https://www.postgresql.org/) thông qua [Prisma ORM v7](https://www.prisma.io/) (sử dụng `@prisma/adapter-pg`)
+- **Authentication**: JWT (JSON Web Token) với cơ chế cặp đôi **Access Token** & **Refresh Token** thông qua `@nestjs/jwt`, mã hóa mật khẩu an toàn bằng `bcryptjs`.
+- **Validation**: Schema validation thông qua `zod` và custom ValidationPipe.
+- **File Upload**: Xử lý upload ảnh món ăn / avatar qua `multer` (`@nestjs/platform-express`) và lưu trữ nội bộ vào thư mục `uploads/`.
+- **Real-time Engine**: [Socket.io](https://socket.io/) được tích hợp qua `@nestjs/websockets` và `@nestjs/platform-socket.io`.
 
 ### 4.3. Kiểm thử API (`postman/`)
 
@@ -135,17 +135,25 @@ quan-ly-quan-an/
 │   ├── package.json
 │   └── vite.config.ts
 │
-├── server0/                  # Mã nguồn Backend API & Realtime Server
+├── server/                   # Mã nguồn Backend API & Realtime Server (NestJS)
 │   ├── prisma/
-│   │   └── schema.prisma     # Cấu hình lược đồ cơ sở dữ liệu Prisma
+│   │   ├── schema.prisma     # Cấu hình lược đồ cơ sở dữ liệu Prisma
+│   │   └── seed.ts           # Script tạo dữ liệu mẫu ban đầu
 │   ├── src/
-│   │   ├── controllers/      # Bộ điều khiển xử lý logic nghiệp vụ
-│   │   ├── routes/           # Khai báo các API Endpoints (auth, dish, order, table, guest...)
-│   │   ├── schemaValidations/# Schema Zod kiểm tra dữ liệu đầu vào / đầu ra của API
-│   │   ├── plugins/          # Các plugin mở rộng Fastify
-│   │   ├── database/         # Kết nối cơ sở dữ liệu Prisma Client
-│   │   └── index.ts          # Điểm khởi chạy máy chủ Backend
+│   │   ├── account/          # Module quản lý tài khoản nhân viên / admin
+│   │   ├── auth/             # Module xác thực & phân quyền (JWT)
+│   │   ├── dish/             # Module quản lý món ăn
+│   │   ├── events/           # Module WebSocket / Socket.io cho Realtime
+│   │   ├── guest/            # Module hỗ trợ khách hàng (đăng nhập bằng mã bàn)
+│   │   ├── order/            # Module xử lý đơn đặt món
+│   │   ├── table/            # Module quản lý bàn ăn
+│   │   ├── media/            # Module xử lý file upload
+│   │   ├── prisma/           # Module kết nối cơ sở dữ liệu (PrismaService)
+│   │   ├── common/           # Các filter, pipe, guard, decorator dùng chung
+│   │   ├── main.ts           # Điểm khởi chạy máy chủ NestJS
+│   │   └── app.module.ts     # Root module của ứng dụng
 │   ├── uploads/              # Thư mục lưu trữ hình ảnh upload
+│   ├── docker-compose.yml    # File cấu hình chạy PostgreSQL nội bộ
 │   └── package.json
 │
 └── postman/                  # Công cụ kiểm thử API
@@ -164,12 +172,12 @@ quan-ly-quan-an/
 
 ---
 
-### 6.2. Khởi chạy Backend (`server0`)
+### 6.2. Khởi chạy Backend (`server`)
 
-1. Mở cửa sổ dòng lệnh và di chuyển vào thư mục `server0`:
+1. Mở cửa sổ dòng lệnh và di chuyển vào thư mục `server`:
 
    ```bash
-   cd server0
+   cd server
    ```
 
 2. Cài đặt các thư viện phụ thuộc:
@@ -178,11 +186,18 @@ quan-ly-quan-an/
    npm install
    ```
 
-3. Chuẩn bị cơ sở dữ liệu SQLite:
+3. Khởi chạy cơ sở dữ liệu PostgreSQL (yêu cầu cài đặt Docker):
+
+   ```bash
+   docker-compose up -d
+   ```
+
+4. Áp dụng schema cơ sở dữ liệu và seed dữ liệu mẫu:
 
    ```bash
    npx prisma generate
-   npx prisma db push
+   npm run db:push
+   npm run db:seed
    ```
 
    _(Tùy chọn) Để xem giao diện quản lý dữ liệu trực quan trên trình duyệt:_
@@ -192,9 +207,9 @@ quan-ly-quan-an/
    # Mở http://localhost:5555
    ```
 
-4. Khởi chạy Backend ở chế độ phát triển:
+5. Khởi chạy Backend ở chế độ phát triển:
    ```bash
-   npm run dev
+   npm run start:dev
    ```
    > Backend sẽ chạy tại địa chỉ: **http://localhost:4000**
 
