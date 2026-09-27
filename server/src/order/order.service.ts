@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { StatusError } from '../common/index.js'
-import { DishStatus, OrderStatus, TableStatus } from '../constants/type.js'
+import { DishStatus, OrderStatus, TableStatus } from '@app/shared'
 import { PrismaService } from '../prisma/prisma.service.js'
 import type {
   CreateOrdersBodyType,
@@ -79,6 +79,8 @@ export class OrderService {
 
       let dishSnapshotId = order.dishSnapshotId
 
+      let oldDishSnapshotId: number | null = null
+
       // Nếu đổi món → tạo snapshot mới
       if (order.dishSnapshot.dishId !== dishId) {
         const dish = await tx.dish.findUniqueOrThrow({ where: { id: dishId } })
@@ -92,14 +94,21 @@ export class OrderService {
             status: dish.status,
           },
         })
+        oldDishSnapshotId = dishSnapshotId
         dishSnapshotId = newSnapshot.id
       }
 
-      return tx.order.update({
+      const updatedOrder = await tx.order.update({
         where: { id: orderId },
         data: { status, dishSnapshotId, quantity, orderHandlerId },
         include: { dishSnapshot: true, orderHandler: true, guest: true },
       })
+
+      if (oldDishSnapshotId) {
+        await tx.dishSnapshot.delete({ where: { id: oldDishSnapshotId } })
+      }
+
+      return updatedOrder
     })
 
     // Tìm socketId của guest để emit realtime

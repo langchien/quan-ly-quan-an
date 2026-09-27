@@ -1,4 +1,4 @@
-import { formatCurrencyVND } from '@/components/home/dish-card'
+import { formatCurrencyVND } from '@/lib/format'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import {

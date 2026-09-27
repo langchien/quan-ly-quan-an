@@ -12,7 +12,7 @@ import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { PrismaService } from '../prisma/prisma.service.js'
 import type { EnvType } from '../config/env.config.js'
-import { ManagerRoom, Role, TokenType, type TokenPayload } from '../constants/type.js'
+import { ManagerRoom, Role, TokenType, type TokenPayload } from '@app/shared'
 import type {
   OrderWithRelations,
   SocketEventName,

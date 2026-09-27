@@ -8,7 +8,7 @@ import {
   DashboardIndicatorQueryParams,
   type DashboardIndicatorQueryParamsType,
 } from './dto/indicator.schema.js'
-import { Role } from '../constants/type.js'
+import { Role } from '@app/shared'
 
 @Controller('indicators')
 @UseGuards(AccessTokenGuard, RolesGuard)

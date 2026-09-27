@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { StatusError } from '../common/index.js'
-import { TableStatus } from '../constants/type.js'
+import { TableStatus } from '@app/shared'
 import { GuestService } from './guest.service.js'
 
 const makeTable = (overrides = {}) => ({

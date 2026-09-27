@@ -1,4 +1,4 @@
-import { RoleValues } from '../../constants/type.js'
+import { RoleValues } from '@app/shared'
 import z from 'zod'
 
 export const LoginBody = z

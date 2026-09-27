@@ -1,5 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton'
-import { DishStatus } from '@/constants/type'
+import { DishStatus } from '@app/shared'
 import { useGetDishList } from '@/queries/use-dish'
 import { SearchX } from 'lucide-react'
 import { DishCard } from './dish-card'

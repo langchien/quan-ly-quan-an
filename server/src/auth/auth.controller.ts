@@ -11,7 +11,7 @@ import {
   RefreshTokenBody,
   type RefreshTokenBodyType,
 } from './dto/auth.schema.js'
-import type { TokenPayload } from '../constants/type.js'
+import type { TokenPayload } from '@app/shared'
 
 @Controller('auth')
 export class AuthController {

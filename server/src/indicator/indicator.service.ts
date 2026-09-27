@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service.js'
-import { OrderStatus, TableStatus } from '../constants/type.js'
+import { OrderStatus, TableStatus } from '@app/shared'
 import type { DashboardIndicatorQueryParamsType } from './dto/indicator.schema.js'
 import { format, eachDayOfInterval } from 'date-fns'
 

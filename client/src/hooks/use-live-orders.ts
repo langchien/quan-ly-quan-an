@@ -4,7 +4,7 @@ import { useSocketEvents } from '@/hooks/use-socket-event'
 import { adminOrdersQueryKey, useGetOrdersQuery } from '@/queries/use-order'
 import { useGetTableList } from '@/queries/use-table'
 import { useAudioChime } from '@/hooks/use-audio-chime'
-import { OrderStatus } from '@/constants/type'
+import { OrderStatus } from '@app/shared'
 import { toast } from 'sonner'
 
 /**

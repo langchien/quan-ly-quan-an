@@ -1,4 +1,4 @@
-import { OrderStatus } from '@/constants/type'
+import { OrderStatus } from '@app/shared'
 import { Check, ChefHat, Clock, CreditCard, UtensilsCrossed } from 'lucide-react'
 
 // Types

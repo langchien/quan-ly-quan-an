@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge'
-import { OrderStatus } from '@/constants/type'
+import { OrderStatus } from '@app/shared'
 
 const statusConfig: Record<string, { label: string; className: string }> = {
   [OrderStatus.Pending]: {

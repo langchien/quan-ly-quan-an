@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import * as bcrypt from 'bcryptjs'
 import { EntityErrorException } from '../common/index.js'
-import { Role } from '../constants/type.js'
+import { Role } from '@app/shared'
 import { PrismaService } from '../prisma/prisma.service.js'
 import type {
   ChangePasswordBodyType,

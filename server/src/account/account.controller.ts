@@ -4,7 +4,7 @@ import { Roles } from '../auth/decorators/roles.decorator.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
 import { RolesGuard } from '../auth/guards/roles.guard.js'
 import { ZodBody, ZodParam } from '../common/index.js'
-import { Role, type TokenPayload } from '../constants/type.js'
+import { Role, type TokenPayload } from '@app/shared'
 import { AccountService } from './account.service.js'
 import {
   AccountIdParam,

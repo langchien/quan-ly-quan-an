@@ -1,4 +1,4 @@
-import { DishStatusValues, OrderStatusValues } from '@/constants/type'
+import { DishStatusValues, OrderStatusValues } from '@app/shared'
 import { AccountSchema } from '@/schemaValidations/account.schema'
 import { TableSchema } from '@/schemaValidations/table.schema'
 import z from 'zod'

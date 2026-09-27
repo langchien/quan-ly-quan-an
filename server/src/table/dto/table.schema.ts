@@ -1,5 +1,5 @@
 import z from 'zod'
-import { TableStatusValues } from '../../constants/type.js'
+import { TableStatusValues } from '@app/shared'
 
 // Table Schema
 

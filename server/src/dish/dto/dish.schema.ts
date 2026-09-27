@@ -1,5 +1,5 @@
 import z from 'zod'
-import { DishStatusValues } from '../../constants/type.js'
+import { DishStatusValues } from '@app/shared'
 
 // Dish Schema
 

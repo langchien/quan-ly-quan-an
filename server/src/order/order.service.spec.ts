@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { StatusError } from '../common/index.js'
-import { DishStatus, OrderStatus, TableStatus } from '../constants/type.js'
+import { DishStatus, OrderStatus, TableStatus } from '@app/shared'
 import { OrderService } from './order.service.js'
 
 // Factories

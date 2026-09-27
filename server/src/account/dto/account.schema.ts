@@ -1,5 +1,5 @@
 import z from 'zod'
-import { RoleValues } from '../../constants/type.js'
+import { RoleValues } from '@app/shared'
 
 // Account Schema
 

@@ -1,4 +1,4 @@
-import { RoleValues } from '@/constants/type'
+import { RoleValues } from '@app/shared'
 import z from 'zod'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'

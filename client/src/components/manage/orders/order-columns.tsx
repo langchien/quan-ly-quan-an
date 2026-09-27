@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { OrderStatus } from '@/constants/type'
+import { OrderStatus } from '@app/shared'
 import { formatCurrency } from '@/lib/format'
 import type { OrderSchemaType } from '@/schemaValidations/order.schema'
 import type { ColumnDef } from '@tanstack/react-table'
@@ -24,8 +24,6 @@ import {
   MoreHorizontal,
   RefreshCcw,
 } from 'lucide-react'
-
-export { formatCurrency } from '@/lib/format'
 
 export function getInitials(name: string) {
   return name

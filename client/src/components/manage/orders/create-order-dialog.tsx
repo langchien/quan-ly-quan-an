@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/format'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,7 +26,7 @@ import { useCreateOrdersMutation } from '@/queries/use-order'
 import { Loader2, Minus, Plus, ShoppingCart, Trash2, Users } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { formatCurrency, getInitials } from './order-columns'
+import { getInitials } from './order-columns'
 
 interface CartItem {
   dishId: number

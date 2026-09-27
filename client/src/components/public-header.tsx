@@ -1,4 +1,4 @@
-import { Role } from '@/constants/type'
+import { Role } from '@app/shared'
 import { useAuthStore } from '@/store/useAuthStore'
 import { Link } from '@tanstack/react-router'
 import { AppBrand } from './app-brand'

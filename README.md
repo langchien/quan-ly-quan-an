@@ -244,10 +244,10 @@ quan-ly-quan-an/
 | Vai trò                           | Email đăng nhập           | Mật khẩu mặc định |
 | :-------------------------------- | :------------------------ | :---------------- |
 | **Quản trị viên (Owner / Admin)** | `admin@gmail.com`         | `123456`          |
-| **Nhân viên (Employee)**          | `phuminhdat@gmail.com`    | `123123`          |
-| **Nhân viên (Employee)**          | `buianhson@gmail.com`     | `123123`          |
-| **Nhân viên (Employee)**          | `ngocbichhuynh@gmail.com` | `123123`          |
-| **Nhân viên (Employee)**          | `binhnguyen@gmail.com`    | `123123`          |
+| **Nhân viên (Employee)**          | `phuminhdat@gmail.com`    | `123456`          |
+| **Nhân viên (Employee)**          | `buianhson@gmail.com`     | `123456`          |
+| **Nhân viên (Employee)**          | `ngocbichhuynh@gmail.com` | `123456`          |
+| **Nhân viên (Employee)**          | `binhnguyen@gmail.com`    | `123456`          |
 
 ---
 

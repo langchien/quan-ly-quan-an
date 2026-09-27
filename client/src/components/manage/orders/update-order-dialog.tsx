@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/format'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { OrderStatus, OrderStatusValues } from '@/constants/type'
+import { OrderStatus, OrderStatusValues } from '@app/shared'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useUpdateOrderMutation } from '@/queries/use-order'
 import {
@@ -30,7 +31,7 @@ import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { formatCurrency, getInitials, getOrderStatusBadge } from './order-columns'
+import { getInitials, getOrderStatusBadge } from './order-columns'
 
 interface UpdateOrderDialogProps {
   order: OrderSchemaType | null

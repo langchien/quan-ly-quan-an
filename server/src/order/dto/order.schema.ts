@@ -1,5 +1,5 @@
 import z from 'zod'
-import { DishStatusValues, OrderStatusValues } from '../../constants/type.js'
+import { DishStatusValues, OrderStatusValues } from '@app/shared'
 
 // Shared Sub-schemas
 

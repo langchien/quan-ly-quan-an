@@ -1,11 +1,9 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { DishStatus } from '@/constants/type'
+import { DishStatus } from '@app/shared'
 import type { DishType } from '@/schemaValidations/dish.schema'
 
 import { formatCurrencyVND } from '@/lib/format'
-
-export { formatCurrencyVND }
 
 function getStatusBadge(status: string) {
   switch (status) {

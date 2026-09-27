@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { OrderStatus } from '@/constants/type'
+import { OrderStatus } from '@app/shared'
 import type { OrderSchemaType } from '@/schemaValidations/order.schema'
 import { OrderCard } from './order-card'
 import { cn } from '@/lib/utils'

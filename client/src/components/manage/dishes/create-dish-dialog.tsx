@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { DishStatus } from '@/constants/type'
+import { DishStatus } from '@app/shared'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useUploadAvatarMutation } from '@/queries/use-account'
 import { useGetCategoryList } from '@/queries/use-category'

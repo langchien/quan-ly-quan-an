@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { TableStatus } from '@/constants/type'
+import { TableStatus } from '@app/shared'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useCreateTableMutation } from '@/queries/use-table'
 import { CreateTableBody, type CreateTableBodyType } from '@/schemaValidations/table.schema'

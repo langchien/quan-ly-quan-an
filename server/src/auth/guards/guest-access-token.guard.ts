@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { Request } from 'express'
 import type { EnvType } from '../../config/env.config.js'
-import { Role, TokenType, type TokenPayload } from '../../constants/type.js'
+import { Role, TokenType, type TokenPayload } from '@app/shared'
 
 /**
  * Guard dành riêng cho guest.

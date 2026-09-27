@@ -12,7 +12,7 @@ import { RevenueLineChart } from '@/components/manage/dashboard/revenue-line-cha
 import { DishBarChart } from '@/components/manage/dashboard/dish-bar-chart'
 import { cn } from '@/lib/utils'
 import { formatCurrency } from '@/lib/format'
-import { Role } from '@/constants/type'
+import { Role } from '@app/shared'
 import { accountMeQueryOptions } from '@/queries/use-account'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 

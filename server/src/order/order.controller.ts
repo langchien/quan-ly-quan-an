@@ -5,7 +5,7 @@ import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
 import { RolesGuard } from '../auth/guards/roles.guard.js'
 import { ActiveUser } from '../auth/decorators/active-user.decorator.js'
 import { ZodBody, ZodParam, ZodQuery } from '../common/index.js'
-import { Role } from '../constants/type.js'
+import { Role } from '@app/shared'
 import {
   OrderParam,
   type OrderParamType,

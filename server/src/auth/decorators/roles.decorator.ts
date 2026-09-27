@@ -1,5 +1,5 @@
 import { Reflector } from '@nestjs/core'
-import type { RoleType } from '../../constants/type.js'
+import type { RoleType } from '@app/shared'
 
 /**
  * Decorator đánh dấu endpoint yêu cầu role cụ thể.

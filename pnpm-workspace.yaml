@@ -1,0 +1,11 @@
+packages:
+  - 'client'
+  - 'server'
+  - 'shared'
+
+allowBuilds:
+  esbuild: true
+  lightningcss: true
+  unrs-resolver: false
+  '@prisma/engines': true
+  prisma: true

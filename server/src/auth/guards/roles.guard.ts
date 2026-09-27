@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import type { TokenPayload, RoleType } from '../../constants/type.js'
+import type { TokenPayload, RoleType } from '@app/shared'
 import { Roles } from '../decorators/roles.decorator.js'
 
 /**

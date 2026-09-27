@@ -1,3 +1,4 @@
+import { formatCurrency } from '@/lib/format'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -7,13 +8,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { OrderStatus } from '@/constants/type'
+import { OrderStatus } from '@app/shared'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { usePayGuestOrdersMutation } from '@/queries/use-order'
 import type { OrderSchemaType } from '@/schemaValidations/order.schema'
 import { CreditCard, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { formatCurrency, getOrderStatusBadge } from './order-columns'
+import { getOrderStatusBadge } from './order-columns'
 
 interface PayGuestDialogProps {
   /** Một order bất kỳ của guest (dùng để lấy guestId và thông tin hiển thị) */

@@ -1,5 +1,5 @@
 import { StaffTable } from '@/components/manage/staffs/staff-table'
-import { Role } from '@/constants/type'
+import { Role } from '@app/shared'
 import { accountListQueryOptions, accountMeQueryOptions } from '@/queries/use-account'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 

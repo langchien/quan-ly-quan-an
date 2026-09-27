@@ -1,4 +1,4 @@
-import { DishStatusValues } from '@/constants/type'
+import { DishStatusValues } from '@app/shared'
 import { CategorySchema } from '@/schemaValidations/category.schema'
 import z from 'zod'
 

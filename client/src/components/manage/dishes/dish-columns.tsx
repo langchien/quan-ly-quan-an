@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { DishStatus } from '@/constants/type'
+import { DishStatus } from '@app/shared'
 import type { DishType } from '@/schemaValidations/dish.schema'
 import type { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'

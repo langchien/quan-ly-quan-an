@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { JwtService, type JwtSignOptions } from '@nestjs/jwt'
 import { StatusError } from '../common/index.js'
 import type { EnvType } from '../config/env.config.js'
-import { Role, TableStatus, TokenType } from '../constants/type.js'
+import { Role, TableStatus, TokenType } from '@app/shared'
 import { OrderService } from '../order/order.service.js'
 import { PrismaService } from '../prisma/prisma.service.js'
 import type {

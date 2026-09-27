@@ -1,4 +1,4 @@
-import { Role, type RoleType } from '@/constants/type'
+import { Role, type RoleType } from '@app/shared'
 import {
   ChefHat,
   Home,

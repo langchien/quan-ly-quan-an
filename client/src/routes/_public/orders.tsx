@@ -1,7 +1,7 @@
 import { OrdersList, OrdersListSkeleton } from '@/components/guest/orders-list'
 import { CallStaffButton } from '@/components/guest/call-staff-button'
 import { Button } from '@/components/ui/button'
-import { Role } from '@/constants/type'
+import { Role } from '@app/shared'
 import { useSocketEvents } from '@/hooks/use-socket-event'
 import { socket } from '@/lib/socket'
 import { useGuestGetOrdersQuery, useGuestLogoutMutation } from '@/queries/use-guest'

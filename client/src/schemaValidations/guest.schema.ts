@@ -1,4 +1,4 @@
-import { RoleValues } from '@/constants/type'
+import { RoleValues } from '@app/shared'
 import { OrderSchema } from '@/schemaValidations/order.schema'
 import z from 'zod'
 

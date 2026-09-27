@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import { DishStatus } from '@/constants/type'
+import { DishStatus } from '@app/shared'
 import type { DishType } from '@/schemaValidations/dish.schema'
 import { MoreHorizontal, Pencil, Trash2, UtensilsCrossed } from 'lucide-react'
 import { formatCurrency } from '@/lib/format'

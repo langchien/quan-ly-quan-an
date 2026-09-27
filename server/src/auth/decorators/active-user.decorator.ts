@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common'
-import type { TokenPayload } from '../../constants/type.js'
+import type { TokenPayload } from '@app/shared'
 
 /**
  * Decorator lấy thông tin user đã đăng nhập từ JWT payload.
