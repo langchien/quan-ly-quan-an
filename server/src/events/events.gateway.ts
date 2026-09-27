@@ -3,6 +3,9 @@ import {
   WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  SubscribeMessage,
+  MessageBody,
+  ConnectedSocket,
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
 import { JwtService } from '@nestjs/jwt'
@@ -15,6 +18,7 @@ import type {
   SocketEventName,
   SocketEventPayloads,
   TableTokenRotatedPayload,
+  CallStaffPayload,
 } from './events.types.js'
 
 /**
@@ -136,5 +140,48 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
    */
   emitTableTokenRotated(payload: TableTokenRotatedPayload) {
     this.server.to(ManagerRoom).emit('table-token-rotated', payload)
+  }
+
+  /**
+   * Lắng nghe event 'call-staff' từ guest socket.
+   * Server xác thực thông tin từ JWT rồi forward payload tới Manager room.
+   */
+  @SubscribeMessage('call-staff')
+  async handleCallStaff(
+    @MessageBody() data: { message?: string },
+    @ConnectedSocket() socket: AuthenticatedSocket
+  ) {
+    const payload = socket.decodedAccessToken
+    if (!payload || payload.role !== 'Guest') {
+      return { error: 'Unauthorized' }
+    }
+
+    // Lấy thông tin guest từ DB
+    const guest = await this.prisma.guest.findUnique({
+      where: { id: payload.userId },
+    })
+
+    if (!guest || guest.tableNumber == null) {
+      return { error: 'Guest not found or not seated' }
+    }
+
+    const callStaffPayload: CallStaffPayload = {
+      tableNumber: guest.tableNumber,
+      guestName: guest.name,
+      message: data?.message,
+      calledAt: new Date().toISOString(),
+    }
+
+    // Forward tới tất cả manager
+    this.server.to(ManagerRoom).emit('call-staff', callStaffPayload)
+
+    return { success: true }
+  }
+
+  /**
+   * Emit call-staff từ server (dành cho trường hợp server-side trigger).
+   */
+  emitCallStaff(payload: CallStaffPayload) {
+    this.server.to(ManagerRoom).emit('call-staff', payload)
   }
 }

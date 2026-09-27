@@ -13,6 +13,8 @@ export interface ClientSocketEventPayloads {
   'update-order': unknown
   payment: unknown[]
   'table-token-rotated': { tableNumber: number; newToken: string }
+  /** Khi khách gọi nhân viên từ bàn */
+  'call-staff': { tableNumber: number; guestName: string; message?: string; calledAt: string }
 }
 
 export type ClientSocketEventName = keyof ClientSocketEventPayloads

@@ -28,6 +28,21 @@ export interface TableTokenRotatedPayload {
 }
 
 /**
+ * Payload khi khách gọi nhân viên từ bàn.
+ * Guest emit lên server → server forward tới Manager room.
+ */
+export interface CallStaffPayload {
+  /** Số bàn của khách */
+  tableNumber: number
+  /** Tên khách */
+  guestName: string
+  /** Nội dung yêu cầu hỗ trợ (tuỳ chọn) */
+  message?: string
+  /** Thời điểm gọi (ISO string) */
+  calledAt: string
+}
+
+/**
  * Mapping tên socket event → kiểu payload tương ứng.
  * Dùng chung cho cả server (emit) và client (listen).
  */
@@ -40,6 +55,8 @@ export interface SocketEventPayloads {
   payment: OrderWithRelations[]
   /** Khi token QR bàn được rotate sau thanh toán */
   'table-token-rotated': TableTokenRotatedPayload
+  /** Khi khách gọi nhân viên từ bàn */
+  'call-staff': CallStaffPayload
 }
 
 /** Tên các socket events hợp lệ */

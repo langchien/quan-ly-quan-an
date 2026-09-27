@@ -1,4 +1,5 @@
 import { OrdersList, OrdersListSkeleton } from '@/components/guest/orders-list'
+import { CallStaffButton } from '@/components/guest/call-staff-button'
 import { Button } from '@/components/ui/button'
 import { Role } from '@/constants/type'
 import { useSocketEvents } from '@/hooks/use-socket-event'
@@ -86,6 +87,9 @@ function OrdersPage() {
           </div>
 
           <div className='flex items-center gap-2'>
+            {/* Gọi nhân viên */}
+            <CallStaffButton />
+
             {/* Refresh thủ công */}
             <Button
               variant='outline'

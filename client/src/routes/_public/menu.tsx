@@ -1,4 +1,5 @@
 import { CartSheet } from '@/components/guest/cart-sheet'
+import { CallStaffButton } from '@/components/guest/call-staff-button'
 import { MenuDishCard } from '@/components/guest/menu-dish-card'
 import { Input } from '@/components/ui/input'
 import { DishStatus, Role } from '@/constants/type'
@@ -104,8 +105,11 @@ function MenuPage() {
             )}
           </div>
 
-          {/* Giỏ hàng */}
-          <CartSheet />
+          {/* Giỏ hàng + Gọi nhân viên */}
+          <div className='flex items-center gap-2'>
+            <CallStaffButton />
+            <CartSheet />
+          </div>
         </div>
 
         {/* Thanh tìm kiếm */}

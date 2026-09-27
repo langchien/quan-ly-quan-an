@@ -62,6 +62,14 @@ export function useLiveOrders() {
         description: 'Token bàn đã thay đổi, mã QR cũ không còn hiệu lực.',
       })
     },
+    'call-staff': payload => {
+      const { tableNumber, guestName, message } = payload
+      audioChime.playChime()
+      toast.warning(`🔔 Bàn ${tableNumber} cần hỗ trợ!`, {
+        description: message ? `${guestName}: ${message}` : `${guestName} đang gọi nhân viên.`,
+        duration: 10_000,
+      })
+    },
   })
 
   // Computed KPIs
