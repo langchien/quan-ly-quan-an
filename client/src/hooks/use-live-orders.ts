@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { socket } from '@/lib/socket'
+import { useSocketEvents } from '@/hooks/use-socket-event'
 import { adminOrdersQueryKey, useGetOrdersQuery } from '@/queries/use-order'
 import { useGetTableList } from '@/queries/use-table'
 import { useAudioChime } from '@/hooks/use-audio-chime'
@@ -38,35 +38,23 @@ export function useLiveOrders() {
 
   const { data: tables, isLoading: isLoadingTables } = useGetTableList()
 
-  // Socket events
-  useEffect(() => {
-    function handleNewOrder() {
+  // Socket events — dùng useSocketEvents hook chuẩn hóa
+  useSocketEvents({
+    'new-order': () => {
       toast.info('🔔 Có đơn hàng mới!', {
         description: 'Danh sách đơn hàng vừa được cập nhật.',
       })
       audioChime.playChime()
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
-    }
-
-    function handleUpdateOrder() {
+    },
+    'update-order': () => {
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
-    }
-
-    function handlePayment() {
+    },
+    'payment': () => {
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
       queryClient.invalidateQueries({ queryKey: ['tables', 'list'] })
-    }
-
-    socket.on('new-order', handleNewOrder)
-    socket.on('update-order', handleUpdateOrder)
-    socket.on('payment', handlePayment)
-
-    return () => {
-      socket.off('new-order', handleNewOrder)
-      socket.off('update-order', handleUpdateOrder)
-      socket.off('payment', handlePayment)
-    }
-  }, [queryClient, audioChime])
+    },
+  })
 
   // Computed KPIs
   const liveOrders = orders ?? []

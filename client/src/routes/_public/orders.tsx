@@ -1,17 +1,13 @@
 import { OrdersList, OrdersListSkeleton } from '@/components/guest/orders-list'
 import { Button } from '@/components/ui/button'
 import { Role } from '@/constants/type'
+import { useSocketEvents } from '@/hooks/use-socket-event'
 import { socket } from '@/lib/socket'
 import { useGuestGetOrdersQuery, useGuestLogoutMutation } from '@/queries/use-guest'
-import type { OrderSchema } from '@/schemaValidations/order.schema'
 import { useAuthStore } from '@/store/useAuthStore'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { ClipboardList, LogOut, RefreshCw } from 'lucide-react'
-import { useEffect } from 'react'
 import { toast } from 'sonner'
-import type z from 'zod'
-
-type OrderType = z.TypeOf<typeof OrderSchema>
 
 // Route
 
@@ -36,31 +32,23 @@ function OrdersPage() {
   const logoutMutation = useGuestLogoutMutation()
   const refreshToken = useAuthStore(s => s.refreshToken)
 
-  // Lắng nghe socket events
-  useEffect(() => {
-    function handleUpdateOrder(updatedOrder: OrderType) {
-      // Cập nhật query cache khi order được cập nhật
+  // Lắng nghe socket events — dùng useSocketEvents hook chuẩn hóa
+  useSocketEvents({
+    'update-order': (updatedOrder) => {
       refetch()
-      toast.info(`Cập nhật đơn hàng: ${updatedOrder.dishSnapshot.name}`, {
-        description: `Trạng thái mới: ${updatedOrder.status}`,
+      const order = updatedOrder as { dishSnapshot?: { name?: string }; status?: string }
+      toast.info(`Cập nhật đơn hàng: ${order.dishSnapshot?.name ?? ''}`, {
+        description: `Trạng thái mới: ${order.status ?? ''}`,
       })
-    }
-
-    function handlePayment(paidOrders: OrderType[]) {
+    },
+    'payment': (paidOrders) => {
       refetch()
+      const orders = paidOrders as unknown[]
       toast.success('Thanh toán thành công! 🎉', {
-        description: `${paidOrders.length} món đã được thanh toán.`,
+        description: `${orders.length} món đã được thanh toán.`,
       })
-    }
-
-    socket.on('update-order', handleUpdateOrder)
-    socket.on('payment', handlePayment)
-
-    return () => {
-      socket.off('update-order', handleUpdateOrder)
-      socket.off('payment', handlePayment)
-    }
-  }, [refetch])
+    },
+  })
 
   // Logout
   async function handleLogout() {

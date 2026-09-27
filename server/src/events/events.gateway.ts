@@ -1,4 +1,4 @@
-﻿import {
+import {
   WebSocketGateway,
   WebSocketServer,
   OnGatewayConnection,
@@ -10,6 +10,15 @@ import { ConfigService } from '@nestjs/config'
 import { PrismaService } from '../prisma/prisma.service.js'
 import type { EnvType } from '../config/env.config.js'
 import { ManagerRoom, Role, TokenType, type TokenPayload } from '../constants/type.js'
+import type { OrderWithRelations, SocketEventName, SocketEventPayloads } from './events.types.js'
+
+/**
+ * Socket instance đã xác thực — gắn thêm `decodedAccessToken`
+ * sau khi verify JWT trong `handleConnection`.
+ */
+interface AuthenticatedSocket extends Socket {
+  decodedAccessToken?: TokenPayload
+}
 
 @WebSocketGateway({
   cors: {
@@ -27,7 +36,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly prisma: PrismaService
   ) {}
 
-  async handleConnection(socket: Socket) {
+  async handleConnection(socket: AuthenticatedSocket) {
     try {
       const authHeader =
         socket.handshake.auth?.Authorization ?? socket.handshake.headers?.authorization ?? ''
@@ -77,7 +86,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         socket.join(ManagerRoom)
       }
 
-      ;(socket as any).decodedAccessToken = payload
+      socket.decodedAccessToken = payload
       console.log(`Socket connected: ${socket.id} | role: ${role} | userId: ${userId}`)
     } catch {
       socket.disconnect()
@@ -89,27 +98,30 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     await this.prisma.socket.deleteMany({ where: { socketId: socket.id } }).catch(() => {})
   }
 
-  emitNewOrder(orders: any[], guestSocketId?: string) {
+  /**
+   * Helper: emit event tới Manager room và (nếu có) guest socket.
+   */
+  private emitToRooms<E extends SocketEventName>(
+    event: E,
+    payload: SocketEventPayloads[E],
+    guestSocketId?: string
+  ) {
     if (guestSocketId) {
-      this.server.to(ManagerRoom).to(guestSocketId).emit('new-order', orders)
+      this.server.to(ManagerRoom).to(guestSocketId).emit(event, payload)
     } else {
-      this.server.to(ManagerRoom).emit('new-order', orders)
+      this.server.to(ManagerRoom).emit(event, payload)
     }
   }
 
-  emitUpdateOrder(order: any, guestSocketId?: string) {
-    if (guestSocketId) {
-      this.server.to(ManagerRoom).to(guestSocketId).emit('update-order', order)
-    } else {
-      this.server.to(ManagerRoom).emit('update-order', order)
-    }
+  emitNewOrder(orders: OrderWithRelations[], guestSocketId?: string) {
+    this.emitToRooms('new-order', orders, guestSocketId)
   }
 
-  emitPayment(orders: any[], guestSocketId?: string) {
-    if (guestSocketId) {
-      this.server.to(ManagerRoom).to(guestSocketId).emit('payment', orders)
-    } else {
-      this.server.to(ManagerRoom).emit('payment', orders)
-    }
+  emitUpdateOrder(order: OrderWithRelations, guestSocketId?: string) {
+    this.emitToRooms('update-order', order, guestSocketId)
+  }
+
+  emitPayment(orders: OrderWithRelations[], guestSocketId?: string) {
+    this.emitToRooms('payment', orders, guestSocketId)
   }
 }
