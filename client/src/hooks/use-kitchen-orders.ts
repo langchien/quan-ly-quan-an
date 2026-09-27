@@ -48,7 +48,7 @@ export function useKitchenOrders() {
     'update-order': () => {
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
     },
-    'payment': () => {
+    payment: () => {
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
     },
   })
@@ -96,7 +96,9 @@ export function useKitchenOrders() {
 
   // Đếm tổng đơn đã hoàn thành hôm nay
   const completedToday = useMemo(
-    () => allOrders.filter(o => o.status === OrderStatus.Delivered || o.status === OrderStatus.Paid).length,
+    () =>
+      allOrders.filter(o => o.status === OrderStatus.Delivered || o.status === OrderStatus.Paid)
+        .length,
     [allOrders]
   )
 

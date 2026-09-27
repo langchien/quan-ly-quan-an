@@ -211,8 +211,7 @@ export class OrderService {
     const guest = await this.prisma.guest.findUnique({ where: { id: guestId } })
     let tokenRotation: { tableNumber: number; newToken: string } | null = null
     if (guest?.tableNumber) {
-      const newToken =
-        Math.random().toString(36).substring(2) + Date.now().toString(36)
+      const newToken = Math.random().toString(36).substring(2) + Date.now().toString(36)
       await this.prisma.table.update({
         where: { number: guest.tableNumber },
         data: { token: newToken },

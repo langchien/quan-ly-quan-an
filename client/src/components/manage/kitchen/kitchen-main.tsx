@@ -10,22 +10,14 @@ import type { OrderSchemaType } from '@/schemaValidations/order.schema'
 /**
  * Render một nhóm đơn theo bàn trong cột Kanban
  */
-function TableGroup({
-  tableNumber,
-  orders,
-}: {
-  tableNumber: number
-  orders: OrderSchemaType[]
-}) {
+function TableGroup({ tableNumber, orders }: { tableNumber: number; orders: OrderSchemaType[] }) {
   return (
     <div className='space-y-2'>
       <div className='flex items-center gap-2'>
         <Badge variant='outline' className='text-xs font-semibold'>
           Bàn {tableNumber || '?'}
         </Badge>
-        <span className='text-xs text-muted-foreground'>
-          {orders.length} món
-        </span>
+        <span className='text-xs text-muted-foreground'>{orders.length} món</span>
       </div>
       {orders.map(order => (
         <KitchenOrderCard key={order.id} order={order} />
@@ -149,11 +141,7 @@ export function KitchenMain() {
                   Array.from(col.groups.entries())
                     .sort(([a], [b]) => a - b) // Sắp xếp theo số bàn
                     .map(([tableNumber, orders]) => (
-                      <TableGroup
-                        key={tableNumber}
-                        tableNumber={tableNumber}
-                        orders={orders}
-                      />
+                      <TableGroup key={tableNumber} tableNumber={tableNumber} orders={orders} />
                     ))
                 )}
               </div>

@@ -11,7 +11,7 @@ import { socket } from '@/lib/socket'
 export interface ClientSocketEventPayloads {
   'new-order': unknown[]
   'update-order': unknown
-  'payment': unknown[]
+  payment: unknown[]
   'table-token-rotated': { tableNumber: number; newToken: string }
 }
 
@@ -95,7 +95,8 @@ export function useSocketEvents(
     if (!eventKeys) return
 
     const activeEvents = eventKeys.split(',') as ClientSocketEventName[]
-    const listeners: Array<{ event: ClientSocketEventName; listener: (payload: unknown) => void }> = []
+    const listeners: Array<{ event: ClientSocketEventName; listener: (payload: unknown) => void }> =
+      []
 
     for (const event of activeEvents) {
       const listener = (payload: unknown) => {
@@ -115,4 +116,3 @@ export function useSocketEvents(
     }
   }, [eventKeys])
 }
-

@@ -68,7 +68,7 @@ export function KitchenOrderCard({ order }: KitchenOrderCardProps) {
       await updateMutation.mutateAsync({
         orderId: order.id,
         body: {
-          status: nextStatus as any,
+          status: nextStatus,
           dishId: order.dishSnapshot.dishId ?? 0,
           quantity: order.quantity,
         },
@@ -102,7 +102,7 @@ export function KitchenOrderCard({ order }: KitchenOrderCardProps) {
           </Avatar>
 
           <div className='min-w-0 flex-1'>
-            <p className='truncate text-base font-semibold leading-tight'>
+            <p className='truncate text-base leading-tight font-semibold'>
               {order.dishSnapshot.name}
             </p>
             <div className='mt-1 flex items-center gap-2'>
@@ -110,9 +110,7 @@ export function KitchenOrderCard({ order }: KitchenOrderCardProps) {
                 ×{order.quantity}
               </Badge>
               {order.guest && (
-                <span className='truncate text-xs text-muted-foreground'>
-                  {order.guest.name}
-                </span>
+                <span className='truncate text-xs text-muted-foreground'>{order.guest.name}</span>
               )}
             </div>
           </div>
@@ -146,8 +144,8 @@ export function KitchenOrderCard({ order }: KitchenOrderCardProps) {
             size='lg'
             className={cn(
               'h-11 w-full gap-2 text-sm font-semibold',
-              isPending && 'bg-blue-600 hover:bg-blue-700 text-white',
-              isProcessing && 'bg-emerald-600 hover:bg-emerald-700 text-white'
+              isPending && 'bg-blue-600 text-white hover:bg-blue-700',
+              isProcessing && 'bg-emerald-600 text-white hover:bg-emerald-700'
             )}
             onClick={handleAction}
             disabled={updateMutation.isPending}

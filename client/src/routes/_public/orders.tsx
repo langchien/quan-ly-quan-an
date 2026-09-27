@@ -34,16 +34,16 @@ function OrdersPage() {
 
   // Lắng nghe socket events — dùng useSocketEvents hook chuẩn hóa
   useSocketEvents({
-    'update-order': (updatedOrder) => {
+    'update-order': updatedOrder => {
       refetch()
       const order = updatedOrder as { dishSnapshot?: { name?: string }; status?: string }
       toast.info(`Cập nhật đơn hàng: ${order.dishSnapshot?.name ?? ''}`, {
         description: `Trạng thái mới: ${order.status ?? ''}`,
       })
     },
-    'payment': (paidOrders) => {
+    payment: paidOrders => {
       refetch()
-      const orders = paidOrders as unknown[]
+      const orders = paidOrders
       toast.success('Thanh toán thành công! 🎉', {
         description: `${orders.length} món đã được thanh toán.`,
       })

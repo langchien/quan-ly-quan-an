@@ -37,7 +37,7 @@ export interface SocketEventPayloads {
   /** Khi trạng thái 1 đơn hàng được cập nhật */
   'update-order': OrderWithRelations
   /** Khi thanh toán hoàn tất (1 hoặc nhiều đơn) */
-  'payment': OrderWithRelations[]
+  payment: OrderWithRelations[]
   /** Khi token QR bàn được rotate sau thanh toán */
   'table-token-rotated': TableTokenRotatedPayload
 }

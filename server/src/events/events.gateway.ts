@@ -10,7 +10,12 @@ import { ConfigService } from '@nestjs/config'
 import { PrismaService } from '../prisma/prisma.service.js'
 import type { EnvType } from '../config/env.config.js'
 import { ManagerRoom, Role, TokenType, type TokenPayload } from '../constants/type.js'
-import type { OrderWithRelations, SocketEventName, SocketEventPayloads, TableTokenRotatedPayload } from './events.types.js'
+import type {
+  OrderWithRelations,
+  SocketEventName,
+  SocketEventPayloads,
+  TableTokenRotatedPayload,
+} from './events.types.js'
 
 /**
  * Socket instance đã xác thực — gắn thêm `decodedAccessToken`

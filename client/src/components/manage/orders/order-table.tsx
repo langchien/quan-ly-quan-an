@@ -31,7 +31,7 @@ export function OrderTable() {
     'update-order': () => {
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
     },
-    'payment': () => {
+    payment: () => {
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
     },
   })

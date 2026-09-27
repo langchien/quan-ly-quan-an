@@ -50,11 +50,11 @@ export function useLiveOrders() {
     'update-order': () => {
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
     },
-    'payment': () => {
+    payment: () => {
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
       queryClient.invalidateQueries({ queryKey: ['tables', 'list'] })
     },
-    'table-token-rotated': (payload) => {
+    'table-token-rotated': payload => {
       const { tableNumber } = payload as { tableNumber: number }
       queryClient.invalidateQueries({ queryKey: ['tables', 'list'] })
       queryClient.invalidateQueries({ queryKey: ['tables', 'detail', tableNumber] })
