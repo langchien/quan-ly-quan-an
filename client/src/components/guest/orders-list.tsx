@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { OrderStatus } from '@app/shared'
 import { useWaitingTime, formatOrderTime } from '@/hooks/use-waiting-time'
-import type { GuestGetOrdersResType } from '@/schemaValidations/guest.schema'
+import type { GuestGetOrdersResType } from '@app/shared'
 import { OrderStatusBadge } from './order-status-badge'
 import { Clock } from 'lucide-react'
 

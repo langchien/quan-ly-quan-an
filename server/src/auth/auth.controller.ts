@@ -10,7 +10,7 @@ import {
   type LogoutBodyType,
   RefreshTokenBody,
   type RefreshTokenBodyType,
-} from './dto/auth.schema.js'
+} from '@app/shared'
 import type { TokenPayload } from '@app/shared'
 
 @Controller('auth')

@@ -5,7 +5,7 @@ import { getDishColumns } from '@/components/manage/dishes/dish-columns'
 import { DishDataTable } from '@/components/manage/dishes/dish-data-table'
 import { useRole } from '@/hooks/useRole'
 import { useGetDishList } from '@/queries/use-dish'
-import type { DishType } from '@/schemaValidations/dish.schema'
+import type { DishType } from '@app/shared'
 import { UtensilsCrossed } from 'lucide-react'
 import { useMemo, useState } from 'react'
 

@@ -9,7 +9,7 @@ import type {
   PayGuestOrdersResType,
   UpdateOrderBodyType,
   UpdateOrderResType,
-} from '@/schemaValidations/order.schema'
+} from '@app/shared'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 // Query Keys

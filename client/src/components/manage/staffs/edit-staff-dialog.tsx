@@ -25,7 +25,7 @@ import {
   UpdateEmployeeAccountBody,
   type AccountType,
   type UpdateEmployeeAccountBodyType,
-} from '@/schemaValidations/account.schema'
+} from '@app/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Camera, Loader2 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'

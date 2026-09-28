@@ -1,6 +1,6 @@
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useLoginMutation } from '@/queries/use-auth'
-import { LoginBody, type LoginBodyType } from '@/schemaValidations/auth.schema'
+import { LoginBody, type LoginBodyType } from '@app/shared'
 import { useAuthStore } from '@/store/useAuthStore'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from '@tanstack/react-router'

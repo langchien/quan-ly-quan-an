@@ -20,11 +20,7 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useUpdateTableMutation } from '@/queries/use-table'
-import {
-  UpdateTableBody,
-  type UpdateTableBodyType,
-  type TableSchema,
-} from '@/schemaValidations/table.schema'
+import { UpdateTableBody, type UpdateTableBodyType, type TableSchema } from '@app/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'

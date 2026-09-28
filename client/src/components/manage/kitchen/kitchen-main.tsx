@@ -5,7 +5,7 @@ import { useKitchenOrders } from '@/hooks/use-kitchen-orders'
 import { KitchenOrderCard } from './kitchen-order-card'
 import { KitchenStatsBar } from './kitchen-stats-bar'
 import { ChefHat, Clock, Inbox } from 'lucide-react'
-import type { OrderSchemaType } from '@/schemaValidations/order.schema'
+import type { OrderSchemaType } from '@app/shared'
 
 /**
  * Render một nhóm đơn theo bàn trong cột Kanban

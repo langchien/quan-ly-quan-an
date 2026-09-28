@@ -7,7 +7,7 @@ import type {
   GetListGuestsResType,
   UpdateEmployeeAccountBodyType,
   UpdateMeBodyType,
-} from '@/schemaValidations/account.schema'
+} from '@app/shared'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const accountMeQueryOptions = queryOptions({

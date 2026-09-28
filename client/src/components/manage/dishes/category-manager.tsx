@@ -22,7 +22,7 @@ import {
   type CategoryType,
   UpdateCategoryBody,
   type UpdateCategoryBodyType,
-} from '@/schemaValidations/category.schema'
+} from '@app/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Edit2, FolderOpen, Loader2, Plus, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'

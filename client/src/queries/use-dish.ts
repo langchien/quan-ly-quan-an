@@ -4,7 +4,7 @@ import type {
   DishListResType,
   DishResType,
   UpdateDishBodyType,
-} from '@/schemaValidations/dish.schema'
+} from '@app/shared'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 // Query Options

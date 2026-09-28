@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { AccountType } from '@/schemaValidations/account.schema'
+import type { AccountType } from '@app/shared'
 import {
   type ColumnDef,
   type ColumnFiltersState,

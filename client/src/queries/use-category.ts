@@ -4,7 +4,7 @@ import type {
   CategoryResType,
   CreateCategoryBodyType,
   UpdateCategoryBodyType,
-} from '@/schemaValidations/category.schema'
+} from '@app/shared'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 // Query Options

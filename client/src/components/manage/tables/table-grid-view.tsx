@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
 import { envConfig } from '@/envConfig'
-import type { TableSchema } from '@/schemaValidations/table.schema'
+import type { TableSchema } from '@app/shared'
 import { LayoutGrid, Link, MoreHorizontal, Pencil, Trash2, Users } from 'lucide-react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { toast } from 'sonner'

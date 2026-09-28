@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service.js'
-import type { CreateDishBodyType, UpdateDishBodyType } from './dto/dish.schema.js'
+import type { CreateDishBodyType, UpdateDishBodyType } from '@app/shared'
 
 @Injectable()
 export class DishService {

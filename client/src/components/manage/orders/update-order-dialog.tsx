@@ -21,11 +21,7 @@ import {
 import { OrderStatus, OrderStatusValues } from '@app/shared'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useUpdateOrderMutation } from '@/queries/use-order'
-import {
-  UpdateOrderBody,
-  type OrderSchemaType,
-  type UpdateOrderBodyType,
-} from '@/schemaValidations/order.schema'
+import { UpdateOrderBody, type OrderSchemaType, type UpdateOrderBodyType } from '@app/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'

@@ -1,5 +1,5 @@
 import { httpClient } from '@/lib/httpClient'
-import type { DashboardIndicatorResType } from '@/schemaValidations/indicator.schema'
+import type { DashboardIndicatorResType } from '@app/shared'
 import { useQuery } from '@tanstack/react-query'
 
 export function useDashboardIndicator({

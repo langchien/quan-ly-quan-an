@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useDeleteDishMutation } from '@/queries/use-dish'
-import type { DishType } from '@/schemaValidations/dish.schema'
+import type { DishType } from '@app/shared'
 import { toast } from 'sonner'
 
 interface DeleteDishDialogProps {

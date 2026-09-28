@@ -17,7 +17,7 @@ import {
   type UpdateEmployeeAccountBodyType,
   UpdateMeBody,
   type UpdateMeBodyType,
-} from './dto/account.schema.js'
+} from '@app/shared'
 
 @Controller()
 @UseGuards(AccessTokenGuard, RolesGuard)

@@ -4,7 +4,7 @@ import type {
   TableListResType,
   TableResType,
   UpdateTableBodyType,
-} from '@/schemaValidations/table.schema'
+} from '@app/shared'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 // Query Options

@@ -12,7 +12,7 @@ import {
   type UpdateDishBodyType,
   DishParams,
   type DishParamsType,
-} from './dto/dish.schema.js'
+} from '@app/shared'
 
 @Controller('dishes')
 export class DishController {

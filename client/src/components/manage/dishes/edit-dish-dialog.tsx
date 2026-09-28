@@ -23,11 +23,7 @@ import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useUploadAvatarMutation } from '@/queries/use-account'
 import { useGetCategoryList } from '@/queries/use-category'
 import { useUpdateDishMutation } from '@/queries/use-dish'
-import {
-  UpdateDishBody,
-  type DishType,
-  type UpdateDishBodyType,
-} from '@/schemaValidations/dish.schema'
+import { UpdateDishBody, type DishType, type UpdateDishBodyType } from '@app/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Camera, Loader2 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'

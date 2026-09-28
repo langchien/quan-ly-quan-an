@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useDeleteTableMutation } from '@/queries/use-table'
-import type { TableSchema } from '@/schemaValidations/table.schema'
+import type { TableSchema } from '@app/shared'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 

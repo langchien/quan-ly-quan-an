@@ -6,7 +6,7 @@ import { EntityErrorException } from '../common/index.js'
 import type { EnvType } from '../config/env.config.js'
 import { TokenType, type RoleType, type TokenPayload } from '@app/shared'
 import { PrismaService } from '../prisma/prisma.service.js'
-import type { LoginBodyType } from './dto/auth.schema.js'
+import type { LoginBodyType } from '@app/shared'
 
 @Injectable()
 export class AuthService {

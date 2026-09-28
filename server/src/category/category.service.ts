@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { StatusError } from '../common/index.js'
 import { PrismaService } from '../prisma/prisma.service.js'
-import type { CreateCategoryBodyType, UpdateCategoryBodyType } from './dto/category.schema.js'
+import type { CreateCategoryBodyType, UpdateCategoryBodyType } from '@app/shared'
 
 @Injectable()
 export class CategoryService {

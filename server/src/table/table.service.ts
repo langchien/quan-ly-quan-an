@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service.js'
 import { EntityErrorException } from '../common/index.js'
-import type { CreateTableBodyType, UpdateTableBodyType } from './dto/table.schema.js'
+import type { CreateTableBodyType, UpdateTableBodyType } from '@app/shared'
 
 /**
  * Tạo token ngẫu nhiên cho bàn (dùng làm QR code token)

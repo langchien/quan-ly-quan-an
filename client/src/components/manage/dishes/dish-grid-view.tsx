@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
 import { DishStatus } from '@app/shared'
-import type { DishType } from '@/schemaValidations/dish.schema'
+import type { DishType } from '@app/shared'
 import { MoreHorizontal, Pencil, Trash2, UtensilsCrossed } from 'lucide-react'
 import { formatCurrency } from '@/lib/format'
 

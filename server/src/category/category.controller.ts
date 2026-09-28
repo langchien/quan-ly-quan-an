@@ -12,7 +12,7 @@ import {
   type CreateCategoryBodyType,
   UpdateCategoryBody,
   type UpdateCategoryBodyType,
-} from './dto/category.schema.js'
+} from '@app/shared'
 
 @Controller('categories')
 export class CategoryController {

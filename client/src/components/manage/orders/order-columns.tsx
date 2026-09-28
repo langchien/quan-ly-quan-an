@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { OrderStatus } from '@app/shared'
 import { formatCurrency } from '@/lib/format'
-import type { OrderSchemaType } from '@/schemaValidations/order.schema'
+import type { OrderSchemaType } from '@app/shared'
 import type { ColumnDef } from '@tanstack/react-table'
 import {
   ArrowUpDown,

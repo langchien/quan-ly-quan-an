@@ -12,7 +12,7 @@ import {
   type UpdateTableBodyType,
   TableParams,
   type TableParamsType,
-} from './dto/table.schema.js'
+} from '@app/shared'
 
 @Controller('tables')
 export class TableController {

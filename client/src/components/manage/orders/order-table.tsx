@@ -6,7 +6,7 @@ import { UpdateOrderDialog } from '@/components/manage/orders/update-order-dialo
 import { OrderStatus } from '@app/shared'
 import { useSocketEvents } from '@/hooks/use-socket-event'
 import { adminOrdersQueryKey, useGetOrdersQuery } from '@/queries/use-order'
-import type { OrderSchemaType } from '@/schemaValidations/order.schema'
+import type { OrderSchemaType } from '@app/shared'
 import { useQueryClient } from '@tanstack/react-query'
 import { ShoppingBag } from 'lucide-react'
 import { useMemo, useState } from 'react'

@@ -1,16 +1,24 @@
 import z from 'zod'
-import { TableStatusValues } from '@app/shared'
+import { TableStatusValues } from '..'
 
-// Table Schema
+export const CreateTableBody = z.object({
+  number: z.coerce.number().positive(),
+  capacity: z.coerce.number().positive(),
+  status: z.enum(TableStatusValues).optional(),
+})
+
+export type CreateTableBodyType = z.TypeOf<typeof CreateTableBody>
 
 export const TableSchema = z.object({
   number: z.coerce.number(),
   capacity: z.coerce.number(),
   status: z.enum(TableStatusValues),
   token: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 })
+
+export type TableType = z.TypeOf<typeof TableSchema>
 
 export const TableRes = z.object({
   data: TableSchema,
@@ -26,18 +34,6 @@ export const TableListRes = z.object({
 
 export type TableListResType = z.TypeOf<typeof TableListRes>
 
-// Create Table
-
-export const CreateTableBody = z.object({
-  number: z.coerce.number().positive(),
-  capacity: z.coerce.number().positive(),
-  status: z.enum(TableStatusValues).optional(),
-})
-
-export type CreateTableBodyType = z.TypeOf<typeof CreateTableBody>
-
-// Update Table
-
 export const UpdateTableBody = z.object({
   changeToken: z.boolean(),
   capacity: z.coerce.number().positive(),
@@ -45,8 +41,6 @@ export const UpdateTableBody = z.object({
 })
 
 export type UpdateTableBodyType = z.TypeOf<typeof UpdateTableBody>
-
-// Params
 
 export const TableParams = z.object({
   number: z.coerce.number(),

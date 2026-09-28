@@ -6,7 +6,7 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import type { RevenueByDateType } from '@/schemaValidations/indicator.schema'
+import type { RevenueByDateType } from '@app/shared'
 
 const chartConfig = {
   revenue: {

@@ -7,7 +7,7 @@ import type {
   GetOrdersQueryParamsType,
   PayGuestOrdersBodyType,
   UpdateOrderBodyType,
-} from './dto/order.schema.js'
+} from '@app/shared'
 
 /**
  * Tham số cho hàm tạo đơn hàng dùng chung

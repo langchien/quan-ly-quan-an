@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import type { AccountType } from '@/schemaValidations/account.schema'
+import type { AccountType } from '@app/shared'
 import type { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
 

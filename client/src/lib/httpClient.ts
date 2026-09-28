@@ -1,5 +1,5 @@
 import { envConfig } from '@/envConfig'
-import type { RefreshTokenResType } from '@/schemaValidations/auth.schema'
+import type { RefreshTokenResType } from '@app/shared'
 import { useAuthStore } from '@/store/useAuthStore'
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'

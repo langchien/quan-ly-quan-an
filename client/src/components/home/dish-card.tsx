@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { DishStatus } from '@app/shared'
-import type { DishType } from '@/schemaValidations/dish.schema'
+import type { DishType } from '@app/shared'
 
 import { formatCurrencyVND } from '@/lib/format'
 

@@ -1,11 +1,11 @@
-﻿import { ExecutionContext, UnauthorizedException } from '@nestjs/common'
+import { ExecutionContext, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Role, TokenType } from '@app/shared'
 import { GuestAccessTokenGuard } from './guest-access-token.guard.js'
 
-// Helper tạo mock ExecutionContext
+// Helper t?o mock ExecutionContext
 
 const createMockContext = (authHeader?: string): ExecutionContext =>
   ({

@@ -15,7 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { TableStatus } from '@app/shared'
-import type { TableSchema } from '@/schemaValidations/table.schema'
+import type { TableSchema } from '@app/shared'
 import type { Table } from '@tanstack/react-table'
 import { CirclePlus, LayoutGrid, List, Search, Settings2, Plus, X } from 'lucide-react'
 import type { z } from 'zod'

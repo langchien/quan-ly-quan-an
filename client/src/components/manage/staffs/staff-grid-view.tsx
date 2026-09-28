@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import type { AccountType } from '@/schemaValidations/account.schema'
+import type { AccountType } from '@app/shared'
 import { Mail, MoreHorizontal, Pencil, Trash2, UserX } from 'lucide-react'
 import { getInitials } from './staff-columns'
 

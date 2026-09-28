@@ -13,7 +13,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
-import type { OrderSchemaType } from '@/schemaValidations/order.schema'
+import type { OrderSchemaType } from '@app/shared'
 import type { Table } from '@tanstack/react-table'
 import { CirclePlus, ClipboardPlus, Search, Settings2, X } from 'lucide-react'
 import { ORDER_STATUS_OPTIONS } from './order-columns'

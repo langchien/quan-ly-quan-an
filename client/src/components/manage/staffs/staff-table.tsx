@@ -4,7 +4,7 @@ import { EditStaffDialog } from '@/components/manage/staffs/edit-staff-dialog'
 import { getStaffColumns } from '@/components/manage/staffs/staff-columns'
 import { StaffDataTable } from '@/components/manage/staffs/staff-data-table'
 import { useGetAccountList } from '@/queries/use-account'
-import type { AccountType } from '@/schemaValidations/account.schema'
+import type { AccountType } from '@app/shared'
 import { UserX } from 'lucide-react'
 import { useMemo, useState } from 'react'
 

@@ -6,7 +6,7 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import type { DishIndicatorType } from '@/schemaValidations/indicator.schema'
+import type { DishIndicatorType } from '@app/shared'
 
 // Mảng màu cho các thanh bar
 const COLORS = [

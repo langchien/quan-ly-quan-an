@@ -17,7 +17,7 @@ import {
   type CreateOrdersBodyType,
   PayGuestOrdersBody,
   type PayGuestOrdersBodyType,
-} from './dto/order.schema.js'
+} from '@app/shared'
 import { EventsGateway } from '../events/events.gateway.js'
 
 @Controller('orders')

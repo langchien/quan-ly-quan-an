@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Loader2, Save, ShieldCheck } from 'lucide-react'
 
-import { ChangePasswordBody, type ChangePasswordBodyType } from '@/schemaValidations/account.schema'
+import { ChangePasswordBody, type ChangePasswordBodyType } from '@app/shared'
 import { useChangePasswordMutation } from '@/queries/use-account'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { InputPassword } from '@/components/input-password'

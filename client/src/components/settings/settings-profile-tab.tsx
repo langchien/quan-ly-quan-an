@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Camera, Loader2, RotateCcw, Save } from 'lucide-react'
 
-import { UpdateMeBody, type UpdateMeBodyType } from '@/schemaValidations/account.schema'
+import { UpdateMeBody, type UpdateMeBodyType } from '@app/shared'
 import { useAccountMe, useUpdateMeMutation, useUploadAvatarMutation } from '@/queries/use-account'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'

@@ -1,9 +1,9 @@
-import { RoleValues } from '@app/shared'
 import z from 'zod'
+import { RoleValues } from '..'
 
 export const LoginBody = z
   .object({
-    email: z.email(),
+    email: z.string().email(),
     password: z.string().min(6).max(100),
   })
   .strict()

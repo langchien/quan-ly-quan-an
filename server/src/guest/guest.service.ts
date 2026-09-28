@@ -10,7 +10,7 @@ import type {
   GuestCreateOrdersBodyType,
   GuestLoginBodyType,
   GuestRefreshTokenBodyType,
-} from './dto/guest.schema.js'
+} from '@app/shared'
 
 @Injectable()
 export class GuestService {

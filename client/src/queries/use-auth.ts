@@ -1,5 +1,5 @@
 import { httpClient } from '@/lib/httpClient'
-import type { LoginBodyType, LoginResType, LogoutBodyType } from '@/schemaValidations/auth.schema'
+import type { LoginBodyType, LoginResType, LogoutBodyType } from '@app/shared'
 import { useMutation } from '@tanstack/react-query'
 
 export function useLoginMutation() {

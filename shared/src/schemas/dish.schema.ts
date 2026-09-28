@@ -1,6 +1,6 @@
-import { DishStatusValues } from '@app/shared'
-import { CategorySchema } from '@/schemaValidations/category.schema'
 import z from 'zod'
+import { DishStatusValues } from '..'
+import { CategorySchema } from './category.schema'
 
 export const CreateDishBody = z.object({
   name: z.string().min(1).max(256),
@@ -22,8 +22,8 @@ export const DishSchema = z.object({
   status: z.enum(DishStatusValues),
   categoryId: z.number().nullable(),
   category: CategorySchema.nullable(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 })
 
 export type DishType = z.TypeOf<typeof DishSchema>
@@ -44,7 +44,9 @@ export type DishListResType = z.TypeOf<typeof DishListRes>
 
 export const UpdateDishBody = CreateDishBody
 export type UpdateDishBodyType = CreateDishBodyType
+
 export const DishParams = z.object({
   id: z.coerce.number(),
 })
+
 export type DishParamsType = z.TypeOf<typeof DishParams>

@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { DishType } from '@/schemaValidations/dish.schema'
+import type { DishType } from '@app/shared'
 import {
   type ColumnDef,
   type ColumnFiltersState,

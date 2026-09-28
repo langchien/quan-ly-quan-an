@@ -1,13 +1,13 @@
 import { httpClient } from '@/lib/httpClient'
-import type { LogoutBodyType } from '@/schemaValidations/auth.schema'
-import type { MessageResType } from '@/schemaValidations/common.schema'
 import type {
+  LogoutBodyType,
+  MessageResType,
   GuestCreateOrdersBodyType,
   GuestCreateOrdersResType,
   GuestGetOrdersResType,
   GuestLoginBodyType,
   GuestLoginResType,
-} from '@/schemaValidations/guest.schema'
+} from '@app/shared'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 // Query Keys

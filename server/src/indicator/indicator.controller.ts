@@ -4,10 +4,7 @@ import { Roles } from '../auth/decorators/roles.decorator.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
 import { RolesGuard } from '../auth/guards/roles.guard.js'
 import { ZodQuery } from '../common/index.js'
-import {
-  DashboardIndicatorQueryParams,
-  type DashboardIndicatorQueryParamsType,
-} from './dto/indicator.schema.js'
+import { DashboardIndicatorQueryParams, type DashboardIndicatorQueryParamsType } from '@app/shared'
 import { Role } from '@app/shared'
 
 @Controller('indicators')

@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useDeleteEmployeeAccountMutation } from '@/queries/use-account'
-import type { AccountType } from '@/schemaValidations/account.schema'
+import type { AccountType } from '@app/shared'
 import { toast } from 'sonner'
 
 interface DeleteStaffDialogProps {

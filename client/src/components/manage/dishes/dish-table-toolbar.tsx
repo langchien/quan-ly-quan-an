@@ -15,7 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useGetCategoryList } from '@/queries/use-category'
-import type { DishType } from '@/schemaValidations/dish.schema'
+import type { DishType } from '@app/shared'
 import type { Table } from '@tanstack/react-table'
 import { CirclePlus, LayoutGrid, List, Search, Settings2, UtensilsCrossed, X } from 'lucide-react'
 import { DISH_STATUS_OPTIONS } from './dish-columns'

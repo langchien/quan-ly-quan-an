@@ -12,10 +12,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useCreateEmployeeAccountMutation, useUploadAvatarMutation } from '@/queries/use-account'
-import {
-  CreateEmployeeAccountBody,
-  type CreateEmployeeAccountBodyType,
-} from '@/schemaValidations/account.schema'
+import { CreateEmployeeAccountBody, type CreateEmployeeAccountBodyType } from '@app/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Camera, Loader2 } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'

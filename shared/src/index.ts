@@ -71,3 +71,14 @@ export interface TableTokenPayload {
   number: number
   tokenType: (typeof TokenType)['TableToken']
 }
+
+export * from './schemas/account.schema'
+export * from './schemas/auth.schema'
+export * from './schemas/category.schema'
+export * from './schemas/common.schema'
+export * from './schemas/dish.schema'
+export * from './schemas/guest.schema'
+export * from './schemas/indicator.schema'
+export * from './schemas/media.schema'
+export * from './schemas/order.schema'
+export * from './schemas/table.schema'

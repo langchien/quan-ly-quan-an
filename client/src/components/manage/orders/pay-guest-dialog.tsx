@@ -11,7 +11,7 @@ import {
 import { OrderStatus } from '@app/shared'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { usePayGuestOrdersMutation } from '@/queries/use-order'
-import type { OrderSchemaType } from '@/schemaValidations/order.schema'
+import type { OrderSchemaType } from '@app/shared'
 import { CreditCard, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { getOrderStatusBadge } from './order-columns'

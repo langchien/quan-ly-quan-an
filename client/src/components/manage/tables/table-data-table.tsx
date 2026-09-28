@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { TableSchema } from '@/schemaValidations/table.schema'
+import type { TableSchema } from '@app/shared'
 import {
   type ColumnDef,
   type ColumnFiltersState,

@@ -19,7 +19,7 @@ import {
 import { TableStatus } from '@app/shared'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useCreateTableMutation } from '@/queries/use-table'
-import { CreateTableBody, type CreateTableBodyType } from '@/schemaValidations/table.schema'
+import { CreateTableBody, type CreateTableBodyType } from '@app/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'

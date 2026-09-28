@@ -8,7 +8,7 @@ import type {
   CreateEmployeeAccountBodyType,
   UpdateEmployeeAccountBodyType,
   UpdateMeBodyType,
-} from './dto/account.schema.js'
+} from '@app/shared'
 
 @Injectable()
 export class AccountService {
