@@ -18,6 +18,9 @@ describe('env.config', () => {
     DOMAIN: 'localhost',
     PROTOCOL: 'http',
     UPLOAD_FOLDER: 'uploads',
+    PAYOS_CLIENT_ID: 'client_id',
+    PAYOS_API_KEY: 'api_key',
+    PAYOS_CHECKSUM_KEY: 'checksum_key',
   }
 
   it('nên parse và chuyển đổi kiểu thành công với dữ liệu hợp lệ', () => {
@@ -37,6 +40,13 @@ describe('env.config', () => {
   it('nên ném lỗi khi email không đúng định dạng', () => {
     const invalidEnv = { ...validEnv, INITIAL_EMAIL_OWNER: 'not-an-email' }
     expect(() => validateEnv(invalidEnv)).toThrow(
+      'Các giá trị khai báo trong file .env không hợp lệ'
+    )
+  })
+
+  it('nên ném lỗi khi thiếu khóa PayOS (không còn mock mode)', () => {
+    const { PAYOS_CHECKSUM_KEY: _KEY, ...envWithoutKey } = validEnv
+    expect(() => validateEnv(envWithoutKey)).toThrow(
       'Các giá trị khai báo trong file .env không hợp lệ'
     )
   })

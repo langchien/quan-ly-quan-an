@@ -1,13 +1,15 @@
-import { OrdersList, OrdersListSkeleton } from '@/components/guest/orders-list'
 import { CallStaffButton } from '@/components/guest/call-staff-button'
+import { OrdersList, OrdersListSkeleton } from '@/components/guest/orders-list'
+import { PayosQrDialog } from '@/components/guest/payos-qr-dialog'
 import { Button } from '@/components/ui/button'
-import { Role } from '@app/shared'
 import { useSocketEvents } from '@/hooks/use-socket-event'
 import { socket } from '@/lib/socket'
 import { useGuestGetOrdersQuery, useGuestLogoutMutation } from '@/queries/use-guest'
 import { useAuthStore } from '@/store/useAuthStore'
+import { OrderStatus, Role } from '@app/shared'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
-import { ClipboardList, LogOut, RefreshCw } from 'lucide-react'
+import { ClipboardList, LogOut, QrCode, RefreshCw } from 'lucide-react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 
 // Route
@@ -32,6 +34,20 @@ function OrdersPage() {
   const { data: orders, isLoading, refetch } = useGuestGetOrdersQuery()
   const logoutMutation = useGuestLogoutMutation()
   const refreshToken = useAuthStore(s => s.refreshToken)
+  const [payosDialogOpen, setPayosDialogOpen] = useState(false)
+
+  // Tính toán đơn chưa thanh toán
+  const unpaidOrders = (orders ?? []).filter(
+    (o: { status: string }) =>
+      o.status === OrderStatus.Pending ||
+      o.status === OrderStatus.Processing ||
+      o.status === OrderStatus.Delivered
+  )
+  const totalUnpaidAmount = unpaidOrders.reduce(
+    (sum: number, o: { dishSnapshot: { price: number }; quantity: number }) =>
+      sum + o.dishSnapshot.price * o.quantity,
+    0
+  )
 
   // Lắng nghe socket events — dùng useSocketEvents hook chuẩn hóa
   useSocketEvents({
@@ -44,6 +60,7 @@ function OrdersPage() {
     },
     payment: paidOrders => {
       refetch()
+      setPayosDialogOpen(false) // Tự đóng dialog QR khi thanh toán xong
       const orders = paidOrders
       toast.success('Thanh toán thành công! 🎉', {
         description: `${orders.length} món đã được thanh toán.`,
@@ -120,7 +137,32 @@ function OrdersPage() {
         {isLoading ? (
           <OrdersListSkeleton />
         ) : orders && orders.length > 0 ? (
-          <OrdersList orders={orders} />
+          <>
+            <OrdersList orders={orders} />
+
+            {/* Nút thanh toán VietQR — chỉ hiện khi có đơn chưa thanh toán */}
+            {unpaidOrders.length > 0 && (
+              <div className='mt-6 flex justify-center'>
+                <Button
+                  size='lg'
+                  className='w-full max-w-sm gap-2 bg-blue-600 text-base hover:bg-blue-700'
+                  onClick={() => setPayosDialogOpen(true)}
+                  id='pay-vietqr-btn'
+                >
+                  <QrCode className='size-5' />
+                  Thanh toán VietQR
+                </Button>
+              </div>
+            )}
+
+            {/* Dialog QR PayOS */}
+            <PayosQrDialog
+              open={payosDialogOpen}
+              onOpenChange={setPayosDialogOpen}
+              totalAmount={totalUnpaidAmount}
+              orderCount={unpaidOrders.length}
+            />
+          </>
         ) : (
           <div className='flex flex-col items-center justify-center py-20 text-center'>
             <ClipboardList className='mb-4 size-12 text-muted-foreground/50' />

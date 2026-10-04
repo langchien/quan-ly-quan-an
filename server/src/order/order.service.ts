@@ -224,16 +224,47 @@ export class OrderService {
         guestId,
         status: { in: [OrderStatus.Pending, OrderStatus.Processing, OrderStatus.Delivered] },
       },
+      include: { dishSnapshot: true },
     })
 
     if (pendingOrders.length === 0) {
       throw new StatusError({ message: 'Không có hóa đơn nào cần thanh toán', status: 400 })
     }
 
+    // Tính tổng tiền
+    const totalAmount = pendingOrders.reduce((sum, o) => sum + o.dishSnapshot.price * o.quantity, 0)
+
+    // Sinh orderCode cho Bill
+    const orderCode =
+      Number(String(Date.now()).slice(-6)) * 10000 + Math.floor(1000 + Math.random() * 9000)
+
     const orderIds = pendingOrders.map(o => o.id)
-    await this.prisma.order.updateMany({
-      where: { id: { in: orderIds } },
-      data: { status: OrderStatus.Paid, orderHandlerId },
+
+    await this.prisma.$transaction(async tx => {
+      // Hủy bill Pending cũ của khách nếu có (ví dụ khách bấm tạo VietQR trước đó nhưng đổi ý trả tiền mặt)
+      await tx.bill.updateMany({
+        where: { guestId, status: 'Pending' },
+        data: { status: 'Cancelled' },
+      })
+
+      // Tạo Bill (thanh toán tiền mặt → status Paid ngay)
+      const bill = await tx.bill.create({
+        data: {
+          orderCode,
+          guestId,
+          tableNumber: pendingOrders[0]?.tableNumber ?? null,
+          orderHandlerId,
+          totalAmount,
+          status: OrderStatus.Paid,
+          paymentMethod: 'Cash',
+        },
+      })
+
+      // Cập nhật các Order → Paid + gán billId
+      await tx.order.updateMany({
+        where: { id: { in: orderIds } },
+        data: { status: OrderStatus.Paid, orderHandlerId, billId: bill.id },
+      })
     })
 
     // Rotate token QR bàn sau thanh toán — token cũ vô hiệu hóa

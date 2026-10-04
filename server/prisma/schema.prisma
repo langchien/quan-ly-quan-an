@@ -18,6 +18,7 @@ model Account {
   avatar       String?
   role         String         @default("Employee") // Owner, Employee
   orders       Order[]
+  bills        Bill[]
   employees    Account[]      @relation("OwnerEmployee")
   owner        Account?       @relation("OwnerEmployee", fields: [ownerId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   ownerId      Int?
@@ -68,6 +69,7 @@ model Table {
   number    Int      @id
   capacity  Int
   orders    Order[]
+  bills     Bill[]
   guests    Guest[]
   status    String   @default("Available")
   token     String
@@ -87,6 +89,8 @@ model Order {
   note           String?
   orderHandler   Account?     @relation(fields: [orderHandlerId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   orderHandlerId Int?
+  bill           Bill?        @relation(fields: [billId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  billId         Int?
   status         String       @default("Pending")
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -106,11 +110,32 @@ model Guest {
   table                 Table?    @relation(fields: [tableNumber], references: [number], onDelete: SetNull, onUpdate: NoAction)
   tableNumber           Int?
   orders                Order[]
+  bills                 Bill[]
   refreshToken          String?
   refreshTokenExpiresAt DateTime?
   sockets               Socket[]
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
+}
+
+model Bill {
+  id             Int      @id @default(autoincrement())
+  orderCode      BigInt   @unique // Mã đơn hàng cho PayOS (số nguyên dương duy nhất)
+  guestId        Int?
+  guest          Guest?   @relation(fields: [guestId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  tableNumber    Int?
+  table          Table?   @relation(fields: [tableNumber], references: [number], onDelete: SetNull, onUpdate: NoAction)
+  orderHandlerId Int?
+  orderHandler   Account? @relation(fields: [orderHandlerId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  totalAmount    Int      // Tổng tiền thanh toán (VND)
+  status         String   @default("Pending") // Pending, Paid, Cancelled
+  paymentMethod  String   @default("PayOS")   // PayOS, Cash
+  paymentLinkId  String?  // PayOS payment link ID
+  checkoutUrl    String?  // URL trang thanh toán PayOS
+  qrCode         String?  // URL ảnh QR code VietQR
+  orders         Order[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Socket {

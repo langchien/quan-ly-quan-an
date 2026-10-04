@@ -16,6 +16,12 @@ export const envSchema = z.object({
   DOMAIN: z.string().default('localhost'),
   PROTOCOL: z.string().default('http'),
   UPLOAD_FOLDER: z.string().default('uploads'),
+  // PayOS (bắt buộc — không còn mock mode)
+  PAYOS_CLIENT_ID: z.string().min(1, 'PAYOS_CLIENT_ID không được để trống'),
+  PAYOS_API_KEY: z.string().min(1, 'PAYOS_API_KEY không được để trống'),
+  PAYOS_CHECKSUM_KEY: z.string().min(1, 'PAYOS_CHECKSUM_KEY không được để trống'),
+  PAYOS_RETURN_URL: z.string().url().default('http://localhost:5173/orders'),
+  PAYOS_CANCEL_URL: z.string().url().default('http://localhost:5173/orders'),
 })
 
 export type EnvType = z.infer<typeof envSchema>

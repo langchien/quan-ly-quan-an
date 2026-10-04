@@ -1,9 +1,9 @@
-import { NestFactory } from '@nestjs/core'
-import { ConfigService } from '@nestjs/config'
 import { Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { NestFactory } from '@nestjs/core'
 import { IoAdapter } from '@nestjs/platform-socket.io'
 import { AppModule } from './app.module.js'
-import { ZodValidationPipe, GlobalExceptionFilter } from './common/index.js'
+import { GlobalExceptionFilter, ZodValidationPipe } from './common/index.js'
 import type { EnvType } from './config/env.config.js'
 
 async function bootstrap() {

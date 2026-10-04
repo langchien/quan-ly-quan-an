@@ -16,6 +16,8 @@ import { MediaModule } from './media/media.module.js'
 import { OrderModule } from './order/order.module.js'
 import { PrismaModule } from './prisma/prisma.module.js'
 import { TableModule } from './table/table.module.js'
+import { PayosModule } from './payos/payos.module.js'
+import { BillModule } from './bill/bill.module.js'
 
 @Module({
   imports: [
@@ -42,6 +44,8 @@ import { TableModule } from './table/table.module.js'
     GuestModule,
     OrderModule,
     IndicatorModule,
+    PayosModule,
+    BillModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,191 @@
+import { formatCurrencyVND } from '@/lib/format'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { useCreatePaymentLinkMutation } from '@/queries/use-bill'
+import { handleErrorApi } from '@/lib/handleErrorApi'
+import { useSocketEvents } from '@/hooks/use-socket-event'
+import { Loader2, QrCode, CheckCircle2, Smartphone, ExternalLink } from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
+import { useState } from 'react'
+import { toast } from 'sonner'
+
+interface PayosQrDialogProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  totalAmount: number
+  orderCount: number
+}
+
+type PaymentState = 'idle' | 'loading' | 'qr-ready' | 'paid'
+
+export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: PayosQrDialogProps) {
+  const [state, setState] = useState<PaymentState>('idle')
+  const [qrData, setQrData] = useState<{
+    billId: number
+    checkoutUrl: string
+    qrCode: string
+    orderCode: number
+  } | null>(null)
+
+  const createPaymentLink = useCreatePaymentLinkMutation()
+
+  // Lắng nghe socket event thanh toán hoàn tất (PayOS webhook)
+  useSocketEvents({
+    payment: () => {
+      if (open && state === 'qr-ready') {
+        setState('paid')
+        toast.success('Thanh toán thành công! 🎉')
+      }
+    },
+  })
+
+  async function handleCreatePaymentLink() {
+    try {
+      setState('loading')
+      const res = await createPaymentLink.mutateAsync()
+      setQrData(res.data.data)
+      setState('qr-ready')
+    } catch (error) {
+      setState('idle')
+      handleErrorApi({ error })
+    }
+  }
+
+  function handleClose() {
+    setState('idle')
+    setQrData(null)
+    onOpenChange(false)
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent className='max-w-[420px]'>
+        <DialogHeader>
+          <DialogTitle className='flex items-center gap-2'>
+            <QrCode className='size-5 text-blue-600' />
+            Thanh toán VietQR
+          </DialogTitle>
+          <DialogDescription>Quét mã QR bằng ứng dụng ngân hàng để thanh toán</DialogDescription>
+        </DialogHeader>
+
+        {/* Trạng thái: Chưa tạo mã */}
+        {state === 'idle' && (
+          <div className='space-y-4'>
+            <div className='flex items-center justify-between rounded-lg bg-muted/60 px-4 py-3'>
+              <span className='text-sm text-muted-foreground'>{orderCount} món cần thanh toán</span>
+              <span className='text-xl font-bold text-blue-600'>
+                {formatCurrencyVND(totalAmount)}
+              </span>
+            </div>
+            <Button
+              className='w-full gap-2'
+              onClick={handleCreatePaymentLink}
+              id='create-payment-link-btn'
+            >
+              <Smartphone className='size-4' />
+              Tạo mã QR thanh toán
+            </Button>
+          </div>
+        )}
+
+        {/* Trạng thái: Đang tạo mã */}
+        {state === 'loading' && (
+          <div className='flex flex-col items-center gap-3 py-8'>
+            <Loader2 className='size-8 animate-spin text-blue-600' />
+            <p className='text-sm text-muted-foreground'>Đang tạo mã thanh toán...</p>
+          </div>
+        )}
+
+        {/* Trạng thái: Hiển thị QR */}
+        {state === 'qr-ready' && qrData && (
+          <div className='space-y-4'>
+            {/* QR Code */}
+            <div className='flex flex-col items-center gap-3'>
+              <div className='overflow-hidden rounded-xl border-2 border-blue-100 bg-white p-3 shadow-sm'>
+                {qrData.qrCode.startsWith('http') || qrData.qrCode.startsWith('data:') ? (
+                  <img
+                    src={qrData.qrCode}
+                    alt='Mã QR VietQR'
+                    className='size-[240px] object-contain'
+                    id='payos-qr-image'
+                  />
+                ) : (
+                  <QRCodeSVG
+                    value={qrData.qrCode}
+                    size={240}
+                    level='M'
+                    className='size-[240px]'
+                    id='payos-qr-svg'
+                  />
+                )}
+              </div>
+              <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+                <span>Mã đơn: #{qrData.orderCode}</span>
+                {qrData.checkoutUrl && (
+                  <>
+                    <span>•</span>
+                    <a
+                      href={qrData.checkoutUrl}
+                      target='_blank'
+                      rel='noreferrer'
+                      className='inline-flex items-center gap-1 text-blue-600 hover:underline'
+                    >
+                      <span>Mở link PayOS</span>
+                      <ExternalLink className='size-3' />
+                    </a>
+                  </>
+                )}
+              </div>
+              <p className='text-center text-xs text-muted-foreground'>
+                Mở ứng dụng ngân hàng → Quét QR → Xác nhận thanh toán
+              </p>
+            </div>
+
+            {/* Tổng tiền */}
+            <div className='flex items-center justify-between rounded-lg bg-blue-50 px-4 py-3 dark:bg-blue-950/30'>
+              <span className='font-medium'>Tổng thanh toán</span>
+              <span className='text-xl font-bold text-blue-600'>
+                {formatCurrencyVND(totalAmount)}
+              </span>
+            </div>
+
+            {/* Lưu ý */}
+            <p className='text-center text-xs text-muted-foreground'>
+              ⏳ Hệ thống sẽ tự động cập nhật khi nhận được tiền
+            </p>
+          </div>
+        )}
+
+        {/* Trạng thái: Đã thanh toán */}
+        {state === 'paid' && (
+          <div className='flex flex-col items-center gap-3 py-8'>
+            <div className='flex size-16 items-center justify-center rounded-full bg-green-100'>
+              <CheckCircle2 className='size-8 text-green-600' />
+            </div>
+            <p className='text-lg font-semibold text-green-600'>Thanh toán thành công!</p>
+            <p className='text-sm text-muted-foreground'>Cảm ơn bạn đã sử dụng dịch vụ 🎉</p>
+          </div>
+        )}
+
+        <DialogFooter>
+          {state === 'paid' ? (
+            <Button onClick={handleClose} className='w-full' id='close-payment-btn'>
+              Đóng
+            </Button>
+          ) : state === 'qr-ready' ? (
+            <Button variant='outline' onClick={handleClose} className='w-full'>
+              Hủy thanh toán
+            </Button>
+          ) : null}
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
