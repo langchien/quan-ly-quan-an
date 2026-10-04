@@ -1,24 +1,32 @@
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatCurrencyVND } from '@/lib/format'
+import { handleErrorApi } from '@/lib/handleErrorApi'
+import { useAuthStore } from '@/store/useAuthStore'
 import { PaymentMethod } from '@app/shared'
 import type { GetGuestBillsResType } from '@app/shared'
-import { Banknote, ChevronRight, QrCode, Receipt } from 'lucide-react'
+import { Banknote, ChevronRight, Download, Loader2, QrCode, Receipt } from 'lucide-react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 type Bill = GetGuestBillsResType['data'][number]
 type BillOrder = Bill['orders'][number]
 
-const paymentMethodConfig: Record<string, { label: string; icon: typeof QrCode }> = {
+const paymentMethodConfig: Record<
+  (typeof PaymentMethod)[keyof typeof PaymentMethod],
+  { label: string; icon: typeof QrCode }
+> = {
   [PaymentMethod.PayOS]: { label: 'VietQR', icon: QrCode },
   [PaymentMethod.Cash]: { label: 'Tiền mặt', icon: Banknote },
 }
@@ -58,7 +66,7 @@ export function BillHistorySkeleton() {
 
 function BillCard({ bill, onSelect }: { bill: Bill; onSelect: () => void }) {
   const method = paymentMethodConfig[bill.paymentMethod]
-  const MethodIcon = method?.icon ?? Receipt
+  const MethodIcon = method.icon
 
   return (
     <Card
@@ -83,7 +91,7 @@ function BillCard({ bill, onSelect }: { bill: Bill; onSelect: () => void }) {
           <p className='text-xs text-muted-foreground'>{formatBillTime(bill.createdAt)}</p>
           <div className='mt-1 flex items-center gap-2 text-xs text-muted-foreground'>
             <MethodIcon className='size-3' />
-            <span>{method?.label ?? bill.paymentMethod}</span>
+            <span>{method.label}</span>
             <span>·</span>
             <span>{countItems(bill)} món</span>
           </div>
@@ -99,6 +107,22 @@ function BillCard({ bill, onSelect }: { bill: Bill; onSelect: () => void }) {
 
 function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () => void }) {
   const method = bill ? paymentMethodConfig[bill.paymentMethod] : null
+  const guest = useAuthStore(s => s.guest)
+  const [isExporting, setIsExporting] = useState(false)
+
+  async function handleDownloadPdf() {
+    if (!bill) return
+    try {
+      setIsExporting(true)
+      const { downloadBillPdf } = await import('@/components/guest/bill-pdf')
+      await downloadBillPdf(bill, guest?.name)
+      toast.success(`Đã tải hóa đơn #${bill.orderCode} (PDF)`)
+    } catch (error) {
+      handleErrorApi({ error })
+    } finally {
+      setIsExporting(false)
+    }
+  }
 
   return (
     <Dialog open={!!bill} onOpenChange={open => !open && onClose()}>
@@ -140,13 +164,33 @@ function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () =>
             <div className='space-y-2'>
               <div className='flex items-center justify-between text-sm text-muted-foreground'>
                 <span>Phương thức</span>
-                <Badge variant='outline'>{method?.label ?? bill.paymentMethod}</Badge>
+                <Badge variant='outline'>{paymentMethodConfig[bill.paymentMethod].label}</Badge>
               </div>
               <div className='flex items-center justify-between text-base font-semibold'>
                 <span>Tổng cộng ({countItems(bill)} món)</span>
                 <span className='text-primary'>{formatCurrencyVND(bill.totalAmount)}</span>
               </div>
             </div>
+
+            <DialogFooter className='flex-row gap-2 pt-2 sm:justify-between'>
+              <Button
+                variant='outline'
+                className='flex-1 gap-2'
+                onClick={handleDownloadPdf}
+                disabled={isExporting}
+                id='download-bill-pdf-btn'
+              >
+                {isExporting ? (
+                  <Loader2 className='size-4 animate-spin' />
+                ) : (
+                  <Download className='size-4' />
+                )}
+                {isExporting ? 'Đang xuất PDF...' : 'Tải hóa đơn PDF'}
+              </Button>
+              <Button variant='secondary' onClick={onClose} id='close-bill-dialog-btn'>
+                Đóng
+              </Button>
+            </DialogFooter>
           </>
         )}
       </DialogContent>
