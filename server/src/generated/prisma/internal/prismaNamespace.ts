@@ -405,6 +405,7 @@ export const ModelName = {
   Order: 'Order',
   RefreshToken: 'RefreshToken',
   Guest: 'Guest',
+  Bill: 'Bill',
   Socket: 'Socket'
 } as const
 
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "category" | "dish" | "dishSnapshot" | "table" | "order" | "refreshToken" | "guest" | "socket"
+    modelProps: "account" | "category" | "dish" | "dishSnapshot" | "table" | "order" | "refreshToken" | "guest" | "bill" | "socket"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1017,6 +1018,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Bill: {
+      payload: Prisma.$BillPayload<ExtArgs>
+      fields: Prisma.BillFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BillFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BillFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload>
+        }
+        findFirst: {
+          args: Prisma.BillFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BillFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload>
+        }
+        findMany: {
+          args: Prisma.BillFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload>[]
+        }
+        create: {
+          args: Prisma.BillCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload>
+        }
+        createMany: {
+          args: Prisma.BillCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BillCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload>[]
+        }
+        delete: {
+          args: Prisma.BillDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload>
+        }
+        update: {
+          args: Prisma.BillUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload>
+        }
+        deleteMany: {
+          args: Prisma.BillDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BillUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BillUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload>[]
+        }
+        upsert: {
+          args: Prisma.BillUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BillPayload>
+        }
+        aggregate: {
+          args: Prisma.BillAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBill>
+        }
+        groupBy: {
+          args: Prisma.BillGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BillGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BillCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BillCountAggregateOutputType> | number
+        }
+      }
+    }
     Socket: {
       payload: Prisma.$SocketPayload<ExtArgs>
       fields: Prisma.SocketFieldRefs
@@ -1206,6 +1281,7 @@ export const OrderScalarFieldEnum = {
   quantity: 'quantity',
   note: 'note',
   orderHandlerId: 'orderHandlerId',
+  billId: 'billId',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1235,6 +1311,25 @@ export const GuestScalarFieldEnum = {
 } as const
 
 export type GuestScalarFieldEnum = (typeof GuestScalarFieldEnum)[keyof typeof GuestScalarFieldEnum]
+
+
+export const BillScalarFieldEnum = {
+  id: 'id',
+  orderCode: 'orderCode',
+  guestId: 'guestId',
+  tableNumber: 'tableNumber',
+  orderHandlerId: 'orderHandlerId',
+  totalAmount: 'totalAmount',
+  status: 'status',
+  paymentMethod: 'paymentMethod',
+  paymentLinkId: 'paymentLinkId',
+  checkoutUrl: 'checkoutUrl',
+  qrCode: 'qrCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillScalarFieldEnum = (typeof BillScalarFieldEnum)[keyof typeof BillScalarFieldEnum]
 
 
 export const SocketScalarFieldEnum = {
@@ -1315,6 +1410,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt'
+ */
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt[]'
+ */
+export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
     
 
 
@@ -1490,6 +1599,7 @@ export type GlobalOmitConfig = {
   order?: Prisma.OrderOmit
   refreshToken?: Prisma.RefreshTokenOmit
   guest?: Prisma.GuestOmit
+  bill?: Prisma.BillOmit
   socket?: Prisma.SocketOmit
 }
 

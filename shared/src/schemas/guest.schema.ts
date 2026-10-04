@@ -1,6 +1,6 @@
 import z from 'zod'
-import { RoleValues } from '..'
-import { OrderSchema } from './order.schema'
+import { RoleValues } from '../constants.js'
+import { OrderSchema } from './order.schema.js'
 
 export const GuestLoginBody = z
   .object({

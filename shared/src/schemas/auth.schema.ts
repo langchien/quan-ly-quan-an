@@ -1,5 +1,5 @@
 import z from 'zod'
-import { RoleValues } from '..'
+import { RoleValues } from '../constants.js'
 
 export const LoginBody = z
   .object({

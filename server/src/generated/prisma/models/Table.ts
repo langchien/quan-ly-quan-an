@@ -229,6 +229,7 @@ export type TableWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   orders?: Prisma.OrderListRelationFilter
+  bills?: Prisma.BillListRelationFilter
   guests?: Prisma.GuestListRelationFilter
 }
 
@@ -240,6 +241,7 @@ export type TableOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   orders?: Prisma.OrderOrderByRelationAggregateInput
+  bills?: Prisma.BillOrderByRelationAggregateInput
   guests?: Prisma.GuestOrderByRelationAggregateInput
 }
 
@@ -254,6 +256,7 @@ export type TableWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Table"> | Date | string
   orders?: Prisma.OrderListRelationFilter
+  bills?: Prisma.BillListRelationFilter
   guests?: Prisma.GuestListRelationFilter
 }, "number">
 
@@ -291,6 +294,7 @@ export type TableCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutTableInput
+  bills?: Prisma.BillCreateNestedManyWithoutTableInput
   guests?: Prisma.GuestCreateNestedManyWithoutTableInput
 }
 
@@ -302,6 +306,7 @@ export type TableUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTableInput
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutTableInput
   guests?: Prisma.GuestUncheckedCreateNestedManyWithoutTableInput
 }
 
@@ -313,6 +318,7 @@ export type TableUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutTableNestedInput
+  bills?: Prisma.BillUpdateManyWithoutTableNestedInput
   guests?: Prisma.GuestUpdateManyWithoutTableNestedInput
 }
 
@@ -324,6 +330,7 @@ export type TableUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTableNestedInput
+  bills?: Prisma.BillUncheckedUpdateManyWithoutTableNestedInput
   guests?: Prisma.GuestUncheckedUpdateManyWithoutTableNestedInput
 }
 
@@ -428,6 +435,22 @@ export type TableUpdateOneWithoutGuestsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TableUpdateToOneWithWhereWithoutGuestsInput, Prisma.TableUpdateWithoutGuestsInput>, Prisma.TableUncheckedUpdateWithoutGuestsInput>
 }
 
+export type TableCreateNestedOneWithoutBillsInput = {
+  create?: Prisma.XOR<Prisma.TableCreateWithoutBillsInput, Prisma.TableUncheckedCreateWithoutBillsInput>
+  connectOrCreate?: Prisma.TableCreateOrConnectWithoutBillsInput
+  connect?: Prisma.TableWhereUniqueInput
+}
+
+export type TableUpdateOneWithoutBillsNestedInput = {
+  create?: Prisma.XOR<Prisma.TableCreateWithoutBillsInput, Prisma.TableUncheckedCreateWithoutBillsInput>
+  connectOrCreate?: Prisma.TableCreateOrConnectWithoutBillsInput
+  upsert?: Prisma.TableUpsertWithoutBillsInput
+  disconnect?: Prisma.TableWhereInput | boolean
+  delete?: Prisma.TableWhereInput | boolean
+  connect?: Prisma.TableWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TableUpdateToOneWithWhereWithoutBillsInput, Prisma.TableUpdateWithoutBillsInput>, Prisma.TableUncheckedUpdateWithoutBillsInput>
+}
+
 export type TableCreateWithoutOrdersInput = {
   number: number
   capacity: number
@@ -435,6 +458,7 @@ export type TableCreateWithoutOrdersInput = {
   token: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  bills?: Prisma.BillCreateNestedManyWithoutTableInput
   guests?: Prisma.GuestCreateNestedManyWithoutTableInput
 }
 
@@ -445,6 +469,7 @@ export type TableUncheckedCreateWithoutOrdersInput = {
   token: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutTableInput
   guests?: Prisma.GuestUncheckedCreateNestedManyWithoutTableInput
 }
 
@@ -471,6 +496,7 @@ export type TableUpdateWithoutOrdersInput = {
   token?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bills?: Prisma.BillUpdateManyWithoutTableNestedInput
   guests?: Prisma.GuestUpdateManyWithoutTableNestedInput
 }
 
@@ -481,6 +507,7 @@ export type TableUncheckedUpdateWithoutOrdersInput = {
   token?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bills?: Prisma.BillUncheckedUpdateManyWithoutTableNestedInput
   guests?: Prisma.GuestUncheckedUpdateManyWithoutTableNestedInput
 }
 
@@ -492,6 +519,7 @@ export type TableCreateWithoutGuestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutTableInput
+  bills?: Prisma.BillCreateNestedManyWithoutTableInput
 }
 
 export type TableUncheckedCreateWithoutGuestsInput = {
@@ -502,6 +530,7 @@ export type TableUncheckedCreateWithoutGuestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTableInput
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutTableInput
 }
 
 export type TableCreateOrConnectWithoutGuestsInput = {
@@ -528,6 +557,7 @@ export type TableUpdateWithoutGuestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutTableNestedInput
+  bills?: Prisma.BillUpdateManyWithoutTableNestedInput
 }
 
 export type TableUncheckedUpdateWithoutGuestsInput = {
@@ -538,6 +568,67 @@ export type TableUncheckedUpdateWithoutGuestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutTableNestedInput
+  bills?: Prisma.BillUncheckedUpdateManyWithoutTableNestedInput
+}
+
+export type TableCreateWithoutBillsInput = {
+  number: number
+  capacity: number
+  status?: string
+  token: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderCreateNestedManyWithoutTableInput
+  guests?: Prisma.GuestCreateNestedManyWithoutTableInput
+}
+
+export type TableUncheckedCreateWithoutBillsInput = {
+  number: number
+  capacity: number
+  status?: string
+  token: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutTableInput
+  guests?: Prisma.GuestUncheckedCreateNestedManyWithoutTableInput
+}
+
+export type TableCreateOrConnectWithoutBillsInput = {
+  where: Prisma.TableWhereUniqueInput
+  create: Prisma.XOR<Prisma.TableCreateWithoutBillsInput, Prisma.TableUncheckedCreateWithoutBillsInput>
+}
+
+export type TableUpsertWithoutBillsInput = {
+  update: Prisma.XOR<Prisma.TableUpdateWithoutBillsInput, Prisma.TableUncheckedUpdateWithoutBillsInput>
+  create: Prisma.XOR<Prisma.TableCreateWithoutBillsInput, Prisma.TableUncheckedCreateWithoutBillsInput>
+  where?: Prisma.TableWhereInput
+}
+
+export type TableUpdateToOneWithWhereWithoutBillsInput = {
+  where?: Prisma.TableWhereInput
+  data: Prisma.XOR<Prisma.TableUpdateWithoutBillsInput, Prisma.TableUncheckedUpdateWithoutBillsInput>
+}
+
+export type TableUpdateWithoutBillsInput = {
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  token?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUpdateManyWithoutTableNestedInput
+  guests?: Prisma.GuestUpdateManyWithoutTableNestedInput
+}
+
+export type TableUncheckedUpdateWithoutBillsInput = {
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  token?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutTableNestedInput
+  guests?: Prisma.GuestUncheckedUpdateManyWithoutTableNestedInput
 }
 
 
@@ -547,11 +638,13 @@ export type TableUncheckedUpdateWithoutGuestsInput = {
 
 export type TableCountOutputType = {
   orders: number
+  bills: number
   guests: number
 }
 
 export type TableCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | TableCountOutputTypeCountOrdersArgs
+  bills?: boolean | TableCountOutputTypeCountBillsArgs
   guests?: boolean | TableCountOutputTypeCountGuestsArgs
 }
 
@@ -575,6 +668,13 @@ export type TableCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Ex
 /**
  * TableCountOutputType without action
  */
+export type TableCountOutputTypeCountBillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillWhereInput
+}
+
+/**
+ * TableCountOutputType without action
+ */
 export type TableCountOutputTypeCountGuestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.GuestWhereInput
 }
@@ -588,6 +688,7 @@ export type TableSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdAt?: boolean
   updatedAt?: boolean
   orders?: boolean | Prisma.Table$ordersArgs<ExtArgs>
+  bills?: boolean | Prisma.Table$billsArgs<ExtArgs>
   guests?: boolean | Prisma.Table$guestsArgs<ExtArgs>
   _count?: boolean | Prisma.TableCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["table"]>
@@ -622,6 +723,7 @@ export type TableSelectScalar = {
 export type TableOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"number" | "capacity" | "status" | "token" | "createdAt" | "updatedAt", ExtArgs["result"]["table"]>
 export type TableInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | Prisma.Table$ordersArgs<ExtArgs>
+  bills?: boolean | Prisma.Table$billsArgs<ExtArgs>
   guests?: boolean | Prisma.Table$guestsArgs<ExtArgs>
   _count?: boolean | Prisma.TableCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -632,6 +734,7 @@ export type $TablePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Table"
   objects: {
     orders: Prisma.$OrderPayload<ExtArgs>[]
+    bills: Prisma.$BillPayload<ExtArgs>[]
     guests: Prisma.$GuestPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1036,6 +1139,7 @@ readonly fields: TableFieldRefs;
 export interface Prisma__TableClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   orders<T extends Prisma.Table$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Table$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bills<T extends Prisma.Table$billsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Table$billsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   guests<T extends Prisma.Table$guestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Table$guestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1486,6 +1590,30 @@ export type Table$ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
+}
+
+/**
+ * Table.bills
+ */
+export type Table$billsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Bill
+   */
+  select?: Prisma.BillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Bill
+   */
+  omit?: Prisma.BillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillInclude<ExtArgs> | null
+  where?: Prisma.BillWhereInput
+  orderBy?: Prisma.BillOrderByWithRelationInput | Prisma.BillOrderByWithRelationInput[]
+  cursor?: Prisma.BillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillScalarFieldEnum | Prisma.BillScalarFieldEnum[]
 }
 
 /**

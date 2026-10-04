@@ -33,6 +33,7 @@ export type OrderAvgAggregateOutputType = {
   dishSnapshotId: number | null
   quantity: number | null
   orderHandlerId: number | null
+  billId: number | null
 }
 
 export type OrderSumAggregateOutputType = {
@@ -42,6 +43,7 @@ export type OrderSumAggregateOutputType = {
   dishSnapshotId: number | null
   quantity: number | null
   orderHandlerId: number | null
+  billId: number | null
 }
 
 export type OrderMinAggregateOutputType = {
@@ -52,6 +54,7 @@ export type OrderMinAggregateOutputType = {
   quantity: number | null
   note: string | null
   orderHandlerId: number | null
+  billId: number | null
   status: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,6 +68,7 @@ export type OrderMaxAggregateOutputType = {
   quantity: number | null
   note: string | null
   orderHandlerId: number | null
+  billId: number | null
   status: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -78,6 +82,7 @@ export type OrderCountAggregateOutputType = {
   quantity: number
   note: number
   orderHandlerId: number
+  billId: number
   status: number
   createdAt: number
   updatedAt: number
@@ -92,6 +97,7 @@ export type OrderAvgAggregateInputType = {
   dishSnapshotId?: true
   quantity?: true
   orderHandlerId?: true
+  billId?: true
 }
 
 export type OrderSumAggregateInputType = {
@@ -101,6 +107,7 @@ export type OrderSumAggregateInputType = {
   dishSnapshotId?: true
   quantity?: true
   orderHandlerId?: true
+  billId?: true
 }
 
 export type OrderMinAggregateInputType = {
@@ -111,6 +118,7 @@ export type OrderMinAggregateInputType = {
   quantity?: true
   note?: true
   orderHandlerId?: true
+  billId?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -124,6 +132,7 @@ export type OrderMaxAggregateInputType = {
   quantity?: true
   note?: true
   orderHandlerId?: true
+  billId?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -137,6 +146,7 @@ export type OrderCountAggregateInputType = {
   quantity?: true
   note?: true
   orderHandlerId?: true
+  billId?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -237,6 +247,7 @@ export type OrderGroupByOutputType = {
   quantity: number
   note: string | null
   orderHandlerId: number | null
+  billId: number | null
   status: string
   createdAt: Date
   updatedAt: Date
@@ -273,6 +284,7 @@ export type OrderWhereInput = {
   quantity?: Prisma.IntFilter<"Order"> | number
   note?: Prisma.StringNullableFilter<"Order"> | string | null
   orderHandlerId?: Prisma.IntNullableFilter<"Order"> | number | null
+  billId?: Prisma.IntNullableFilter<"Order"> | number | null
   status?: Prisma.StringFilter<"Order"> | string
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -280,6 +292,7 @@ export type OrderWhereInput = {
   table?: Prisma.XOR<Prisma.TableNullableScalarRelationFilter, Prisma.TableWhereInput> | null
   dishSnapshot?: Prisma.XOR<Prisma.DishSnapshotScalarRelationFilter, Prisma.DishSnapshotWhereInput>
   orderHandler?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
+  bill?: Prisma.XOR<Prisma.BillNullableScalarRelationFilter, Prisma.BillWhereInput> | null
 }
 
 export type OrderOrderByWithRelationInput = {
@@ -290,6 +303,7 @@ export type OrderOrderByWithRelationInput = {
   quantity?: Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  billId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -297,6 +311,7 @@ export type OrderOrderByWithRelationInput = {
   table?: Prisma.TableOrderByWithRelationInput
   dishSnapshot?: Prisma.DishSnapshotOrderByWithRelationInput
   orderHandler?: Prisma.AccountOrderByWithRelationInput
+  bill?: Prisma.BillOrderByWithRelationInput
 }
 
 export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -310,6 +325,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   quantity?: Prisma.IntFilter<"Order"> | number
   note?: Prisma.StringNullableFilter<"Order"> | string | null
   orderHandlerId?: Prisma.IntNullableFilter<"Order"> | number | null
+  billId?: Prisma.IntNullableFilter<"Order"> | number | null
   status?: Prisma.StringFilter<"Order"> | string
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -317,6 +333,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   table?: Prisma.XOR<Prisma.TableNullableScalarRelationFilter, Prisma.TableWhereInput> | null
   dishSnapshot?: Prisma.XOR<Prisma.DishSnapshotScalarRelationFilter, Prisma.DishSnapshotWhereInput>
   orderHandler?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
+  bill?: Prisma.XOR<Prisma.BillNullableScalarRelationFilter, Prisma.BillWhereInput> | null
 }, "id" | "dishSnapshotId">
 
 export type OrderOrderByWithAggregationInput = {
@@ -327,6 +344,7 @@ export type OrderOrderByWithAggregationInput = {
   quantity?: Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  billId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -348,6 +366,7 @@ export type OrderScalarWhereWithAggregatesInput = {
   quantity?: Prisma.IntWithAggregatesFilter<"Order"> | number
   note?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   orderHandlerId?: Prisma.IntNullableWithAggregatesFilter<"Order"> | number | null
+  billId?: Prisma.IntNullableWithAggregatesFilter<"Order"> | number | null
   status?: Prisma.StringWithAggregatesFilter<"Order"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
@@ -363,6 +382,7 @@ export type OrderCreateInput = {
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
   dishSnapshot: Prisma.DishSnapshotCreateNestedOneWithoutOrderInput
   orderHandler?: Prisma.AccountCreateNestedOneWithoutOrdersInput
+  bill?: Prisma.BillCreateNestedOneWithoutOrdersInput
 }
 
 export type OrderUncheckedCreateInput = {
@@ -373,6 +393,7 @@ export type OrderUncheckedCreateInput = {
   quantity: number
   note?: string | null
   orderHandlerId?: number | null
+  billId?: number | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -388,6 +409,7 @@ export type OrderUpdateInput = {
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
   dishSnapshot?: Prisma.DishSnapshotUpdateOneRequiredWithoutOrderNestedInput
   orderHandler?: Prisma.AccountUpdateOneWithoutOrdersNestedInput
+  bill?: Prisma.BillUpdateOneWithoutOrdersNestedInput
 }
 
 export type OrderUncheckedUpdateInput = {
@@ -398,6 +420,7 @@ export type OrderUncheckedUpdateInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -411,6 +434,7 @@ export type OrderCreateManyInput = {
   quantity: number
   note?: string | null
   orderHandlerId?: number | null
+  billId?: number | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -432,6 +456,7 @@ export type OrderUncheckedUpdateManyInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -460,6 +485,7 @@ export type OrderCountOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   note?: Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrder
+  billId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -472,6 +498,7 @@ export type OrderAvgOrderByAggregateInput = {
   dishSnapshotId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrder
+  billId?: Prisma.SortOrder
 }
 
 export type OrderMaxOrderByAggregateInput = {
@@ -482,6 +509,7 @@ export type OrderMaxOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   note?: Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrder
+  billId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -495,6 +523,7 @@ export type OrderMinOrderByAggregateInput = {
   quantity?: Prisma.SortOrder
   note?: Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrder
+  billId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -507,6 +536,7 @@ export type OrderSumOrderByAggregateInput = {
   dishSnapshotId?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
   orderHandlerId?: Prisma.SortOrder
+  billId?: Prisma.SortOrder
 }
 
 export type OrderCreateNestedManyWithoutOrderHandlerInput = {
@@ -667,6 +697,48 @@ export type OrderUncheckedUpdateManyWithoutGuestNestedInput = {
   deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
 }
 
+export type OrderCreateNestedManyWithoutBillInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutBillInput, Prisma.OrderUncheckedCreateWithoutBillInput> | Prisma.OrderCreateWithoutBillInput[] | Prisma.OrderUncheckedCreateWithoutBillInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutBillInput | Prisma.OrderCreateOrConnectWithoutBillInput[]
+  createMany?: Prisma.OrderCreateManyBillInputEnvelope
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+}
+
+export type OrderUncheckedCreateNestedManyWithoutBillInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutBillInput, Prisma.OrderUncheckedCreateWithoutBillInput> | Prisma.OrderCreateWithoutBillInput[] | Prisma.OrderUncheckedCreateWithoutBillInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutBillInput | Prisma.OrderCreateOrConnectWithoutBillInput[]
+  createMany?: Prisma.OrderCreateManyBillInputEnvelope
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+}
+
+export type OrderUpdateManyWithoutBillNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutBillInput, Prisma.OrderUncheckedCreateWithoutBillInput> | Prisma.OrderCreateWithoutBillInput[] | Prisma.OrderUncheckedCreateWithoutBillInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutBillInput | Prisma.OrderCreateOrConnectWithoutBillInput[]
+  upsert?: Prisma.OrderUpsertWithWhereUniqueWithoutBillInput | Prisma.OrderUpsertWithWhereUniqueWithoutBillInput[]
+  createMany?: Prisma.OrderCreateManyBillInputEnvelope
+  set?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  disconnect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  delete?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  update?: Prisma.OrderUpdateWithWhereUniqueWithoutBillInput | Prisma.OrderUpdateWithWhereUniqueWithoutBillInput[]
+  updateMany?: Prisma.OrderUpdateManyWithWhereWithoutBillInput | Prisma.OrderUpdateManyWithWhereWithoutBillInput[]
+  deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
+}
+
+export type OrderUncheckedUpdateManyWithoutBillNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutBillInput, Prisma.OrderUncheckedCreateWithoutBillInput> | Prisma.OrderCreateWithoutBillInput[] | Prisma.OrderUncheckedCreateWithoutBillInput[]
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutBillInput | Prisma.OrderCreateOrConnectWithoutBillInput[]
+  upsert?: Prisma.OrderUpsertWithWhereUniqueWithoutBillInput | Prisma.OrderUpsertWithWhereUniqueWithoutBillInput[]
+  createMany?: Prisma.OrderCreateManyBillInputEnvelope
+  set?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  disconnect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  delete?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  connect?: Prisma.OrderWhereUniqueInput | Prisma.OrderWhereUniqueInput[]
+  update?: Prisma.OrderUpdateWithWhereUniqueWithoutBillInput | Prisma.OrderUpdateWithWhereUniqueWithoutBillInput[]
+  updateMany?: Prisma.OrderUpdateManyWithWhereWithoutBillInput | Prisma.OrderUpdateManyWithWhereWithoutBillInput[]
+  deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
+}
+
 export type OrderCreateWithoutOrderHandlerInput = {
   quantity: number
   note?: string | null
@@ -676,6 +748,7 @@ export type OrderCreateWithoutOrderHandlerInput = {
   guest?: Prisma.GuestCreateNestedOneWithoutOrdersInput
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
   dishSnapshot: Prisma.DishSnapshotCreateNestedOneWithoutOrderInput
+  bill?: Prisma.BillCreateNestedOneWithoutOrdersInput
 }
 
 export type OrderUncheckedCreateWithoutOrderHandlerInput = {
@@ -685,6 +758,7 @@ export type OrderUncheckedCreateWithoutOrderHandlerInput = {
   dishSnapshotId: number
   quantity: number
   note?: string | null
+  billId?: number | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -727,6 +801,7 @@ export type OrderScalarWhereInput = {
   quantity?: Prisma.IntFilter<"Order"> | number
   note?: Prisma.StringNullableFilter<"Order"> | string | null
   orderHandlerId?: Prisma.IntNullableFilter<"Order"> | number | null
+  billId?: Prisma.IntNullableFilter<"Order"> | number | null
   status?: Prisma.StringFilter<"Order"> | string
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -741,6 +816,7 @@ export type OrderCreateWithoutDishSnapshotInput = {
   guest?: Prisma.GuestCreateNestedOneWithoutOrdersInput
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
   orderHandler?: Prisma.AccountCreateNestedOneWithoutOrdersInput
+  bill?: Prisma.BillCreateNestedOneWithoutOrdersInput
 }
 
 export type OrderUncheckedCreateWithoutDishSnapshotInput = {
@@ -750,6 +826,7 @@ export type OrderUncheckedCreateWithoutDishSnapshotInput = {
   quantity: number
   note?: string | null
   orderHandlerId?: number | null
+  billId?: number | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -780,6 +857,7 @@ export type OrderUpdateWithoutDishSnapshotInput = {
   guest?: Prisma.GuestUpdateOneWithoutOrdersNestedInput
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
   orderHandler?: Prisma.AccountUpdateOneWithoutOrdersNestedInput
+  bill?: Prisma.BillUpdateOneWithoutOrdersNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutDishSnapshotInput = {
@@ -789,6 +867,7 @@ export type OrderUncheckedUpdateWithoutDishSnapshotInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -803,6 +882,7 @@ export type OrderCreateWithoutTableInput = {
   guest?: Prisma.GuestCreateNestedOneWithoutOrdersInput
   dishSnapshot: Prisma.DishSnapshotCreateNestedOneWithoutOrderInput
   orderHandler?: Prisma.AccountCreateNestedOneWithoutOrdersInput
+  bill?: Prisma.BillCreateNestedOneWithoutOrdersInput
 }
 
 export type OrderUncheckedCreateWithoutTableInput = {
@@ -812,6 +892,7 @@ export type OrderUncheckedCreateWithoutTableInput = {
   quantity: number
   note?: string | null
   orderHandlerId?: number | null
+  billId?: number | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -852,6 +933,7 @@ export type OrderCreateWithoutGuestInput = {
   table?: Prisma.TableCreateNestedOneWithoutOrdersInput
   dishSnapshot: Prisma.DishSnapshotCreateNestedOneWithoutOrderInput
   orderHandler?: Prisma.AccountCreateNestedOneWithoutOrdersInput
+  bill?: Prisma.BillCreateNestedOneWithoutOrdersInput
 }
 
 export type OrderUncheckedCreateWithoutGuestInput = {
@@ -861,6 +943,7 @@ export type OrderUncheckedCreateWithoutGuestInput = {
   quantity: number
   note?: string | null
   orderHandlerId?: number | null
+  billId?: number | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -892,6 +975,57 @@ export type OrderUpdateManyWithWhereWithoutGuestInput = {
   data: Prisma.XOR<Prisma.OrderUpdateManyMutationInput, Prisma.OrderUncheckedUpdateManyWithoutGuestInput>
 }
 
+export type OrderCreateWithoutBillInput = {
+  quantity: number
+  note?: string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  guest?: Prisma.GuestCreateNestedOneWithoutOrdersInput
+  table?: Prisma.TableCreateNestedOneWithoutOrdersInput
+  dishSnapshot: Prisma.DishSnapshotCreateNestedOneWithoutOrderInput
+  orderHandler?: Prisma.AccountCreateNestedOneWithoutOrdersInput
+}
+
+export type OrderUncheckedCreateWithoutBillInput = {
+  id?: number
+  guestId?: number | null
+  tableNumber?: number | null
+  dishSnapshotId: number
+  quantity: number
+  note?: string | null
+  orderHandlerId?: number | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type OrderCreateOrConnectWithoutBillInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutBillInput, Prisma.OrderUncheckedCreateWithoutBillInput>
+}
+
+export type OrderCreateManyBillInputEnvelope = {
+  data: Prisma.OrderCreateManyBillInput | Prisma.OrderCreateManyBillInput[]
+  skipDuplicates?: boolean
+}
+
+export type OrderUpsertWithWhereUniqueWithoutBillInput = {
+  where: Prisma.OrderWhereUniqueInput
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutBillInput, Prisma.OrderUncheckedUpdateWithoutBillInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutBillInput, Prisma.OrderUncheckedCreateWithoutBillInput>
+}
+
+export type OrderUpdateWithWhereUniqueWithoutBillInput = {
+  where: Prisma.OrderWhereUniqueInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutBillInput, Prisma.OrderUncheckedUpdateWithoutBillInput>
+}
+
+export type OrderUpdateManyWithWhereWithoutBillInput = {
+  where: Prisma.OrderScalarWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateManyMutationInput, Prisma.OrderUncheckedUpdateManyWithoutBillInput>
+}
+
 export type OrderCreateManyOrderHandlerInput = {
   id?: number
   guestId?: number | null
@@ -899,6 +1033,7 @@ export type OrderCreateManyOrderHandlerInput = {
   dishSnapshotId: number
   quantity: number
   note?: string | null
+  billId?: number | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -913,6 +1048,7 @@ export type OrderUpdateWithoutOrderHandlerInput = {
   guest?: Prisma.GuestUpdateOneWithoutOrdersNestedInput
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
   dishSnapshot?: Prisma.DishSnapshotUpdateOneRequiredWithoutOrderNestedInput
+  bill?: Prisma.BillUpdateOneWithoutOrdersNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutOrderHandlerInput = {
@@ -922,6 +1058,7 @@ export type OrderUncheckedUpdateWithoutOrderHandlerInput = {
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -934,6 +1071,7 @@ export type OrderUncheckedUpdateManyWithoutOrderHandlerInput = {
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -946,6 +1084,7 @@ export type OrderCreateManyTableInput = {
   quantity: number
   note?: string | null
   orderHandlerId?: number | null
+  billId?: number | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -960,6 +1099,7 @@ export type OrderUpdateWithoutTableInput = {
   guest?: Prisma.GuestUpdateOneWithoutOrdersNestedInput
   dishSnapshot?: Prisma.DishSnapshotUpdateOneRequiredWithoutOrderNestedInput
   orderHandler?: Prisma.AccountUpdateOneWithoutOrdersNestedInput
+  bill?: Prisma.BillUpdateOneWithoutOrdersNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutTableInput = {
@@ -969,6 +1109,7 @@ export type OrderUncheckedUpdateWithoutTableInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -981,6 +1122,7 @@ export type OrderUncheckedUpdateManyWithoutTableInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -993,6 +1135,7 @@ export type OrderCreateManyGuestInput = {
   quantity: number
   note?: string | null
   orderHandlerId?: number | null
+  billId?: number | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1007,10 +1150,63 @@ export type OrderUpdateWithoutGuestInput = {
   table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
   dishSnapshot?: Prisma.DishSnapshotUpdateOneRequiredWithoutOrderNestedInput
   orderHandler?: Prisma.AccountUpdateOneWithoutOrdersNestedInput
+  bill?: Prisma.BillUpdateOneWithoutOrdersNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutGuestInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type OrderUncheckedUpdateManyWithoutGuestInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderHandlerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type OrderCreateManyBillInput = {
+  id?: number
+  guestId?: number | null
+  tableNumber?: number | null
+  dishSnapshotId: number
+  quantity: number
+  note?: string | null
+  orderHandlerId?: number | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type OrderUpdateWithoutBillInput = {
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  guest?: Prisma.GuestUpdateOneWithoutOrdersNestedInput
+  table?: Prisma.TableUpdateOneWithoutOrdersNestedInput
+  dishSnapshot?: Prisma.DishSnapshotUpdateOneRequiredWithoutOrderNestedInput
+  orderHandler?: Prisma.AccountUpdateOneWithoutOrdersNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutBillInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  guestId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1021,8 +1217,9 @@ export type OrderUncheckedUpdateWithoutGuestInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type OrderUncheckedUpdateManyWithoutGuestInput = {
+export type OrderUncheckedUpdateManyWithoutBillInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  guestId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dishSnapshotId?: Prisma.IntFieldUpdateOperationsInput | number
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1043,6 +1240,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   quantity?: boolean
   note?: boolean
   orderHandlerId?: boolean
+  billId?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1050,6 +1248,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
   dishSnapshot?: boolean | Prisma.DishSnapshotDefaultArgs<ExtArgs>
   orderHandler?: boolean | Prisma.Order$orderHandlerArgs<ExtArgs>
+  bill?: boolean | Prisma.Order$billArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1060,6 +1259,7 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   quantity?: boolean
   note?: boolean
   orderHandlerId?: boolean
+  billId?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1067,6 +1267,7 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
   dishSnapshot?: boolean | Prisma.DishSnapshotDefaultArgs<ExtArgs>
   orderHandler?: boolean | Prisma.Order$orderHandlerArgs<ExtArgs>
+  bill?: boolean | Prisma.Order$billArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1077,6 +1278,7 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   quantity?: boolean
   note?: boolean
   orderHandlerId?: boolean
+  billId?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1084,6 +1286,7 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
   dishSnapshot?: boolean | Prisma.DishSnapshotDefaultArgs<ExtArgs>
   orderHandler?: boolean | Prisma.Order$orderHandlerArgs<ExtArgs>
+  bill?: boolean | Prisma.Order$billArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectScalar = {
@@ -1094,29 +1297,33 @@ export type OrderSelectScalar = {
   quantity?: boolean
   note?: boolean
   orderHandlerId?: boolean
+  billId?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "guestId" | "tableNumber" | "dishSnapshotId" | "quantity" | "note" | "orderHandlerId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "guestId" | "tableNumber" | "dishSnapshotId" | "quantity" | "note" | "orderHandlerId" | "billId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   guest?: boolean | Prisma.Order$guestArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
   dishSnapshot?: boolean | Prisma.DishSnapshotDefaultArgs<ExtArgs>
   orderHandler?: boolean | Prisma.Order$orderHandlerArgs<ExtArgs>
+  bill?: boolean | Prisma.Order$billArgs<ExtArgs>
 }
 export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   guest?: boolean | Prisma.Order$guestArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
   dishSnapshot?: boolean | Prisma.DishSnapshotDefaultArgs<ExtArgs>
   orderHandler?: boolean | Prisma.Order$orderHandlerArgs<ExtArgs>
+  bill?: boolean | Prisma.Order$billArgs<ExtArgs>
 }
 export type OrderIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   guest?: boolean | Prisma.Order$guestArgs<ExtArgs>
   table?: boolean | Prisma.Order$tableArgs<ExtArgs>
   dishSnapshot?: boolean | Prisma.DishSnapshotDefaultArgs<ExtArgs>
   orderHandler?: boolean | Prisma.Order$orderHandlerArgs<ExtArgs>
+  bill?: boolean | Prisma.Order$billArgs<ExtArgs>
 }
 
 export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1126,6 +1333,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     table: Prisma.$TablePayload<ExtArgs> | null
     dishSnapshot: Prisma.$DishSnapshotPayload<ExtArgs>
     orderHandler: Prisma.$AccountPayload<ExtArgs> | null
+    bill: Prisma.$BillPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1135,6 +1343,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     quantity: number
     note: string | null
     orderHandlerId: number | null
+    billId: number | null
     status: string
     createdAt: Date
     updatedAt: Date
@@ -1536,6 +1745,7 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
   table<T extends Prisma.Order$tableArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$tableArgs<ExtArgs>>): Prisma.Prisma__TableClient<runtime.Types.Result.GetResult<Prisma.$TablePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   dishSnapshot<T extends Prisma.DishSnapshotDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DishSnapshotDefaultArgs<ExtArgs>>): Prisma.Prisma__DishSnapshotClient<runtime.Types.Result.GetResult<Prisma.$DishSnapshotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   orderHandler<T extends Prisma.Order$orderHandlerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$orderHandlerArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  bill<T extends Prisma.Order$billArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$billArgs<ExtArgs>>): Prisma.Prisma__BillClient<runtime.Types.Result.GetResult<Prisma.$BillPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1572,6 +1782,7 @@ export interface OrderFieldRefs {
   readonly quantity: Prisma.FieldRef<"Order", 'Int'>
   readonly note: Prisma.FieldRef<"Order", 'String'>
   readonly orderHandlerId: Prisma.FieldRef<"Order", 'Int'>
+  readonly billId: Prisma.FieldRef<"Order", 'Int'>
   readonly status: Prisma.FieldRef<"Order", 'String'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Order", 'DateTime'>
@@ -2030,6 +2241,25 @@ export type Order$orderHandlerArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   include?: Prisma.AccountInclude<ExtArgs> | null
   where?: Prisma.AccountWhereInput
+}
+
+/**
+ * Order.bill
+ */
+export type Order$billArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Bill
+   */
+  select?: Prisma.BillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Bill
+   */
+  omit?: Prisma.BillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillInclude<ExtArgs> | null
+  where?: Prisma.BillWhereInput
 }
 
 /**

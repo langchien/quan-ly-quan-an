@@ -1,7 +1,7 @@
 import z from 'zod'
-import { DishStatusValues, OrderStatusValues } from '..'
-import { AccountSchema } from './account.schema'
-import { TableSchema } from './table.schema'
+import { DishStatusValues, OrderStatusValues } from '../constants.js'
+import { AccountSchema } from './account.schema.js'
+import { TableSchema } from './table.schema.js'
 
 export const DishSnapshotSchema = z.object({
   id: z.number(),

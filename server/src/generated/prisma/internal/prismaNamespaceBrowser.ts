@@ -59,6 +59,7 @@ export const ModelName = {
   Order: 'Order',
   RefreshToken: 'RefreshToken',
   Guest: 'Guest',
+  Bill: 'Bill',
   Socket: 'Socket'
 } as const
 
@@ -154,6 +155,7 @@ export const OrderScalarFieldEnum = {
   quantity: 'quantity',
   note: 'note',
   orderHandlerId: 'orderHandlerId',
+  billId: 'billId',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -183,6 +185,25 @@ export const GuestScalarFieldEnum = {
 } as const
 
 export type GuestScalarFieldEnum = (typeof GuestScalarFieldEnum)[keyof typeof GuestScalarFieldEnum]
+
+
+export const BillScalarFieldEnum = {
+  id: 'id',
+  orderCode: 'orderCode',
+  guestId: 'guestId',
+  tableNumber: 'tableNumber',
+  orderHandlerId: 'orderHandlerId',
+  totalAmount: 'totalAmount',
+  status: 'status',
+  paymentMethod: 'paymentMethod',
+  paymentLinkId: 'paymentLinkId',
+  checkoutUrl: 'checkoutUrl',
+  qrCode: 'qrCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillScalarFieldEnum = (typeof BillScalarFieldEnum)[keyof typeof BillScalarFieldEnum]
 
 
 export const SocketScalarFieldEnum = {

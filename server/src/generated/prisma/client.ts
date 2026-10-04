@@ -82,6 +82,11 @@ export type RefreshToken = Prisma.RefreshTokenModel
  */
 export type Guest = Prisma.GuestModel
 /**
+ * Model Bill
+ * 
+ */
+export type Bill = Prisma.BillModel
+/**
  * Model Socket
  * 
  */

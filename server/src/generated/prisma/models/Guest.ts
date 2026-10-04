@@ -238,6 +238,7 @@ export type GuestWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Guest"> | Date | string
   table?: Prisma.XOR<Prisma.TableNullableScalarRelationFilter, Prisma.TableWhereInput> | null
   orders?: Prisma.OrderListRelationFilter
+  bills?: Prisma.BillListRelationFilter
   sockets?: Prisma.SocketListRelationFilter
 }
 
@@ -251,6 +252,7 @@ export type GuestOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   table?: Prisma.TableOrderByWithRelationInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
+  bills?: Prisma.BillOrderByRelationAggregateInput
   sockets?: Prisma.SocketOrderByRelationAggregateInput
 }
 
@@ -267,6 +269,7 @@ export type GuestWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Guest"> | Date | string
   table?: Prisma.XOR<Prisma.TableNullableScalarRelationFilter, Prisma.TableWhereInput> | null
   orders?: Prisma.OrderListRelationFilter
+  bills?: Prisma.BillListRelationFilter
   sockets?: Prisma.SocketListRelationFilter
 }, "id">
 
@@ -306,6 +309,7 @@ export type GuestCreateInput = {
   updatedAt?: Date | string
   table?: Prisma.TableCreateNestedOneWithoutGuestsInput
   orders?: Prisma.OrderCreateNestedManyWithoutGuestInput
+  bills?: Prisma.BillCreateNestedManyWithoutGuestInput
   sockets?: Prisma.SocketCreateNestedManyWithoutGuestInput
 }
 
@@ -318,6 +322,7 @@ export type GuestUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGuestInput
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutGuestInput
   sockets?: Prisma.SocketUncheckedCreateNestedManyWithoutGuestInput
 }
 
@@ -329,6 +334,7 @@ export type GuestUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutGuestsNestedInput
   orders?: Prisma.OrderUpdateManyWithoutGuestNestedInput
+  bills?: Prisma.BillUpdateManyWithoutGuestNestedInput
   sockets?: Prisma.SocketUpdateManyWithoutGuestNestedInput
 }
 
@@ -341,6 +347,7 @@ export type GuestUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutGuestNestedInput
+  bills?: Prisma.BillUncheckedUpdateManyWithoutGuestNestedInput
   sockets?: Prisma.SocketUncheckedUpdateManyWithoutGuestNestedInput
 }
 
@@ -489,6 +496,22 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type GuestCreateNestedOneWithoutBillsInput = {
+  create?: Prisma.XOR<Prisma.GuestCreateWithoutBillsInput, Prisma.GuestUncheckedCreateWithoutBillsInput>
+  connectOrCreate?: Prisma.GuestCreateOrConnectWithoutBillsInput
+  connect?: Prisma.GuestWhereUniqueInput
+}
+
+export type GuestUpdateOneWithoutBillsNestedInput = {
+  create?: Prisma.XOR<Prisma.GuestCreateWithoutBillsInput, Prisma.GuestUncheckedCreateWithoutBillsInput>
+  connectOrCreate?: Prisma.GuestCreateOrConnectWithoutBillsInput
+  upsert?: Prisma.GuestUpsertWithoutBillsInput
+  disconnect?: Prisma.GuestWhereInput | boolean
+  delete?: Prisma.GuestWhereInput | boolean
+  connect?: Prisma.GuestWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GuestUpdateToOneWithWhereWithoutBillsInput, Prisma.GuestUpdateWithoutBillsInput>, Prisma.GuestUncheckedUpdateWithoutBillsInput>
+}
+
 export type GuestCreateNestedOneWithoutSocketsInput = {
   create?: Prisma.XOR<Prisma.GuestCreateWithoutSocketsInput, Prisma.GuestUncheckedCreateWithoutSocketsInput>
   connectOrCreate?: Prisma.GuestCreateOrConnectWithoutSocketsInput
@@ -512,6 +535,7 @@ export type GuestCreateWithoutTableInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutGuestInput
+  bills?: Prisma.BillCreateNestedManyWithoutGuestInput
   sockets?: Prisma.SocketCreateNestedManyWithoutGuestInput
 }
 
@@ -523,6 +547,7 @@ export type GuestUncheckedCreateWithoutTableInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGuestInput
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutGuestInput
   sockets?: Prisma.SocketUncheckedCreateNestedManyWithoutGuestInput
 }
 
@@ -572,6 +597,7 @@ export type GuestCreateWithoutOrdersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   table?: Prisma.TableCreateNestedOneWithoutGuestsInput
+  bills?: Prisma.BillCreateNestedManyWithoutGuestInput
   sockets?: Prisma.SocketCreateNestedManyWithoutGuestInput
 }
 
@@ -583,6 +609,7 @@ export type GuestUncheckedCreateWithoutOrdersInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutGuestInput
   sockets?: Prisma.SocketUncheckedCreateNestedManyWithoutGuestInput
 }
 
@@ -609,6 +636,7 @@ export type GuestUpdateWithoutOrdersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutGuestsNestedInput
+  bills?: Prisma.BillUpdateManyWithoutGuestNestedInput
   sockets?: Prisma.SocketUpdateManyWithoutGuestNestedInput
 }
 
@@ -620,6 +648,69 @@ export type GuestUncheckedUpdateWithoutOrdersInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bills?: Prisma.BillUncheckedUpdateManyWithoutGuestNestedInput
+  sockets?: Prisma.SocketUncheckedUpdateManyWithoutGuestNestedInput
+}
+
+export type GuestCreateWithoutBillsInput = {
+  name: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  table?: Prisma.TableCreateNestedOneWithoutGuestsInput
+  orders?: Prisma.OrderCreateNestedManyWithoutGuestInput
+  sockets?: Prisma.SocketCreateNestedManyWithoutGuestInput
+}
+
+export type GuestUncheckedCreateWithoutBillsInput = {
+  id?: number
+  name: string
+  tableNumber?: number | null
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGuestInput
+  sockets?: Prisma.SocketUncheckedCreateNestedManyWithoutGuestInput
+}
+
+export type GuestCreateOrConnectWithoutBillsInput = {
+  where: Prisma.GuestWhereUniqueInput
+  create: Prisma.XOR<Prisma.GuestCreateWithoutBillsInput, Prisma.GuestUncheckedCreateWithoutBillsInput>
+}
+
+export type GuestUpsertWithoutBillsInput = {
+  update: Prisma.XOR<Prisma.GuestUpdateWithoutBillsInput, Prisma.GuestUncheckedUpdateWithoutBillsInput>
+  create: Prisma.XOR<Prisma.GuestCreateWithoutBillsInput, Prisma.GuestUncheckedCreateWithoutBillsInput>
+  where?: Prisma.GuestWhereInput
+}
+
+export type GuestUpdateToOneWithWhereWithoutBillsInput = {
+  where?: Prisma.GuestWhereInput
+  data: Prisma.XOR<Prisma.GuestUpdateWithoutBillsInput, Prisma.GuestUncheckedUpdateWithoutBillsInput>
+}
+
+export type GuestUpdateWithoutBillsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  table?: Prisma.TableUpdateOneWithoutGuestsNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutGuestNestedInput
+  sockets?: Prisma.SocketUpdateManyWithoutGuestNestedInput
+}
+
+export type GuestUncheckedUpdateWithoutBillsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tableNumber?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutGuestNestedInput
   sockets?: Prisma.SocketUncheckedUpdateManyWithoutGuestNestedInput
 }
 
@@ -631,6 +722,7 @@ export type GuestCreateWithoutSocketsInput = {
   updatedAt?: Date | string
   table?: Prisma.TableCreateNestedOneWithoutGuestsInput
   orders?: Prisma.OrderCreateNestedManyWithoutGuestInput
+  bills?: Prisma.BillCreateNestedManyWithoutGuestInput
 }
 
 export type GuestUncheckedCreateWithoutSocketsInput = {
@@ -642,6 +734,7 @@ export type GuestUncheckedCreateWithoutSocketsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutGuestInput
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutGuestInput
 }
 
 export type GuestCreateOrConnectWithoutSocketsInput = {
@@ -668,6 +761,7 @@ export type GuestUpdateWithoutSocketsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   table?: Prisma.TableUpdateOneWithoutGuestsNestedInput
   orders?: Prisma.OrderUpdateManyWithoutGuestNestedInput
+  bills?: Prisma.BillUpdateManyWithoutGuestNestedInput
 }
 
 export type GuestUncheckedUpdateWithoutSocketsInput = {
@@ -679,6 +773,7 @@ export type GuestUncheckedUpdateWithoutSocketsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutGuestNestedInput
+  bills?: Prisma.BillUncheckedUpdateManyWithoutGuestNestedInput
 }
 
 export type GuestCreateManyTableInput = {
@@ -697,6 +792,7 @@ export type GuestUpdateWithoutTableInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutGuestNestedInput
+  bills?: Prisma.BillUpdateManyWithoutGuestNestedInput
   sockets?: Prisma.SocketUpdateManyWithoutGuestNestedInput
 }
 
@@ -708,6 +804,7 @@ export type GuestUncheckedUpdateWithoutTableInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutGuestNestedInput
+  bills?: Prisma.BillUncheckedUpdateManyWithoutGuestNestedInput
   sockets?: Prisma.SocketUncheckedUpdateManyWithoutGuestNestedInput
 }
 
@@ -727,11 +824,13 @@ export type GuestUncheckedUpdateManyWithoutTableInput = {
 
 export type GuestCountOutputType = {
   orders: number
+  bills: number
   sockets: number
 }
 
 export type GuestCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | GuestCountOutputTypeCountOrdersArgs
+  bills?: boolean | GuestCountOutputTypeCountBillsArgs
   sockets?: boolean | GuestCountOutputTypeCountSocketsArgs
 }
 
@@ -755,6 +854,13 @@ export type GuestCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Ex
 /**
  * GuestCountOutputType without action
  */
+export type GuestCountOutputTypeCountBillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillWhereInput
+}
+
+/**
+ * GuestCountOutputType without action
+ */
 export type GuestCountOutputTypeCountSocketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SocketWhereInput
 }
@@ -770,6 +876,7 @@ export type GuestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   updatedAt?: boolean
   table?: boolean | Prisma.Guest$tableArgs<ExtArgs>
   orders?: boolean | Prisma.Guest$ordersArgs<ExtArgs>
+  bills?: boolean | Prisma.Guest$billsArgs<ExtArgs>
   sockets?: boolean | Prisma.Guest$socketsArgs<ExtArgs>
   _count?: boolean | Prisma.GuestCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["guest"]>
@@ -810,6 +917,7 @@ export type GuestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type GuestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   table?: boolean | Prisma.Guest$tableArgs<ExtArgs>
   orders?: boolean | Prisma.Guest$ordersArgs<ExtArgs>
+  bills?: boolean | Prisma.Guest$billsArgs<ExtArgs>
   sockets?: boolean | Prisma.Guest$socketsArgs<ExtArgs>
   _count?: boolean | Prisma.GuestCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -825,6 +933,7 @@ export type $GuestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     table: Prisma.$TablePayload<ExtArgs> | null
     orders: Prisma.$OrderPayload<ExtArgs>[]
+    bills: Prisma.$BillPayload<ExtArgs>[]
     sockets: Prisma.$SocketPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1231,6 +1340,7 @@ export interface Prisma__GuestClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   table<T extends Prisma.Guest$tableArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guest$tableArgs<ExtArgs>>): Prisma.Prisma__TableClient<runtime.Types.Result.GetResult<Prisma.$TablePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   orders<T extends Prisma.Guest$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guest$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bills<T extends Prisma.Guest$billsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guest$billsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sockets<T extends Prisma.Guest$socketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guest$socketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SocketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1709,6 +1819,30 @@ export type Guest$ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
+}
+
+/**
+ * Guest.bills
+ */
+export type Guest$billsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Bill
+   */
+  select?: Prisma.BillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Bill
+   */
+  omit?: Prisma.BillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillInclude<ExtArgs> | null
+  where?: Prisma.BillWhereInput
+  orderBy?: Prisma.BillOrderByWithRelationInput | Prisma.BillOrderByWithRelationInput[]
+  cursor?: Prisma.BillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillScalarFieldEnum | Prisma.BillScalarFieldEnum[]
 }
 
 /**

@@ -1,6 +1,6 @@
 import z from 'zod'
-import { DishStatusValues } from '..'
-import { CategorySchema } from './category.schema'
+import { DishStatusValues } from '../constants.js'
+import { CategorySchema } from './category.schema.js'
 
 export const CreateDishBody = z.object({
   name: z.string().min(1).max(256),

@@ -186,6 +186,9 @@ importers:
       '@nestjs/websockets':
         specifier: ^12.0.1
         version: 12.1.0(@nestjs/common@12.1.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@7.2.0))(@nestjs/core@12.1.0)(@nestjs/platform-socket.io@12.1.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@payos/node':
+        specifier: ^2.0.5
+        version: 2.0.5
       '@prisma/adapter-pg':
         specifier: 7.10.0
         version: 7.10.0
@@ -289,6 +292,10 @@ importers:
       zod:
         specifier: ^4.6.5
         version: 4.6.5
+    devDependencies:
+      typescript:
+        specifier: ^6.0.2
+        version: 6.0.3
 
 packages:
 
@@ -1533,6 +1540,9 @@ packages:
 
   '@paralleldrive/cuid2@2.3.1':
     resolution: {integrity: sha512-XO7cAxhnTZl0Yggq6jOgjiOHhbgcO4NqFqwSmQpjK3b6TEE6Uj/jfSk6wzYyemh3+I0sHirKSetjQwn5cZktFw==}
+
+  '@payos/node@2.0.5':
+    resolution: {integrity: sha512-y2dRfqVMerbBr0gapFqNA+QwzJmhC0Hi0+IaXhOsXEOBRjIe9ZgeFqI3JBF3mXSM3YSf5HAjTAAk2XYtCvMpBQ==}
 
   '@prisma/adapter-pg@7.10.0':
     resolution: {integrity: sha512-N7nwSor0HO1Kz6xBv0TPAjAPysKK0fac6p4fVN3ensLOuzc/83Fgmln5k92eK/cvzqdkSR/2kkAqlbcdwVrwpw==}
@@ -6727,6 +6737,8 @@ snapshots:
   '@paralleldrive/cuid2@2.3.1':
     dependencies:
       '@noble/hashes': 1.8.0
+
+  '@payos/node@2.0.5': {}
 
   '@prisma/adapter-pg@7.10.0':
     dependencies:

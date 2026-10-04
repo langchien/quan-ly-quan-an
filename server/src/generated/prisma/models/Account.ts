@@ -253,6 +253,7 @@ export type AccountWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   orders?: Prisma.OrderListRelationFilter
+  bills?: Prisma.BillListRelationFilter
   employees?: Prisma.AccountListRelationFilter
   owner?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
   refreshToken?: Prisma.RefreshTokenListRelationFilter
@@ -270,6 +271,7 @@ export type AccountOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   orders?: Prisma.OrderOrderByRelationAggregateInput
+  bills?: Prisma.BillOrderByRelationAggregateInput
   employees?: Prisma.AccountOrderByRelationAggregateInput
   owner?: Prisma.AccountOrderByWithRelationInput
   refreshToken?: Prisma.RefreshTokenOrderByRelationAggregateInput
@@ -290,6 +292,7 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   orders?: Prisma.OrderListRelationFilter
+  bills?: Prisma.BillListRelationFilter
   employees?: Prisma.AccountListRelationFilter
   owner?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
   refreshToken?: Prisma.RefreshTokenListRelationFilter
@@ -337,6 +340,7 @@ export type AccountCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutOrderHandlerInput
+  bills?: Prisma.BillCreateNestedManyWithoutOrderHandlerInput
   employees?: Prisma.AccountCreateNestedManyWithoutOwnerInput
   owner?: Prisma.AccountCreateNestedOneWithoutEmployeesInput
   refreshToken?: Prisma.RefreshTokenCreateNestedManyWithoutAccountInput
@@ -354,6 +358,7 @@ export type AccountUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrderHandlerInput
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutOrderHandlerInput
   employees?: Prisma.AccountUncheckedCreateNestedManyWithoutOwnerInput
   refreshToken?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutAccountInput
   sockets?: Prisma.SocketUncheckedCreateNestedManyWithoutAccountInput
@@ -368,6 +373,7 @@ export type AccountUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutOrderHandlerNestedInput
+  bills?: Prisma.BillUpdateManyWithoutOrderHandlerNestedInput
   employees?: Prisma.AccountUpdateManyWithoutOwnerNestedInput
   owner?: Prisma.AccountUpdateOneWithoutEmployeesNestedInput
   refreshToken?: Prisma.RefreshTokenUpdateManyWithoutAccountNestedInput
@@ -385,6 +391,7 @@ export type AccountUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutOrderHandlerNestedInput
+  bills?: Prisma.BillUncheckedUpdateManyWithoutOrderHandlerNestedInput
   employees?: Prisma.AccountUncheckedUpdateManyWithoutOwnerNestedInput
   refreshToken?: Prisma.RefreshTokenUncheckedUpdateManyWithoutAccountNestedInput
   sockets?: Prisma.SocketUncheckedUpdateManyWithoutAccountNestedInput
@@ -606,6 +613,22 @@ export type AccountUpdateOneRequiredWithoutRefreshTokenNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutRefreshTokenInput, Prisma.AccountUpdateWithoutRefreshTokenInput>, Prisma.AccountUncheckedUpdateWithoutRefreshTokenInput>
 }
 
+export type AccountCreateNestedOneWithoutBillsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutBillsInput, Prisma.AccountUncheckedCreateWithoutBillsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutBillsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneWithoutBillsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutBillsInput, Prisma.AccountUncheckedCreateWithoutBillsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutBillsInput
+  upsert?: Prisma.AccountUpsertWithoutBillsInput
+  disconnect?: Prisma.AccountWhereInput | boolean
+  delete?: Prisma.AccountWhereInput | boolean
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutBillsInput, Prisma.AccountUpdateWithoutBillsInput>, Prisma.AccountUncheckedUpdateWithoutBillsInput>
+}
+
 export type AccountCreateNestedOneWithoutSocketsInput = {
   create?: Prisma.XOR<Prisma.AccountCreateWithoutSocketsInput, Prisma.AccountUncheckedCreateWithoutSocketsInput>
   connectOrCreate?: Prisma.AccountCreateOrConnectWithoutSocketsInput
@@ -631,6 +654,7 @@ export type AccountCreateWithoutOwnerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutOrderHandlerInput
+  bills?: Prisma.BillCreateNestedManyWithoutOrderHandlerInput
   employees?: Prisma.AccountCreateNestedManyWithoutOwnerInput
   refreshToken?: Prisma.RefreshTokenCreateNestedManyWithoutAccountInput
   sockets?: Prisma.SocketCreateNestedManyWithoutAccountInput
@@ -646,6 +670,7 @@ export type AccountUncheckedCreateWithoutOwnerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrderHandlerInput
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutOrderHandlerInput
   employees?: Prisma.AccountUncheckedCreateNestedManyWithoutOwnerInput
   refreshToken?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutAccountInput
   sockets?: Prisma.SocketUncheckedCreateNestedManyWithoutAccountInput
@@ -670,6 +695,7 @@ export type AccountCreateWithoutEmployeesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutOrderHandlerInput
+  bills?: Prisma.BillCreateNestedManyWithoutOrderHandlerInput
   owner?: Prisma.AccountCreateNestedOneWithoutEmployeesInput
   refreshToken?: Prisma.RefreshTokenCreateNestedManyWithoutAccountInput
   sockets?: Prisma.SocketCreateNestedManyWithoutAccountInput
@@ -686,6 +712,7 @@ export type AccountUncheckedCreateWithoutEmployeesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrderHandlerInput
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutOrderHandlerInput
   refreshToken?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutAccountInput
   sockets?: Prisma.SocketUncheckedCreateNestedManyWithoutAccountInput
 }
@@ -746,6 +773,7 @@ export type AccountUpdateWithoutEmployeesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutOrderHandlerNestedInput
+  bills?: Prisma.BillUpdateManyWithoutOrderHandlerNestedInput
   owner?: Prisma.AccountUpdateOneWithoutEmployeesNestedInput
   refreshToken?: Prisma.RefreshTokenUpdateManyWithoutAccountNestedInput
   sockets?: Prisma.SocketUpdateManyWithoutAccountNestedInput
@@ -762,6 +790,7 @@ export type AccountUncheckedUpdateWithoutEmployeesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutOrderHandlerNestedInput
+  bills?: Prisma.BillUncheckedUpdateManyWithoutOrderHandlerNestedInput
   refreshToken?: Prisma.RefreshTokenUncheckedUpdateManyWithoutAccountNestedInput
   sockets?: Prisma.SocketUncheckedUpdateManyWithoutAccountNestedInput
 }
@@ -774,6 +803,7 @@ export type AccountCreateWithoutOrdersInput = {
   role?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  bills?: Prisma.BillCreateNestedManyWithoutOrderHandlerInput
   employees?: Prisma.AccountCreateNestedManyWithoutOwnerInput
   owner?: Prisma.AccountCreateNestedOneWithoutEmployeesInput
   refreshToken?: Prisma.RefreshTokenCreateNestedManyWithoutAccountInput
@@ -790,6 +820,7 @@ export type AccountUncheckedCreateWithoutOrdersInput = {
   ownerId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutOrderHandlerInput
   employees?: Prisma.AccountUncheckedCreateNestedManyWithoutOwnerInput
   refreshToken?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutAccountInput
   sockets?: Prisma.SocketUncheckedCreateNestedManyWithoutAccountInput
@@ -819,6 +850,7 @@ export type AccountUpdateWithoutOrdersInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bills?: Prisma.BillUpdateManyWithoutOrderHandlerNestedInput
   employees?: Prisma.AccountUpdateManyWithoutOwnerNestedInput
   owner?: Prisma.AccountUpdateOneWithoutEmployeesNestedInput
   refreshToken?: Prisma.RefreshTokenUpdateManyWithoutAccountNestedInput
@@ -835,6 +867,7 @@ export type AccountUncheckedUpdateWithoutOrdersInput = {
   ownerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bills?: Prisma.BillUncheckedUpdateManyWithoutOrderHandlerNestedInput
   employees?: Prisma.AccountUncheckedUpdateManyWithoutOwnerNestedInput
   refreshToken?: Prisma.RefreshTokenUncheckedUpdateManyWithoutAccountNestedInput
   sockets?: Prisma.SocketUncheckedUpdateManyWithoutAccountNestedInput
@@ -849,6 +882,7 @@ export type AccountCreateWithoutRefreshTokenInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutOrderHandlerInput
+  bills?: Prisma.BillCreateNestedManyWithoutOrderHandlerInput
   employees?: Prisma.AccountCreateNestedManyWithoutOwnerInput
   owner?: Prisma.AccountCreateNestedOneWithoutEmployeesInput
   sockets?: Prisma.SocketCreateNestedManyWithoutAccountInput
@@ -865,6 +899,7 @@ export type AccountUncheckedCreateWithoutRefreshTokenInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrderHandlerInput
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutOrderHandlerInput
   employees?: Prisma.AccountUncheckedCreateNestedManyWithoutOwnerInput
   sockets?: Prisma.SocketUncheckedCreateNestedManyWithoutAccountInput
 }
@@ -894,6 +929,7 @@ export type AccountUpdateWithoutRefreshTokenInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutOrderHandlerNestedInput
+  bills?: Prisma.BillUpdateManyWithoutOrderHandlerNestedInput
   employees?: Prisma.AccountUpdateManyWithoutOwnerNestedInput
   owner?: Prisma.AccountUpdateOneWithoutEmployeesNestedInput
   sockets?: Prisma.SocketUpdateManyWithoutAccountNestedInput
@@ -910,7 +946,86 @@ export type AccountUncheckedUpdateWithoutRefreshTokenInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutOrderHandlerNestedInput
+  bills?: Prisma.BillUncheckedUpdateManyWithoutOrderHandlerNestedInput
   employees?: Prisma.AccountUncheckedUpdateManyWithoutOwnerNestedInput
+  sockets?: Prisma.SocketUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutBillsInput = {
+  name: string
+  email: string
+  password: string
+  avatar?: string | null
+  role?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderCreateNestedManyWithoutOrderHandlerInput
+  employees?: Prisma.AccountCreateNestedManyWithoutOwnerInput
+  owner?: Prisma.AccountCreateNestedOneWithoutEmployeesInput
+  refreshToken?: Prisma.RefreshTokenCreateNestedManyWithoutAccountInput
+  sockets?: Prisma.SocketCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutBillsInput = {
+  id?: number
+  name: string
+  email: string
+  password: string
+  avatar?: string | null
+  role?: string
+  ownerId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrderHandlerInput
+  employees?: Prisma.AccountUncheckedCreateNestedManyWithoutOwnerInput
+  refreshToken?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutAccountInput
+  sockets?: Prisma.SocketUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutBillsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutBillsInput, Prisma.AccountUncheckedCreateWithoutBillsInput>
+}
+
+export type AccountUpsertWithoutBillsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutBillsInput, Prisma.AccountUncheckedUpdateWithoutBillsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutBillsInput, Prisma.AccountUncheckedCreateWithoutBillsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutBillsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutBillsInput, Prisma.AccountUncheckedUpdateWithoutBillsInput>
+}
+
+export type AccountUpdateWithoutBillsInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUpdateManyWithoutOrderHandlerNestedInput
+  employees?: Prisma.AccountUpdateManyWithoutOwnerNestedInput
+  owner?: Prisma.AccountUpdateOneWithoutEmployeesNestedInput
+  refreshToken?: Prisma.RefreshTokenUpdateManyWithoutAccountNestedInput
+  sockets?: Prisma.SocketUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutBillsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutOrderHandlerNestedInput
+  employees?: Prisma.AccountUncheckedUpdateManyWithoutOwnerNestedInput
+  refreshToken?: Prisma.RefreshTokenUncheckedUpdateManyWithoutAccountNestedInput
   sockets?: Prisma.SocketUncheckedUpdateManyWithoutAccountNestedInput
 }
 
@@ -923,6 +1038,7 @@ export type AccountCreateWithoutSocketsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderCreateNestedManyWithoutOrderHandlerInput
+  bills?: Prisma.BillCreateNestedManyWithoutOrderHandlerInput
   employees?: Prisma.AccountCreateNestedManyWithoutOwnerInput
   owner?: Prisma.AccountCreateNestedOneWithoutEmployeesInput
   refreshToken?: Prisma.RefreshTokenCreateNestedManyWithoutAccountInput
@@ -939,6 +1055,7 @@ export type AccountUncheckedCreateWithoutSocketsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutOrderHandlerInput
+  bills?: Prisma.BillUncheckedCreateNestedManyWithoutOrderHandlerInput
   employees?: Prisma.AccountUncheckedCreateNestedManyWithoutOwnerInput
   refreshToken?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutAccountInput
 }
@@ -968,6 +1085,7 @@ export type AccountUpdateWithoutSocketsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutOrderHandlerNestedInput
+  bills?: Prisma.BillUpdateManyWithoutOrderHandlerNestedInput
   employees?: Prisma.AccountUpdateManyWithoutOwnerNestedInput
   owner?: Prisma.AccountUpdateOneWithoutEmployeesNestedInput
   refreshToken?: Prisma.RefreshTokenUpdateManyWithoutAccountNestedInput
@@ -984,6 +1102,7 @@ export type AccountUncheckedUpdateWithoutSocketsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutOrderHandlerNestedInput
+  bills?: Prisma.BillUncheckedUpdateManyWithoutOrderHandlerNestedInput
   employees?: Prisma.AccountUncheckedUpdateManyWithoutOwnerNestedInput
   refreshToken?: Prisma.RefreshTokenUncheckedUpdateManyWithoutAccountNestedInput
 }
@@ -1008,6 +1127,7 @@ export type AccountUpdateWithoutOwnerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUpdateManyWithoutOrderHandlerNestedInput
+  bills?: Prisma.BillUpdateManyWithoutOrderHandlerNestedInput
   employees?: Prisma.AccountUpdateManyWithoutOwnerNestedInput
   refreshToken?: Prisma.RefreshTokenUpdateManyWithoutAccountNestedInput
   sockets?: Prisma.SocketUpdateManyWithoutAccountNestedInput
@@ -1023,6 +1143,7 @@ export type AccountUncheckedUpdateWithoutOwnerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutOrderHandlerNestedInput
+  bills?: Prisma.BillUncheckedUpdateManyWithoutOrderHandlerNestedInput
   employees?: Prisma.AccountUncheckedUpdateManyWithoutOwnerNestedInput
   refreshToken?: Prisma.RefreshTokenUncheckedUpdateManyWithoutAccountNestedInput
   sockets?: Prisma.SocketUncheckedUpdateManyWithoutAccountNestedInput
@@ -1046,6 +1167,7 @@ export type AccountUncheckedUpdateManyWithoutOwnerInput = {
 
 export type AccountCountOutputType = {
   orders: number
+  bills: number
   employees: number
   refreshToken: number
   sockets: number
@@ -1053,6 +1175,7 @@ export type AccountCountOutputType = {
 
 export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | AccountCountOutputTypeCountOrdersArgs
+  bills?: boolean | AccountCountOutputTypeCountBillsArgs
   employees?: boolean | AccountCountOutputTypeCountEmployeesArgs
   refreshToken?: boolean | AccountCountOutputTypeCountRefreshTokenArgs
   sockets?: boolean | AccountCountOutputTypeCountSocketsArgs
@@ -1073,6 +1196,13 @@ export type AccountCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
  */
 export type AccountCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OrderWhereInput
+}
+
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountBillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillWhereInput
 }
 
 /**
@@ -1108,6 +1238,7 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   orders?: boolean | Prisma.Account$ordersArgs<ExtArgs>
+  bills?: boolean | Prisma.Account$billsArgs<ExtArgs>
   employees?: boolean | Prisma.Account$employeesArgs<ExtArgs>
   owner?: boolean | Prisma.Account$ownerArgs<ExtArgs>
   refreshToken?: boolean | Prisma.Account$refreshTokenArgs<ExtArgs>
@@ -1156,6 +1287,7 @@ export type AccountSelectScalar = {
 export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "avatar" | "role" | "ownerId" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
 export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | Prisma.Account$ordersArgs<ExtArgs>
+  bills?: boolean | Prisma.Account$billsArgs<ExtArgs>
   employees?: boolean | Prisma.Account$employeesArgs<ExtArgs>
   owner?: boolean | Prisma.Account$ownerArgs<ExtArgs>
   refreshToken?: boolean | Prisma.Account$refreshTokenArgs<ExtArgs>
@@ -1173,6 +1305,7 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Account"
   objects: {
     orders: Prisma.$OrderPayload<ExtArgs>[]
+    bills: Prisma.$BillPayload<ExtArgs>[]
     employees: Prisma.$AccountPayload<ExtArgs>[]
     owner: Prisma.$AccountPayload<ExtArgs> | null
     refreshToken: Prisma.$RefreshTokenPayload<ExtArgs>[]
@@ -1583,6 +1716,7 @@ readonly fields: AccountFieldRefs;
 export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   orders<T extends Prisma.Account$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bills<T extends Prisma.Account$billsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$billsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employees<T extends Prisma.Account$employeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   owner<T extends Prisma.Account$ownerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$ownerArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   refreshToken<T extends Prisma.Account$refreshTokenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$refreshTokenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2047,6 +2181,30 @@ export type Account$ordersArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
+}
+
+/**
+ * Account.bills
+ */
+export type Account$billsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Bill
+   */
+  select?: Prisma.BillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Bill
+   */
+  omit?: Prisma.BillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillInclude<ExtArgs> | null
+  where?: Prisma.BillWhereInput
+  orderBy?: Prisma.BillOrderByWithRelationInput | Prisma.BillOrderByWithRelationInput[]
+  cursor?: Prisma.BillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillScalarFieldEnum | Prisma.BillScalarFieldEnum[]
 }
 
 /**
