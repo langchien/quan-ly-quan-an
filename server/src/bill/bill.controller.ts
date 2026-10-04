@@ -81,6 +81,18 @@ export class BillController {
   }
 
   /**
+   * GET /bill/history
+   * Guest xem lịch sử hóa đơn đã thanh toán của chính mình.
+   * Lưu ý: phải khai báo TRƯỚC route ':billId'.
+   */
+  @Get('history')
+  @UseGuards(GuestAccessTokenGuard)
+  async getGuestBills(@ActiveUser('userId') guestId: number) {
+    const bills = await this.billService.getGuestBills(guestId)
+    return { message: 'Lấy lịch sử hóa đơn thành công', data: bills }
+  }
+
+  /**
    * GET /bill/:billId
    * Guest xem chi tiết hóa đơn của chính mình.
    */

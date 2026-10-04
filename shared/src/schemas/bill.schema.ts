@@ -81,3 +81,10 @@ export const GetBillRes = z.object({
 });
 
 export type GetBillResType = z.TypeOf<typeof GetBillRes>;
+
+export const GetGuestBillsRes = z.object({
+  message: z.string(),
+  data: z.array(BillWithOrdersSchema),
+});
+
+export type GetGuestBillsResType = z.TypeOf<typeof GetGuestBillsRes>;

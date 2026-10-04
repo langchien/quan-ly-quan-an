@@ -337,6 +337,26 @@ export class BillService {
   }
 
   /**
+   * Lịch sử hóa đơn đã thanh toán của guest đang đăng nhập (mới nhất trước).
+   * Chỉ trả Bill Paid — bill Pending/Cancelled là trạng thái trung gian, không hiển thị.
+   */
+  async getGuestBills(guestId: number) {
+    const bills = await this.prisma.bill.findMany({
+      where: { guestId, status: BillStatus.Paid },
+      include: {
+        orders: {
+          include: { dishSnapshot: true, orderHandler: true, guest: true },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    // Chuyển BigInt sang Number cho response JSON
+    return bills.map(bill => ({ ...bill, orderCode: Number(bill.orderCode) }))
+  }
+
+  /**
    * Lấy chi tiết hóa đơn kèm danh sách món.
    * Chỉ trả về hóa đơn thuộc về guest đang đăng nhập (chống IDOR).
    */

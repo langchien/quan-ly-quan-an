@@ -1,9 +1,12 @@
+import { BillHistoryList, BillHistorySkeleton } from '@/components/guest/bill-history-list'
 import { CallStaffButton } from '@/components/guest/call-staff-button'
 import { OrdersList, OrdersListSkeleton } from '@/components/guest/orders-list'
 import { PayosQrDialog } from '@/components/guest/payos-qr-dialog'
 import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useSocketEvents } from '@/hooks/use-socket-event'
 import { socket } from '@/lib/socket'
+import { useGuestBillsQuery } from '@/queries/use-bill'
 import { useGuestGetOrdersQuery, useGuestLogoutMutation } from '@/queries/use-guest'
 import { useAuthStore } from '@/store/useAuthStore'
 import { OrderStatus, Role } from '@app/shared'
@@ -32,9 +35,16 @@ function OrdersPage() {
   const logout = useAuthStore(s => s.logout)
 
   const { data: orders, isLoading, refetch } = useGuestGetOrdersQuery()
+  const { data: bills, isLoading: isBillsLoading, refetch: refetchBills } = useGuestBillsQuery()
   const logoutMutation = useGuestLogoutMutation()
   const refreshToken = useAuthStore(s => s.refreshToken)
   const [payosDialogOpen, setPayosDialogOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState<string>('current')
+
+  // Đơn hiện tại = chưa thanh toán (đơn Paid chuyển sang tab Lịch sử hóa đơn)
+  const currentOrders = (orders ?? []).filter(
+    (o: { status: string }) => o.status !== OrderStatus.Paid
+  )
 
   // Tính toán đơn chưa thanh toán
   const unpaidOrders = (orders ?? []).filter(
@@ -60,6 +70,7 @@ function OrdersPage() {
     },
     payment: paidOrders => {
       refetch()
+      refetchBills()
       setPayosDialogOpen(false) // Tự đóng dialog QR khi thanh toán xong
       const orders = paidOrders
       toast.success('Thanh toán thành công! 🎉', {
@@ -111,7 +122,10 @@ function OrdersPage() {
             <Button
               variant='outline'
               size='icon'
-              onClick={() => refetch()}
+              onClick={() => {
+                refetch()
+                refetchBills()
+              }}
               disabled={isLoading}
               title='Làm mới'
               id='refresh-orders-btn'
@@ -134,51 +148,88 @@ function OrdersPage() {
         </div>
 
         {/* Nội dung */}
-        {isLoading ? (
-          <OrdersListSkeleton />
-        ) : orders && orders.length > 0 ? (
-          <>
-            <OrdersList orders={orders} />
+        <Tabs value={activeTab} onValueChange={value => setActiveTab(String(value))}>
+          <TabsList className='mb-4 w-full max-w-sm'>
+            <TabsTrigger value='current' id='orders-tab-current'>
+              Đơn hiện tại
+              {currentOrders.length > 0 && (
+                <span className='rounded-full bg-orange-500 px-1.5 text-xs text-white'>
+                  {currentOrders.length}
+                </span>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value='history' id='orders-tab-history'>
+              Lịch sử hóa đơn
+            </TabsTrigger>
+          </TabsList>
 
-            {/* Nút thanh toán VietQR — chỉ hiện khi có đơn chưa thanh toán */}
-            {unpaidOrders.length > 0 && (
-              <div className='mt-6 flex justify-center'>
-                <Button
-                  size='lg'
-                  className='w-full max-w-sm gap-2 bg-blue-600 text-base hover:bg-blue-700'
-                  onClick={() => setPayosDialogOpen(true)}
-                  id='pay-vietqr-btn'
-                >
-                  <QrCode className='size-5' />
-                  Thanh toán VietQR
-                </Button>
+          <TabsContent value='current'>
+            {isLoading ? (
+              <OrdersListSkeleton />
+            ) : currentOrders.length > 0 ? (
+              <>
+                <OrdersList orders={currentOrders} />
+
+                {/* Nút thanh toán VietQR — chỉ hiện khi có đơn chưa thanh toán */}
+                {unpaidOrders.length > 0 && (
+                  <div className='mt-6 flex justify-center'>
+                    <Button
+                      size='lg'
+                      className='w-full max-w-sm gap-2 bg-blue-600 text-base hover:bg-blue-700'
+                      onClick={() => setPayosDialogOpen(true)}
+                      id='pay-vietqr-btn'
+                    >
+                      <QrCode className='size-5' />
+                      Thanh toán VietQR
+                    </Button>
+                  </div>
+                )}
+
+                {/* Dialog QR PayOS */}
+                <PayosQrDialog
+                  open={payosDialogOpen}
+                  onOpenChange={setPayosDialogOpen}
+                  totalAmount={totalUnpaidAmount}
+                  orderCount={unpaidOrders.length}
+                />
+              </>
+            ) : (
+              <div className='flex flex-col items-center justify-center py-20 text-center'>
+                <ClipboardList className='mb-4 size-12 text-muted-foreground/50' />
+                <p className='text-lg font-medium text-muted-foreground'>
+                  {orders && orders.length > 0
+                    ? 'Bạn đã thanh toán tất cả đơn'
+                    : 'Chưa có đơn hàng nào'}
+                </p>
+                <p className='mt-1 text-sm text-muted-foreground/70'>
+                  {orders && orders.length > 0 && (
+                    <>
+                      <button
+                        onClick={() => setActiveTab('history')}
+                        className='font-medium text-primary underline-offset-4 hover:underline'
+                      >
+                        Xem lịch sử hóa đơn
+                      </button>{' '}
+                      hoặc{' '}
+                    </>
+                  )}
+                  Hãy vào{' '}
+                  <button
+                    onClick={() => navigate({ to: '/menu' })}
+                    className='font-medium text-primary underline-offset-4 hover:underline'
+                  >
+                    Gọi món
+                  </button>{' '}
+                  để đặt món nhé!
+                </p>
               </div>
             )}
+          </TabsContent>
 
-            {/* Dialog QR PayOS */}
-            <PayosQrDialog
-              open={payosDialogOpen}
-              onOpenChange={setPayosDialogOpen}
-              totalAmount={totalUnpaidAmount}
-              orderCount={unpaidOrders.length}
-            />
-          </>
-        ) : (
-          <div className='flex flex-col items-center justify-center py-20 text-center'>
-            <ClipboardList className='mb-4 size-12 text-muted-foreground/50' />
-            <p className='text-lg font-medium text-muted-foreground'>Chưa có đơn hàng nào</p>
-            <p className='mt-1 text-sm text-muted-foreground/70'>
-              Hãy vào{' '}
-              <button
-                onClick={() => navigate({ to: '/menu' })}
-                className='font-medium text-primary underline-offset-4 hover:underline'
-              >
-                Gọi món
-              </button>{' '}
-              để đặt món nhé!
-            </p>
-          </div>
-        )}
+          <TabsContent value='history'>
+            {isBillsLoading ? <BillHistorySkeleton /> : <BillHistoryList bills={bills ?? []} />}
+          </TabsContent>
+        </Tabs>
       </div>
     </main>
   )
