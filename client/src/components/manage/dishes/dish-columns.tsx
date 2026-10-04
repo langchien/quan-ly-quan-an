@@ -11,10 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { DishStatus } from '@app/shared'
 import type { DishType } from '@app/shared'
 import type { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
+import { ArrowUpDown, Eye, EyeOff, Loader2, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
+import { useToggleDishStatusMutation } from '@/queries/use-dish'
 
 import { formatCurrency } from '@/lib/format'
 
@@ -45,6 +47,65 @@ function getStatusBadge(status: string) {
     default:
       return <Badge variant='secondary'>{status}</Badge>
   }
+}
+
+/**
+ * Nút toggle nhanh Available ↔ Unavailable.
+ * Món Hidden không hiển thị nút này (cần dùng dialog Edit).
+ */
+function QuickToggleButton({ dish }: { dish: DishType }) {
+  const toggleMutation = useToggleDishStatusMutation()
+  const isPending = toggleMutation.isPending && toggleMutation.variables?.id === dish.id
+
+  if (dish.status === DishStatus.Hidden) {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className='inline-flex cursor-not-allowed items-center gap-1 text-xs text-muted-foreground/50'>
+              <EyeOff className='size-3.5' />
+            </span>
+          </TooltipTrigger>
+          <TooltipContent side='left'>
+            <p>Dùng nút Chỉnh sửa để thay đổi món đang Ẩn</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    )
+  }
+
+  const nextStatus =
+    dish.status === DishStatus.Available ? DishStatus.Unavailable : DishStatus.Available
+  const label =
+    dish.status === DishStatus.Available ? 'Đánh dấu Tạm hết' : 'Đánh dấu Đang bán trở lại'
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            id={`toggle-dish-status-${dish.id}`}
+            variant='ghost'
+            size='icon-sm'
+            disabled={isPending}
+            onClick={() => toggleMutation.mutate({ id: dish.id, status: nextStatus })}
+            aria-label={label}
+          >
+            {isPending ? (
+              <Loader2 className='size-3.5 animate-spin' />
+            ) : dish.status === DishStatus.Available ? (
+              <EyeOff className='size-3.5 text-amber-500' />
+            ) : (
+              <Eye className='size-3.5 text-emerald-500' />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side='left'>
+          <p>{label}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  )
 }
 
 interface GetDishColumnsOptions {
@@ -160,11 +221,19 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
       },
     },
 
-    // Trạng thái
+    // Trạng thái + Quick Toggle
     {
       accessorKey: 'status',
       header: 'Trạng thái',
-      cell: ({ row }) => getStatusBadge(row.getValue('status')),
+      cell: ({ row }) => {
+        const dish = row.original
+        return (
+          <div className='flex items-center gap-2'>
+            {getStatusBadge(dish.status)}
+            <QuickToggleButton dish={dish} />
+          </div>
+        )
+      },
       filterFn: (row, id, value: string[]) => value.includes(row.getValue(id)),
     },
 

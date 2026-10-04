@@ -19,6 +19,7 @@ import type {
   SocketEventPayloads,
   TableTokenRotatedPayload,
   CallStaffPayload,
+  DishStatusChangedPayload,
 } from './events.types.js'
 
 /**
@@ -140,6 +141,14 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
    */
   emitTableTokenRotated(payload: TableTokenRotatedPayload) {
     this.server.to(ManagerRoom).emit('table-token-rotated', payload)
+  }
+
+  /**
+   * Thông báo toàn bộ client (Manager + Guest đang online) khi trạng thái món ăn thay đổi.
+   * Dùng `server.emit()` thay vì `to(ManagerRoom)` vì Guest trên trang /menu cũng cần cập nhật realtime.
+   */
+  emitDishStatusChanged(payload: DishStatusChangedPayload) {
+    this.server.emit('dish-status-changed', payload)
   }
 
   /**

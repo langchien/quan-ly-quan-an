@@ -45,6 +45,12 @@ export type DishListResType = z.TypeOf<typeof DishListRes>
 export const UpdateDishBody = CreateDishBody
 export type UpdateDishBodyType = CreateDishBodyType
 
+export const UpdateDishStatusBody = z.object({
+  status: z.enum(DishStatusValues),
+})
+
+export type UpdateDishStatusBodyType = z.TypeOf<typeof UpdateDishStatusBody>
+
 export const DishParams = z.object({
   id: z.coerce.number(),
 })

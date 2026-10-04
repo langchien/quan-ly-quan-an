@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Put, Delete, UseGuards, HttpCode, HttpStatus } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Patch,
+  Delete,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common'
 import { DishService } from './dish.service.js'
 import { Roles } from '../auth/decorators/roles.decorator.js'
 import { AccessTokenGuard } from '../auth/guards/access-token.guard.js'
@@ -10,6 +20,8 @@ import {
   type CreateDishBodyType,
   UpdateDishBody,
   type UpdateDishBodyType,
+  UpdateDishStatusBody,
+  type UpdateDishStatusBodyType,
   DishParams,
   type DishParamsType,
 } from '@app/shared'
@@ -62,6 +74,21 @@ export class DishController {
   ) {
     const dish = await this.dishService.updateDish(params.id, body)
     return { message: 'Cập nhật món ăn thành công', data: dish }
+  }
+
+  /**
+   * PATCH /dishes/:id/status
+   * Cập nhật nhanh trạng thái món ăn — Owner + Employee
+   * Emit socket `dish-status-changed` tới toàn bộ client sau khi lưu.
+   */
+  @Patch(':id/status')
+  @UseGuards(AccessTokenGuard, RolesGuard)
+  async updateDishStatus(
+    @ZodParam(DishParams) params: DishParamsType,
+    @ZodBody(UpdateDishStatusBody) body: UpdateDishStatusBodyType
+  ) {
+    const dish = await this.dishService.updateDishStatus(params.id, body)
+    return { message: 'Cập nhật trạng thái món ăn thành công', data: dish }
   }
 
   /**

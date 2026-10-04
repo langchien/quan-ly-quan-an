@@ -4,9 +4,11 @@ import { MenuDishCard } from '@/components/guest/menu-dish-card'
 import { Input } from '@/components/ui/input'
 import { DishStatus, Role } from '@app/shared'
 import { removeDiacritics } from '@/lib/format'
-import { categoryListQueryOptions } from '@/queries/use-category'
-import { dishListQueryOptions } from '@/queries/use-dish'
+import { categoryListQueryOptions, useGetCategoryList } from '@/queries/use-category'
+import { dishListQueryOptions, useGetDishList } from '@/queries/use-dish'
 import { useAuthStore } from '@/store/useAuthStore'
+import { useSocketEvent } from '@/hooks/use-socket-event'
+import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { Search, SearchX, X } from 'lucide-react'
 import { useRef, useMemo, useState } from 'react'
@@ -34,27 +36,40 @@ export const Route = createFileRoute('/_public/menu')({
 // Component
 
 function MenuPage() {
-  const [dishes, categories] = Route.useLoaderData()
+  const queryClient = useQueryClient()
   const guest = useAuthStore(s => s.guest)
+
+  // Lắng nghe socket realtime khi nhân viên đổi trạng thái món
+  // → invalidate cache để danh sách món cập nhật ngay (không cần F5)
+  useSocketEvent('dish-status-changed', () => {
+    queryClient.invalidateQueries({ queryKey: ['dishes', 'list'] })
+  })
+
+  // Dùng live query để luôn nhận dữ liệu mới nhất sau khi socket invalidate cache
+  const { data: dishesData } = useGetDishList()
+  const { data: categoriesData } = useGetCategoryList()
+
+  const dishes = dishesData ?? []
+  const categories = categoriesData ?? []
 
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>(ALL_CATEGORY_ID)
 
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Danh mục chỉ hiển thị nếu có ít nhất 1 dish Available thuộc category đó
+  // Danh mục hiển thị nếu có ít nhất 1 dish không bị ẩn (Available hoặc Unavailable)
   const visibleCategories = useMemo(() => {
-    const availableDishCategoryIds = new Set(
+    const visibleCategoryIds = new Set(
       dishes
-        .filter(d => d.status === DishStatus.Available && d.categoryId != null)
+        .filter(d => d.status !== DishStatus.Hidden && d.categoryId != null)
         .map(d => d.categoryId)
     )
-    return categories.filter(c => availableDishCategoryIds.has(c.id))
+    return categories.filter(c => visibleCategoryIds.has(c.id))
   }, [dishes, categories])
 
-  // Lọc theo category + search
+  // Lọc theo category + search (chỉ ẩn các món có status === DishStatus.Hidden)
   const filteredDishes = useMemo(() => {
-    let result = dishes.filter(d => d.status === DishStatus.Available)
+    let result = dishes.filter(d => d.status !== DishStatus.Hidden)
 
     // Lọc theo category
     if (selectedCategory === 'uncategorized') {
@@ -78,12 +93,12 @@ function MenuPage() {
   }, [dishes, searchQuery, selectedCategory])
 
   const hasSearch = searchQuery.trim().length > 0
-  const totalAvailable = dishes.filter(d => d.status === DishStatus.Available).length
+  const totalVisibleDishes = dishes.filter(d => d.status !== DishStatus.Hidden).length
   const hasCategories = visibleCategories.length > 0
 
-  // Đếm món available chưa gán category
+  // Đếm món hiển thị chưa gán category
   const uncategorizedCount = useMemo(
-    () => dishes.filter(d => d.status === DishStatus.Available && d.categoryId == null).length,
+    () => dishes.filter(d => d.status !== DishStatus.Hidden && d.categoryId == null).length,
     [dishes]
   )
 
@@ -147,7 +162,7 @@ function MenuPage() {
               {/* Tab "Tất cả" */}
               <CategoryTab
                 label='Tất cả'
-                count={totalAvailable}
+                count={totalVisibleDishes}
                 isActive={selectedCategory === ALL_CATEGORY_ID}
                 onClick={() => setSelectedCategory(ALL_CATEGORY_ID)}
               />
@@ -155,7 +170,7 @@ function MenuPage() {
               {/* Tabs danh mục */}
               {visibleCategories.map(cat => {
                 const count = dishes.filter(
-                  d => d.status === DishStatus.Available && d.categoryId === cat.id
+                  d => d.status !== DishStatus.Hidden && d.categoryId === cat.id
                 ).length
                 return (
                   <CategoryTab
@@ -185,7 +200,7 @@ function MenuPage() {
         {(hasSearch || selectedCategory !== ALL_CATEGORY_ID) && filteredDishes.length > 0 && (
           <p className='mb-4 text-sm text-muted-foreground'>
             Hiển thị <span className='font-semibold text-foreground'>{filteredDishes.length}</span>{' '}
-            / {totalAvailable} món
+            / {totalVisibleDishes} món
           </p>
         )}
 

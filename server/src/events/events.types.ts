@@ -3,6 +3,7 @@ import type {
   DishSnapshotModel,
   AccountModel,
   GuestModel,
+  DishModel,
 } from '../generated/prisma/models.js'
 
 /**
@@ -43,6 +44,19 @@ export interface CallStaffPayload {
 }
 
 /**
+ * Payload khi trạng thái món ăn bị thay đổi bởi quản lý/nhân viên.
+ * Broadcast tới toàn bộ client (Manager + Guest) để đồng bộ realtime.
+ */
+export interface DishStatusChangedPayload {
+  /** ID món ăn */
+  id: number
+  /** Trạng thái mới */
+  status: string
+  /** Tên món ăn (để hiển thị toast) */
+  name: string
+}
+
+/**
  * Mapping tên socket event → kiểu payload tương ứng.
  * Dùng chung cho cả server (emit) và client (listen).
  */
@@ -57,7 +71,12 @@ export interface SocketEventPayloads {
   'table-token-rotated': TableTokenRotatedPayload
   /** Khi khách gọi nhân viên từ bàn */
   'call-staff': CallStaffPayload
+  /** Khi trạng thái món ăn thay đổi (Available/Unavailable/Hidden) */
+  'dish-status-changed': DishStatusChangedPayload
 }
 
 /** Tên các socket events hợp lệ */
 export type SocketEventName = keyof SocketEventPayloads
+
+/** Re-export để dùng trong DishService */
+export type { DishModel }

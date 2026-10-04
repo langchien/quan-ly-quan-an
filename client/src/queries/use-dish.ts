@@ -4,8 +4,10 @@ import type {
   DishListResType,
   DishResType,
   UpdateDishBodyType,
+  UpdateDishStatusBodyType,
 } from '@app/shared'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 // Query Options
 
@@ -62,6 +64,43 @@ export function useDeleteDishMutation() {
   return useMutation({
     mutationFn: (id: number) => httpClient.delete<DishResType>(`/dishes/${id}`),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['dishes', 'list'] })
+    },
+  })
+}
+
+/**
+ * Cập nhật nhanh trạng thái món ăn (Available / Unavailable / Hidden).
+ * Dùng optimistic update để UI phản hồi ngay, rollback nếu server lỗi.
+ */
+export function useToggleDishStatusMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, status }: { id: number; status: UpdateDishStatusBodyType['status'] }) =>
+      httpClient.patch<DishResType>(`/dishes/${id}/status`, { status }),
+    onMutate: async ({ id, status }) => {
+      // Huỷ refetch đang chờ để tránh override optimistic update
+      await queryClient.cancelQueries({ queryKey: ['dishes', 'list'] })
+
+      // Lưu snapshot để rollback khi lỗi
+      const previous = queryClient.getQueryData(['dishes', 'list'])
+
+      // Optimistic update: cập nhật cache ngay lập tức
+      queryClient.setQueryData<DishListResType['data']>(['dishes', 'list'], old =>
+        old?.map(d => (d.id === id ? { ...d, status } : d))
+      )
+
+      return { previous }
+    },
+    onError: (_err, _vars, context) => {
+      // Rollback về snapshot trước đó nếu API lỗi
+      if (context?.previous !== undefined) {
+        queryClient.setQueryData(['dishes', 'list'], context.previous)
+      }
+      toast.error('Cập nhật trạng thái món thất bại. Đã khôi phục dữ liệu ban đầu.')
+    },
+    onSettled: () => {
+      // Luôn refetch để đảm bảo đồng bộ với server
       queryClient.invalidateQueries({ queryKey: ['dishes', 'list'] })
     },
   })

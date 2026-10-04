@@ -4,17 +4,34 @@ import { EditDishDialog } from '@/components/manage/dishes/edit-dish-dialog'
 import { getDishColumns } from '@/components/manage/dishes/dish-columns'
 import { DishDataTable } from '@/components/manage/dishes/dish-data-table'
 import { useRole } from '@/hooks/useRole'
+import { useSocketEvent } from '@/hooks/use-socket-event'
 import { useGetDishList } from '@/queries/use-dish'
-import type { DishType } from '@app/shared'
+import { DishStatus, type DishType } from '@app/shared'
+import { useQueryClient } from '@tanstack/react-query'
 import { UtensilsCrossed } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { toast } from 'sonner'
 
 export function DishTable() {
+  const queryClient = useQueryClient()
   const { data: dishList, isLoading, isError } = useGetDishList()
   const { isOwner } = useRole()
   const [createOpen, setCreateOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<DishType | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<DishType | null>(null)
+
+  // Đồng bộ realtime khi bất kỳ ai đổi trạng thái món ăn
+  useSocketEvent('dish-status-changed', payload => {
+    queryClient.invalidateQueries({ queryKey: ['dishes', 'list'] })
+
+    if (payload.status === DishStatus.Available) {
+      toast.success(`Món "${payload.name}" đã mở bán trở lại`)
+    } else if (payload.status === DishStatus.Unavailable) {
+      toast.warning(`Món "${payload.name}" đã chuyển sang Tạm hết`)
+    } else if (payload.status === DishStatus.Hidden) {
+      toast.info(`Món "${payload.name}" đã được ẩn`)
+    }
+  })
 
   const columns = useMemo(
     () =>

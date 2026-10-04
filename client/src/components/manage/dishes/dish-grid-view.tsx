@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants, Button  } from '@/components/ui/button'
 import {
   Card,
   CardAction,
@@ -18,10 +18,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { DishStatus } from '@app/shared'
 import type { DishType } from '@app/shared'
-import { MoreHorizontal, Pencil, Trash2, UtensilsCrossed } from 'lucide-react'
+import { Eye, EyeOff, Loader2, MoreHorizontal, Pencil, Trash2, UtensilsCrossed } from 'lucide-react'
 import { formatCurrency } from '@/lib/format'
+import { useToggleDishStatusMutation } from '@/queries/use-dish'
 
 function getStatusConfig(status: string) {
   switch (status) {
@@ -95,6 +97,49 @@ function GridSkeleton() {
         </Card>
       ))}
     </div>
+  )
+}
+
+/**
+ * Nút toggle nhanh Available ↔ Unavailable cho Grid card.
+ * Món Hidden không hiển thị nút này.
+ */
+function GridQuickToggle({ dish }: { dish: DishType }) {
+  const toggleMutation = useToggleDishStatusMutation()
+  const isPending = toggleMutation.isPending && toggleMutation.variables?.id === dish.id
+
+  if (dish.status === DishStatus.Hidden) return null
+
+  const nextStatus =
+    dish.status === DishStatus.Available ? DishStatus.Unavailable : DishStatus.Available
+  const label =
+    dish.status === DishStatus.Available ? 'Đánh dấu Tạm hết' : 'Đánh dấu Đang bán trở lại'
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant='outline'
+            size='icon-sm'
+            disabled={isPending}
+            onClick={() => toggleMutation.mutate({ id: dish.id, status: nextStatus })}
+            aria-label={label}
+          >
+            {isPending ? (
+              <Loader2 className='size-3 animate-spin' />
+            ) : dish.status === DishStatus.Available ? (
+              <EyeOff className='size-3 text-amber-500' />
+            ) : (
+              <Eye className='size-3 text-emerald-500' />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side='top'>
+          <p>{label}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }
 
@@ -239,9 +284,13 @@ export function DishGridView({
                   year: 'numeric',
                 }).format(new Date(dish.createdAt))}
               </p>
-              <span className='text-sm font-semibold text-primary'>
-                {formatCurrency(dish.price)}
-              </span>
+              <div className='flex items-center gap-1.5'>
+                {/* Quick Toggle button */}
+                <GridQuickToggle dish={dish} />
+                <span className='text-sm font-semibold text-primary'>
+                  {formatCurrency(dish.price)}
+                </span>
+              </div>
             </CardFooter>
           </Card>
         )

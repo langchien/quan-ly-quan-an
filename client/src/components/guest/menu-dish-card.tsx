@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { DishStatus } from '@app/shared'
 import { useCartStore } from '@/hooks/use-cart'
 import type { DishType } from '@app/shared'
-import { ShoppingCart } from 'lucide-react'
+import { Ban, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 import { QuantityControl } from './quantity-control'
 
@@ -25,7 +25,10 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
 
   const [imageLoaded, setImageLoaded] = useState(false)
 
+  const isUnavailable = dish.status === DishStatus.Unavailable
+
   function handleAdd() {
+    if (isUnavailable) return
     addItem({
       dishId: dish.id,
       dishName: dish.name,
@@ -35,7 +38,11 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
   }
 
   return (
-    <Card className='group overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg'>
+    <Card
+      className={`group overflow-hidden border transition-all duration-300 ${
+        isUnavailable ? 'opacity-70 grayscale-[40%]' : 'hover:-translate-y-1 hover:shadow-lg'
+      }`}
+    >
       {/* Ảnh món ăn — Lazy Loading + Skeleton */}
       <div className='relative aspect-[4/3] overflow-hidden bg-muted'>
         {dish.image ? (
@@ -47,9 +54,9 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
               alt={dish.name}
               loading='lazy'
               onLoad={() => setImageLoaded(true)}
-              className={`h-full w-full object-cover transition-all duration-500 group-hover:scale-105 ${
-                imageLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
+              className={`h-full w-full object-cover transition-all duration-500 ${
+                isUnavailable ? '' : 'group-hover:scale-105'
+              } ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             />
           </>
         ) : (
@@ -57,12 +64,32 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
             🍽️
           </div>
         )}
+
+        {/* Overlay "Tạm hết" khi món không khả dụng */}
+        {isUnavailable && (
+          <div className='absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-[2px]'>
+            <div className='flex flex-col items-center gap-1 rounded-lg bg-background/80 px-3 py-2 shadow'>
+              <Ban className='h-5 w-5 text-muted-foreground' />
+              <span className='text-xs font-semibold text-muted-foreground'>Tạm hết</span>
+            </div>
+          </div>
+        )}
+
         {/* Badge trạng thái */}
         <div className='absolute top-2 right-2'>
           {dish.status === DishStatus.Available && <Badge variant='default'>Đang bán</Badge>}
+          {isUnavailable && (
+            <Badge
+              variant='secondary'
+              className='border-amber-500/30 bg-amber-500/20 text-amber-700 dark:text-amber-400'
+            >
+              ⏸️ Tạm hết
+            </Badge>
+          )}
         </div>
+
         {/* Badge số lượng trong giỏ */}
-        {quantity > 0 && (
+        {quantity > 0 && !isUnavailable && (
           <div className='absolute top-2 left-2'>
             <Badge variant='secondary' className='bg-orange-500 text-white hover:bg-orange-500'>
               ×{quantity}
@@ -80,10 +107,25 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
         )}
 
         <div className='mt-3 flex items-center justify-between gap-2'>
-          <span className='text-lg font-bold text-primary'>{formatCurrencyVND(dish.price)}</span>
+          <span
+            className={`text-lg font-bold ${isUnavailable ? 'text-muted-foreground' : 'text-primary'}`}
+          >
+            {formatCurrencyVND(dish.price)}
+          </span>
 
-          {/* Nếu chưa thêm → nút Thêm, đã thêm → điều chỉnh số lượng */}
-          {quantity === 0 ? (
+          {/* Nếu hết → nút disabled, chưa thêm → nút Thêm, đã thêm → điều chỉnh số lượng */}
+          {isUnavailable ? (
+            <Button
+              size='sm'
+              disabled
+              className='cursor-not-allowed gap-1.5 rounded-full opacity-50'
+              aria-label={`${dish.name} hiện tạm hết`}
+              title='Món này hiện tạm hết, vui lòng chọn món khác'
+            >
+              <Ban className='h-3.5 w-3.5' />
+              Tạm hết
+            </Button>
+          ) : quantity === 0 ? (
             <Button
               size='sm'
               onClick={handleAdd}

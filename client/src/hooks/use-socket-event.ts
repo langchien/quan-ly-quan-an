@@ -15,6 +15,8 @@ export interface ClientSocketEventPayloads {
   'table-token-rotated': { tableNumber: number; newToken: string }
   /** Khi khách gọi nhân viên từ bàn */
   'call-staff': { tableNumber: number; guestName: string; message?: string; calledAt: string }
+  /** Khi trạng thái món ăn thay đổi (Available/Unavailable/Hidden) */
+  'dish-status-changed': { id: number; status: string; name: string }
 }
 
 export type ClientSocketEventName = keyof ClientSocketEventPayloads
