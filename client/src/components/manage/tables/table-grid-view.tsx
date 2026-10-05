@@ -24,12 +24,15 @@ import { LayoutGrid, Link, MoreHorizontal, Pencil, Trash2, Users } from 'lucide-
 import { QRCodeCanvas } from 'qrcode.react'
 import { toast } from 'sonner'
 import type { z } from 'zod'
+import { useStatusLabel } from '@/lib/status-label'
+import { formatDate } from '@/lib/i18n/use-locale'
 
-function getStatusConfig(status: string) {
+function getStatusConfig(status: string, getLabel?: (s: string) => string) {
+  const label = getLabel ? getLabel(status) : status
   switch (status) {
     case 'Available':
       return {
-        label: 'Trống',
+        label: getLabel ? label : 'Trống',
         emoji: '🟢',
         dotColor: 'bg-emerald-500',
         bgColor: 'bg-emerald-500/10',
@@ -39,7 +42,7 @@ function getStatusConfig(status: string) {
       }
     case 'Reserved':
       return {
-        label: 'Đã đặt',
+        label: getLabel ? label : 'Đã đặt',
         emoji: '🟡',
         dotColor: 'bg-amber-500',
         bgColor: 'bg-amber-500/10',
@@ -49,7 +52,7 @@ function getStatusConfig(status: string) {
       }
     case 'Hidden':
       return {
-        label: 'Ẩn',
+        label: getLabel ? label : 'Ẩn',
         emoji: '🔴',
         dotColor: 'bg-red-500',
         bgColor: 'bg-red-500/10',
@@ -108,6 +111,8 @@ export function TableGridView({
   globalFilter,
   statusFilter,
 }: TableGridViewProps) {
+  const { getTableStatusLabel } = useStatusLabel()
+
   if (isLoading) {
     return <GridSkeleton />
   }
@@ -144,7 +149,7 @@ export function TableGridView({
   return (
     <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
       {filtered.map(table => {
-        const status = getStatusConfig(table.status)
+        const status = getStatusConfig(table.status, getTableStatusLabel)
         const url = `${envConfig.VITE_WEB_URL}/guest/tables/${table.number}?token=${table.token}`
 
         return (
@@ -230,12 +235,7 @@ export function TableGridView({
 
             <CardFooter className='justify-center border-t pt-3'>
               <p className='text-xs text-muted-foreground'>
-                Tạo ngày{' '}
-                {new Intl.DateTimeFormat('vi-VN', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                }).format(new Date(table.createdAt))}
+                Tạo ngày {formatDate(table.createdAt)}
               </p>
             </CardFooter>
           </Card>

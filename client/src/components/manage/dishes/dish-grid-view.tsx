@@ -24,12 +24,15 @@ import { useToggleDishStatusMutation } from '@/queries/use-dish'
 import type { DishType } from '@app/shared'
 import { DishStatus } from '@app/shared'
 import { Eye, EyeOff, Loader2, MoreHorizontal, Pencil, Trash2, UtensilsCrossed } from 'lucide-react'
+import { useStatusLabel } from '@/lib/status-label'
+import { formatDate } from '@/lib/i18n/use-locale'
 
-function getStatusConfig(status: string) {
+function getStatusConfig(status: string, getLabel?: (s: string) => string) {
+  const label = getLabel ? getLabel(status) : status
   switch (status) {
     case DishStatus.Available:
       return {
-        label: 'Đang bán',
+        label: getLabel ? label : 'Đang bán',
         emoji: '✅',
         dotColor: 'bg-emerald-500',
         bgColor: 'bg-emerald-500/10',
@@ -39,7 +42,7 @@ function getStatusConfig(status: string) {
       }
     case DishStatus.Unavailable:
       return {
-        label: 'Tạm hết',
+        label: getLabel ? label : 'Tạm hết',
         emoji: '⏸️',
         dotColor: 'bg-amber-500',
         bgColor: 'bg-amber-500/10',
@@ -49,7 +52,7 @@ function getStatusConfig(status: string) {
       }
     case DishStatus.Hidden:
       return {
-        label: 'Ẩn',
+        label: getLabel ? label : 'Ẩn',
         emoji: '🙈',
         dotColor: 'bg-red-500',
         bgColor: 'bg-red-500/10',
@@ -154,6 +157,8 @@ export function DishGridView({
   statusFilter,
   categoryFilter,
 }: DishGridViewProps) {
+  const { getDishStatusLabel } = useStatusLabel()
+
   if (isLoading) {
     return <GridSkeleton />
   }
@@ -195,7 +200,7 @@ export function DishGridView({
   return (
     <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
       {filtered.map(dish => {
-        const status = getStatusConfig(dish.status)
+        const status = getStatusConfig(dish.status, getDishStatusLabel)
 
         return (
           <Card
@@ -279,13 +284,7 @@ export function DishGridView({
             </CardContent>
 
             <CardFooter className='justify-between border-t pt-3'>
-              <p className='text-xs text-muted-foreground'>
-                {new Intl.DateTimeFormat('vi-VN', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                }).format(new Date(dish.createdAt))}
-              </p>
+              <p className='text-xs text-muted-foreground'>{formatDate(dish.createdAt)}</p>
               <div className='flex items-center gap-1.5'>
                 {/* Quick Toggle button */}
                 <GridQuickToggle dish={dish} />

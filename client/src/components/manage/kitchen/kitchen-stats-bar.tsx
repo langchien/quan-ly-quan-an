@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ChefHat, Clock, CheckCircle2, Volume2, VolumeX } from 'lucide-react'
 
+import { useStatusLabel } from '@/lib/status-label'
+import { OrderStatus } from '@app/shared'
+
 interface KitchenStatsBarProps {
   pendingCount: number
   processingCount: number
@@ -24,9 +27,11 @@ export function KitchenStatsBar({
   isAudioEnabled,
   onToggleAudio,
 }: KitchenStatsBarProps) {
+  const { getOrderStatusLabel } = useStatusLabel()
+
   const stats = [
     {
-      label: 'Chờ nấu',
+      label: getOrderStatusLabel(OrderStatus.Pending),
       count: pendingCount,
       icon: <Clock className='size-5' />,
       color: 'text-amber-600 dark:text-amber-400',
@@ -35,7 +40,7 @@ export function KitchenStatsBar({
       pulse: pendingCount > 0,
     },
     {
-      label: 'Đang nấu',
+      label: getOrderStatusLabel(OrderStatus.Processing),
       count: processingCount,
       icon: <ChefHat className='size-5' />,
       color: 'text-blue-600 dark:text-blue-400',
@@ -44,7 +49,7 @@ export function KitchenStatsBar({
       pulse: false,
     },
     {
-      label: 'Hoàn thành',
+      label: getOrderStatusLabel(OrderStatus.Delivered),
       count: completedToday,
       icon: <CheckCircle2 className='size-5' />,
       color: 'text-emerald-600 dark:text-emerald-400',

@@ -3,6 +3,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { LanguageSwitcher } from '@/components/language-switcher'
+import { ModeToggle } from '@/components/mode-toggle'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -84,8 +85,9 @@ export function ManageHeader() {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className='ms-auto shrink-0'>
+      <div className='ms-auto flex shrink-0 items-center gap-2'>
         <LanguageSwitcher />
+        <ModeToggle />
       </div>
     </header>
   )

@@ -17,7 +17,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import type { AccountType } from '@app/shared'
 import type { Table } from '@tanstack/react-table'
 import { CirclePlus, LayoutGrid, List, Search, Settings2, UserPlus, X } from 'lucide-react'
-import { ROLE_OPTIONS } from './staff-columns'
+import { useStatusLabel } from '@/lib/status-label'
 
 export type ViewMode = 'table' | 'grid'
 
@@ -34,6 +34,7 @@ export function StaffTableToolbar({
   viewMode,
   onViewModeChange,
 }: StaffTableToolbarProps) {
+  const { roleOptions } = useStatusLabel()
   const isFiltered = table.getState().columnFilters.length > 0 || !!table.getState().globalFilter
 
   const roleColumn = table.getColumn('role')
@@ -90,15 +91,17 @@ export function StaffTableToolbar({
                       {roleFilterValue.length} đã chọn
                     </Badge>
                   ) : (
-                    ROLE_OPTIONS.filter(o => roleFilterValue.includes(o.value)).map(o => (
-                      <Badge
-                        key={o.value}
-                        variant='secondary'
-                        className='rounded-sm px-1 font-normal'
-                      >
-                        {o.label}
-                      </Badge>
-                    ))
+                    roleOptions
+                      .filter(o => roleFilterValue.includes(o.value))
+                      .map(o => (
+                        <Badge
+                          key={o.value}
+                          variant='secondary'
+                          className='rounded-sm px-1 font-normal'
+                        >
+                          {o.label}
+                        </Badge>
+                      ))
                   )}
                 </div>
               </>
@@ -106,7 +109,7 @@ export function StaffTableToolbar({
           </PopoverTrigger>
           <PopoverContent className='w-48 p-2' align='start'>
             <div className='space-y-1'>
-              {ROLE_OPTIONS.map(option => (
+              {roleOptions.map(option => (
                 <div
                   key={option.value}
                   className='flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 hover:bg-accent'

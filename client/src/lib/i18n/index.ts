@@ -59,4 +59,5 @@ export function changeLanguage(lng: AppLanguage) {
 }
 
 export { i18n }
+export default i18n
 export * from './types'

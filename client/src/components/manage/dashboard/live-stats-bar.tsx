@@ -53,7 +53,7 @@ export function LiveStatsBar({
     },
     {
       label: 'Doanh thu hôm nay',
-      value: formatCurrencyCompact(todayRevenue) + ' đ',
+      value: formatCurrencyCompact(todayRevenue),
       icon: DollarSign,
       color: 'text-violet-600 dark:text-violet-400',
       bgColor: 'bg-violet-500/10',

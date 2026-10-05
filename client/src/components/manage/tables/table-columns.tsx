@@ -18,25 +18,33 @@ import { QRCodeCanvas } from 'qrcode.react'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 
-export function formatDate(dateStr: string | Date | undefined | null) {
-  if (!dateStr) return '-'
-  const date = new Date(dateStr)
-  if (isNaN(date.getTime())) return '-'
-  return new Intl.DateTimeFormat('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  }).format(date)
-}
+import { formatDate } from '@/lib/i18n/use-locale'
+import { getTableStatusLabel, TABLE_STATUS_EMOJI } from '@/lib/status-label'
+
+export { formatDate }
 
 function getStatusBadge(status: string) {
+  const emoji = TABLE_STATUS_EMOJI[status] ?? ''
+  const label = getTableStatusLabel(status)
   switch (status) {
     case 'Available':
-      return <Badge variant='default'>🟢 Trống</Badge>
+      return (
+        <Badge variant='default'>
+          {emoji} {label}
+        </Badge>
+      )
     case 'Reserved':
-      return <Badge variant='secondary'>🟡 Đã đặt</Badge>
+      return (
+        <Badge variant='secondary'>
+          {emoji} {label}
+        </Badge>
+      )
     case 'Hidden':
-      return <Badge variant='outline'>🔴 Ẩn</Badge>
+      return (
+        <Badge variant='outline'>
+          {emoji} {label}
+        </Badge>
+      )
     default:
       return <Badge variant='secondary'>{status}</Badge>
   }

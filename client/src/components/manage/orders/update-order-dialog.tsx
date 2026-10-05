@@ -29,6 +29,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { getInitials, getOrderStatusBadge } from './order-columns'
 
+import { useStatusLabel, ORDER_STATUS_EMOJI } from '@/lib/status-label'
+
 interface UpdateOrderDialogProps {
   order: OrderSchemaType | null
   open: boolean
@@ -38,15 +40,8 @@ interface UpdateOrderDialogProps {
 // Trạng thái hợp lệ để chuyển sang (loại trừ Paid vì dùng riêng)
 const EDITABLE_STATUSES = OrderStatusValues.filter(s => s !== OrderStatus.Paid)
 
-const STATUS_LABELS: Record<string, string> = {
-  [OrderStatus.Pending]: '🕐 Chờ xử lý',
-  [OrderStatus.Processing]: '🔄 Đang làm',
-  [OrderStatus.Delivered]: '✅ Đã giao',
-  [OrderStatus.Rejected]: '❌ Từ chối',
-  [OrderStatus.Paid]: '💰 Đã thanh toán',
-}
-
 export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDialogProps) {
+  const { getOrderStatusLabel } = useStatusLabel()
   const updateMutation = useUpdateOrderMutation()
 
   const form = useForm<UpdateOrderBodyType>({
@@ -153,7 +148,7 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
                     <SelectContent>
                       {EDITABLE_STATUSES.map(status => (
                         <SelectItem key={status} value={status}>
-                          {STATUS_LABELS[status]}
+                          {ORDER_STATUS_EMOJI[status]} {getOrderStatusLabel(status)}
                         </SelectItem>
                       ))}
                     </SelectContent>

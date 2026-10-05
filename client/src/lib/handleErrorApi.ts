@@ -1,6 +1,7 @@
 import type { UseFormSetError } from 'react-hook-form'
 import { toast } from 'sonner'
 import { EntityError } from './httpClient'
+import i18n from '@/lib/i18n'
 
 export const handleErrorApi = ({
   error,
@@ -17,6 +18,6 @@ export const handleErrorApi = ({
       })
     })
   } else {
-    toast.error(error?.payload?.message ?? 'Lỗi không xác định')
+    toast.error(error?.payload?.message ?? i18n.t('common:error.unknown'))
   }
 }

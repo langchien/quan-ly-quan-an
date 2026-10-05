@@ -24,6 +24,8 @@ import {
   MoreHorizontal,
   RefreshCcw,
 } from 'lucide-react'
+import { formatDateTime } from '@/lib/i18n/use-locale'
+import { getOrderStatusLabel, getOrderStatusOptions } from '@/lib/status-label'
 
 export function getInitials(name: string) {
   return name
@@ -35,58 +37,46 @@ export function getInitials(name: string) {
     .toUpperCase()
 }
 
-export function formatDateTime(date: Date | string) {
-  return new Intl.DateTimeFormat('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date(date))
-}
+export { formatDateTime }
 
-export const ORDER_STATUS_OPTIONS = [
-  { value: OrderStatus.Pending, label: '🕐 Chờ xử lý' },
-  { value: OrderStatus.Processing, label: '🔄 Đang làm' },
-  { value: OrderStatus.Delivered, label: '✅ Đã giao' },
-  { value: OrderStatus.Rejected, label: '❌ Từ chối' },
-  { value: OrderStatus.Paid, label: '💰 Đã thanh toán' },
-]
+export const ORDER_STATUS_OPTIONS = getOrderStatusOptions()
 
 export function getOrderStatusBadge(status: string) {
+  const label = getOrderStatusLabel(status)
   switch (status) {
     case OrderStatus.Pending:
       return (
         <Badge variant='outline' className='gap-1 border-amber-500 text-amber-600'>
           <Clock className='size-3' />
-          Chờ xử lý
+          {label}
         </Badge>
       )
     case OrderStatus.Processing:
       return (
         <Badge variant='secondary' className='gap-1 bg-blue-100 text-blue-700 dark:bg-blue-900/30'>
           <RefreshCcw className='size-3' />
-          Đang làm
+          {label}
         </Badge>
       )
     case OrderStatus.Delivered:
       return (
         <Badge className='gap-1 bg-green-600 text-white hover:bg-green-700'>
           <BadgeCheck className='size-3' />
-          Đã giao
+          {label}
         </Badge>
       )
     case OrderStatus.Rejected:
       return (
         <Badge variant='destructive' className='gap-1'>
           <Ban className='size-3' />
-          Từ chối
+          {label}
         </Badge>
       )
     case OrderStatus.Paid:
       return (
         <Badge className='gap-1 bg-violet-600 text-white hover:bg-violet-700'>
           <CreditCard className='size-3' />
-          Đã thanh toán
+          {label}
         </Badge>
       )
     default:

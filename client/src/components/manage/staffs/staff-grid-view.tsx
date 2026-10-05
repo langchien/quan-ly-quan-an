@@ -23,11 +23,15 @@ import type { AccountType } from '@app/shared'
 import { Mail, MoreHorizontal, Pencil, Trash2, UserX } from 'lucide-react'
 import { getInitials } from './staff-columns'
 
-function getRoleConfig(role: string) {
+import { useStatusLabel } from '@/lib/status-label'
+import { formatDate } from '@/lib/i18n/use-locale'
+
+function getRoleConfig(role: string, getLabel?: (r: string) => string) {
+  const label = getLabel ? getLabel(role) : role
   switch (role) {
     case 'Owner':
       return {
-        label: 'Chủ quán',
+        label: getLabel ? label : 'Chủ quán',
         emoji: '👑',
         dotColor: 'bg-amber-500',
         bgColor: 'bg-amber-500/10',
@@ -39,7 +43,7 @@ function getRoleConfig(role: string) {
       }
     case 'Employee':
       return {
-        label: 'Nhân viên',
+        label: getLabel ? label : 'Nhân viên',
         emoji: '👤',
         dotColor: 'bg-blue-500',
         bgColor: 'bg-blue-500/10',
@@ -100,6 +104,8 @@ export function StaffGridView({
   globalFilter,
   roleFilter,
 }: StaffGridViewProps) {
+  const { getRoleLabel } = useStatusLabel()
+
   if (isLoading) {
     return <GridSkeleton />
   }
@@ -136,7 +142,7 @@ export function StaffGridView({
   return (
     <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
       {filtered.map(staff => {
-        const role = getRoleConfig(staff.role)
+        const role = getRoleConfig(staff.role, getRoleLabel)
 
         return (
           <Card
@@ -213,12 +219,7 @@ export function StaffGridView({
 
             <CardFooter className='justify-center border-t pt-3'>
               <p className='text-xs text-muted-foreground'>
-                Tạo ngày{' '}
-                {new Intl.DateTimeFormat('vi-VN', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                }).format(new Date(staff.createdAt))}
+                Tạo ngày {formatDate(staff.createdAt)}
               </p>
             </CardFooter>
           </Card>

@@ -14,19 +14,15 @@ import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { TableStatus } from '@app/shared'
 import type { TableSchema } from '@app/shared'
 import type { Table } from '@tanstack/react-table'
 import { CirclePlus, LayoutGrid, List, Search, Settings2, Plus, X } from 'lucide-react'
 import type { z } from 'zod'
+import { useStatusLabel, getTableStatusOptions } from '@/lib/status-label'
 
 export type ViewMode = 'table' | 'grid'
 
-export const TABLE_STATUS_OPTIONS = [
-  { value: TableStatus.Available, label: '🟢 Trống' },
-  { value: TableStatus.Reserved, label: '🟡 Đã đặt' },
-  { value: TableStatus.Hidden, label: '🔴 Ẩn' },
-]
+export const TABLE_STATUS_OPTIONS = getTableStatusOptions()
 
 interface TableTableToolbarProps {
   table: Table<z.infer<typeof TableSchema>>
@@ -41,6 +37,7 @@ export function TableTableToolbar({
   viewMode,
   onViewModeChange,
 }: TableTableToolbarProps) {
+  const { tableStatusOptions } = useStatusLabel()
   const isFiltered = table.getState().columnFilters.length > 0 || !!table.getState().globalFilter
 
   const statusColumn = table.getColumn('status')
@@ -97,15 +94,17 @@ export function TableTableToolbar({
                       {statusFilterValue.length} đã chọn
                     </Badge>
                   ) : (
-                    TABLE_STATUS_OPTIONS.filter(o => statusFilterValue.includes(o.value)).map(o => (
-                      <Badge
-                        key={o.value}
-                        variant='secondary'
-                        className='rounded-sm px-1 font-normal'
-                      >
-                        {o.label}
-                      </Badge>
-                    ))
+                    tableStatusOptions
+                      .filter(o => statusFilterValue.includes(o.value))
+                      .map(o => (
+                        <Badge
+                          key={o.value}
+                          variant='secondary'
+                          className='rounded-sm px-1 font-normal'
+                        >
+                          {o.label}
+                        </Badge>
+                      ))
                   )}
                 </div>
               </>
@@ -113,7 +112,7 @@ export function TableTableToolbar({
           </PopoverTrigger>
           <PopoverContent className='w-48 p-2' align='start'>
             <div className='space-y-1'>
-              {TABLE_STATUS_OPTIONS.map(option => (
+              {tableStatusOptions.map(option => (
                 <div
                   key={option.value}
                   className='flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 hover:bg-accent'

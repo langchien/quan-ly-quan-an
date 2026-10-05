@@ -16,7 +16,7 @@ import { Separator } from '@/components/ui/separator'
 import type { OrderSchemaType } from '@app/shared'
 import type { Table } from '@tanstack/react-table'
 import { CirclePlus, ClipboardPlus, Search, Settings2, X } from 'lucide-react'
-import { ORDER_STATUS_OPTIONS } from './order-columns'
+import { useStatusLabel } from '@/lib/status-label'
 
 interface OrderTableToolbarProps {
   table: Table<OrderSchemaType>
@@ -24,6 +24,7 @@ interface OrderTableToolbarProps {
 }
 
 export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps) {
+  const { orderStatusOptions } = useStatusLabel()
   const isFiltered = table.getState().columnFilters.length > 0 || !!table.getState().globalFilter
 
   const statusColumn = table.getColumn('status')
@@ -80,15 +81,17 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
                       {statusFilterValue.length} đã chọn
                     </Badge>
                   ) : (
-                    ORDER_STATUS_OPTIONS.filter(o => statusFilterValue.includes(o.value)).map(o => (
-                      <Badge
-                        key={o.value}
-                        variant='secondary'
-                        className='rounded-sm px-1 font-normal'
-                      >
-                        {o.label}
-                      </Badge>
-                    ))
+                    orderStatusOptions
+                      .filter(o => statusFilterValue.includes(o.value))
+                      .map(o => (
+                        <Badge
+                          key={o.value}
+                          variant='secondary'
+                          className='rounded-sm px-1 font-normal'
+                        >
+                          {o.label}
+                        </Badge>
+                      ))
                   )}
                 </div>
               </>
@@ -96,7 +99,7 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
           </PopoverTrigger>
           <PopoverContent className='w-52 p-2' align='start'>
             <div className='space-y-1'>
-              {ORDER_STATUS_OPTIONS.map(option => (
+              {orderStatusOptions.map(option => (
                 <div
                   key={option.value}
                   className='flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 hover:bg-accent'

@@ -9,12 +9,14 @@ import type { DishType } from '@app/shared'
 import { Ban, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 import { QuantityControl } from './quantity-control'
+import { useStatusLabel } from '@/lib/status-label'
 
 interface MenuDishCardProps {
   dish: DishType
 }
 
 export function MenuDishCard({ dish }: MenuDishCardProps) {
+  const { getDishStatusLabel } = useStatusLabel()
   const items = useCartStore(s => s.items)
   const addItem = useCartStore(s => s.addItem)
   const updateQuantity = useCartStore(s => s.updateQuantity)
@@ -70,20 +72,24 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
           <div className='absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-[2px]'>
             <div className='flex flex-col items-center gap-1 rounded-lg bg-background/80 px-3 py-2 shadow'>
               <Ban className='h-5 w-5 text-muted-foreground' />
-              <span className='text-xs font-semibold text-muted-foreground'>Tạm hết</span>
+              <span className='text-xs font-semibold text-muted-foreground'>
+                {getDishStatusLabel(DishStatus.Unavailable)}
+              </span>
             </div>
           </div>
         )}
 
         {/* Badge trạng thái */}
         <div className='absolute top-2 right-2'>
-          {dish.status === DishStatus.Available && <Badge variant='default'>Đang bán</Badge>}
+          {dish.status === DishStatus.Available && (
+            <Badge variant='default'>{getDishStatusLabel(DishStatus.Available)}</Badge>
+          )}
           {isUnavailable && (
             <Badge
               variant='secondary'
               className='border-warning/30 bg-warning-soft text-warning-soft-foreground'
             >
-              ⏸️ Tạm hết
+              ⏸️ {getDishStatusLabel(DishStatus.Unavailable)}
             </Badge>
           )}
         </div>

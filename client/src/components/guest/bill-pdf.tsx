@@ -1,7 +1,8 @@
 import { SHOP_INFO } from '@/lib/shop-info'
-import { PaymentMethod } from '@app/shared'
-import type { GetGuestBillsResType } from '@app/shared'
+import type { PaymentMethod, GetGuestBillsResType } from '@app/shared'
 import { Document, Font, Page, StyleSheet, Text, View, pdf } from '@react-pdf/renderer'
+import { getIntlLocale, formatDateTime as formatDateTimeLocale } from '@/lib/i18n/use-locale'
+import { getPaymentMethodLabel } from '@/lib/status-label'
 
 // Module này chỉ được import động (dynamic import) khi khách bấm "Tải PDF"
 // để không kéo @react-pdf/renderer vào bundle chính.
@@ -58,22 +59,15 @@ const styles = StyleSheet.create({
 
 // Dùng "đ" thay cho ký hiệu ₫ để tương thích mọi font
 function money(value: number) {
-  return `${new Intl.NumberFormat('vi-VN').format(value)} đ`
+  return `${new Intl.NumberFormat(getIntlLocale()).format(value)} đ`
 }
 
 function formatDateTime(date: string | Date) {
-  return new Date(date).toLocaleString('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+  return formatDateTimeLocale(date)
 }
 
-const methodLabel: Record<(typeof PaymentMethod)[keyof typeof PaymentMethod], string> = {
-  [PaymentMethod.PayOS]: 'VietQR (PayOS)',
-  [PaymentMethod.Cash]: 'Tiền mặt',
+function getMethodLabel(method: (typeof PaymentMethod)[keyof typeof PaymentMethod]) {
+  return getPaymentMethodLabel(method)
 }
 
 function BillPdfDocument({ bill, guestName }: { bill: Bill; guestName?: string }) {
@@ -112,7 +106,7 @@ function BillPdfDocument({ bill, guestName }: { bill: Bill; guestName?: string }
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Phương thức</Text>
-          <Text>{methodLabel[bill.paymentMethod]}</Text>
+          <Text>{getMethodLabel(bill.paymentMethod)}</Text>
         </View>
 
         <View style={styles.divider} />

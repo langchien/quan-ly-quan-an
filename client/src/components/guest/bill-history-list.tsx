@@ -20,25 +20,18 @@ import { Banknote, ChevronRight, Download, Loader2, QrCode, Receipt } from 'luci
 import { useState } from 'react'
 import { toast } from 'sonner'
 
+import { formatDateTime } from '@/lib/i18n/use-locale'
+import { getPaymentMethodLabel } from '@/lib/status-label'
+
 type Bill = GetGuestBillsResType['data'][number]
 type BillOrder = Bill['orders'][number]
 
-const paymentMethodConfig: Record<
+const paymentMethodIcons: Record<
   (typeof PaymentMethod)[keyof typeof PaymentMethod],
-  { label: string; icon: typeof QrCode }
+  typeof QrCode
 > = {
-  [PaymentMethod.PayOS]: { label: 'VietQR', icon: QrCode },
-  [PaymentMethod.Cash]: { label: 'Tiền mặt', icon: Banknote },
-}
-
-function formatBillTime(date: string | Date) {
-  return new Date(date).toLocaleString('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+  [PaymentMethod.PayOS]: QrCode,
+  [PaymentMethod.Cash]: Banknote,
 }
 
 function countItems(bill: Bill) {
@@ -65,8 +58,7 @@ export function BillHistorySkeleton() {
 }
 
 function BillCard({ bill, onSelect }: { bill: Bill; onSelect: () => void }) {
-  const method = paymentMethodConfig[bill.paymentMethod]
-  const MethodIcon = method.icon
+  const MethodIcon = paymentMethodIcons[bill.paymentMethod]
 
   return (
     <Card
@@ -88,10 +80,10 @@ function BillCard({ bill, onSelect }: { bill: Bill; onSelect: () => void }) {
         </div>
         <div className='min-w-0 flex-1'>
           <p className='font-medium'>Hóa đơn #{bill.orderCode}</p>
-          <p className='text-xs text-muted-foreground'>{formatBillTime(bill.createdAt)}</p>
+          <p className='text-xs text-muted-foreground'>{formatDateTime(bill.createdAt)}</p>
           <div className='mt-1 flex items-center gap-2 text-xs text-muted-foreground'>
             <MethodIcon className='size-3' />
-            <span>{method.label}</span>
+            <span>{getPaymentMethodLabel(bill.paymentMethod)}</span>
             <span>·</span>
             <span>{countItems(bill)} món</span>
           </div>
@@ -134,7 +126,7 @@ function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () =>
                 Hóa đơn #{bill.orderCode}
               </DialogTitle>
               <DialogDescription>
-                {formatBillTime(bill.createdAt)}
+                {formatDateTime(bill.createdAt)}
                 {bill.tableNumber != null && <> — Bàn {bill.tableNumber}</>}
               </DialogDescription>
             </DialogHeader>
@@ -163,7 +155,7 @@ function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () =>
             <div className='space-y-2'>
               <div className='flex items-center justify-between text-sm text-muted-foreground'>
                 <span>Phương thức</span>
-                <Badge variant='outline'>{paymentMethodConfig[bill.paymentMethod].label}</Badge>
+                <Badge variant='outline'>{getPaymentMethodLabel(bill.paymentMethod)}</Badge>
               </div>
               <div className='flex items-center justify-between text-base font-semibold'>
                 <span>Tổng cộng ({countItems(bill)} món)</span>

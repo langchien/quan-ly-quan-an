@@ -4,13 +4,14 @@ import { DishStatus } from '@app/shared'
 import type { DishType } from '@app/shared'
 
 import { formatCurrencyVND } from '@/lib/format'
+import { getDishStatusLabel } from '@/lib/status-label'
 
 function getStatusBadge(status: string) {
   switch (status) {
     case DishStatus.Available:
-      return <Badge variant='default'>Đang bán</Badge>
+      return <Badge variant='default'>{getDishStatusLabel(DishStatus.Available)}</Badge>
     case DishStatus.Unavailable:
-      return <Badge variant='secondary'>Tạm hết</Badge>
+      return <Badge variant='secondary'>{getDishStatusLabel(DishStatus.Unavailable)}</Badge>
     default:
       return null
   }

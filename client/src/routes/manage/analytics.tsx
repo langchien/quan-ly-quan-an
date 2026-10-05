@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { format } from 'date-fns'
-import { vi } from 'date-fns/locale'
 import { DollarSign, Users, ShoppingBag, Armchair, CalendarIcon } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -12,6 +11,7 @@ import { RevenueLineChart } from '@/components/manage/dashboard/revenue-line-cha
 import { DishBarChart } from '@/components/manage/dashboard/dish-bar-chart'
 import { cn } from '@/lib/utils'
 import { formatCurrency } from '@/lib/format'
+import { useLocale } from '@/lib/i18n/use-locale'
 import { Role } from '@app/shared'
 import { accountMeQueryOptions } from '@/queries/use-account'
 import { createFileRoute, redirect } from '@tanstack/react-router'
@@ -200,6 +200,7 @@ function DatePicker({
   onSelect: (date: Date | undefined) => void
 }) {
   const [open, setOpen] = useState(false)
+  const { dateFnsLocale } = useLocale()
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -215,7 +216,7 @@ function DatePicker({
         }
       >
         <CalendarIcon className='mr-2 h-4 w-4' />
-        {date ? format(date, 'dd/MM/yyyy', { locale: vi }) : 'Chọn ngày'}
+        {date ? format(date, 'dd/MM/yyyy', { locale: dateFnsLocale }) : 'Chọn ngày'}
       </PopoverTrigger>
       <PopoverContent className='w-auto p-0' align='start'>
         <Calendar
@@ -225,7 +226,7 @@ function DatePicker({
             onSelect(selectedDate)
             setOpen(false)
           }}
-          locale={vi}
+          locale={dateFnsLocale}
           autoFocus
         />
       </PopoverContent>

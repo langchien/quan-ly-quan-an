@@ -24,31 +24,40 @@ export function getDateFnsLocale(lng: AppLanguage = getCurrentLanguage()) {
   return DATE_FNS_LOCALES[lng]
 }
 
-type DateInput = Date | string | number
+export type DateInput = Date | string | number | null | undefined
 
 export function formatDateTime(date: DateInput, lng?: AppLanguage) {
+  if (!date) return '-'
+  const d = new Date(date)
+  if (isNaN(d.getTime())) return '-'
   return new Intl.DateTimeFormat(getIntlLocale(lng), {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  }).format(new Date(date))
+  }).format(d)
 }
 
 export function formatDate(date: DateInput, lng?: AppLanguage) {
+  if (!date) return '-'
+  const d = new Date(date)
+  if (isNaN(d.getTime())) return '-'
   return new Intl.DateTimeFormat(getIntlLocale(lng), {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
-  }).format(new Date(date))
+  }).format(d)
 }
 
 export function formatTime(date: DateInput, lng?: AppLanguage) {
+  if (!date) return '-'
+  const d = new Date(date)
+  if (isNaN(d.getTime())) return '-'
   return new Intl.DateTimeFormat(getIntlLocale(lng), {
     hour: '2-digit',
     minute: '2-digit',
-  }).format(new Date(date))
+  }).format(d)
 }
 
 /**

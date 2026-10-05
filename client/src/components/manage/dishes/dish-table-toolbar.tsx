@@ -18,7 +18,7 @@ import { useGetCategoryList } from '@/queries/use-category'
 import type { DishType } from '@app/shared'
 import type { Table } from '@tanstack/react-table'
 import { CirclePlus, LayoutGrid, List, Search, Settings2, UtensilsCrossed, X } from 'lucide-react'
-import { DISH_STATUS_OPTIONS } from './dish-columns'
+import { useStatusLabel } from '@/lib/status-label'
 
 export type ViewMode = 'table' | 'grid'
 
@@ -44,6 +44,7 @@ export function DishTableToolbar({
   onViewModeChange,
 }: DishTableToolbarProps) {
   const { data: categories } = useGetCategoryList()
+  const { dishStatusOptions } = useStatusLabel()
   const isFiltered = table.getState().columnFilters.length > 0 || !!table.getState().globalFilter
 
   // Status filter
@@ -125,15 +126,17 @@ export function DishTableToolbar({
                       {statusFilterValue.length} đã chọn
                     </Badge>
                   ) : (
-                    DISH_STATUS_OPTIONS.filter(o => statusFilterValue.includes(o.value)).map(o => (
-                      <Badge
-                        key={o.value}
-                        variant='secondary'
-                        className='rounded-sm px-1 font-normal'
-                      >
-                        {o.label}
-                      </Badge>
-                    ))
+                    dishStatusOptions
+                      .filter(o => statusFilterValue.includes(o.value))
+                      .map(o => (
+                        <Badge
+                          key={o.value}
+                          variant='secondary'
+                          className='rounded-sm px-1 font-normal'
+                        >
+                          {o.label}
+                        </Badge>
+                      ))
                   )}
                 </div>
               </>
@@ -141,7 +144,7 @@ export function DishTableToolbar({
           </PopoverTrigger>
           <PopoverContent className='w-52 p-2' align='start'>
             <div className='space-y-1'>
-              {DISH_STATUS_OPTIONS.map(option => (
+              {dishStatusOptions.map(option => (
                 <div
                   key={option.value}
                   className='flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 hover:bg-accent'

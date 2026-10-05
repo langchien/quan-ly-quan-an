@@ -1,11 +1,13 @@
-import { useMemo } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { OrderStatus } from '@app/shared'
-import type { OrderSchemaType } from '@app/shared'
-import { OrderCard } from './order-card'
 import { cn } from '@/lib/utils'
-import { ChefHat, CheckCircle2, Clock, Inbox } from 'lucide-react'
+import type { OrderSchemaType } from '@app/shared'
+import { OrderStatus } from '@app/shared'
+import { CheckCircle2, ChefHat, Clock, Inbox } from 'lucide-react'
+import { useMemo } from 'react'
+import { OrderCard } from './order-card'
+
+import { useStatusLabel } from '@/lib/status-label'
 
 interface LiveOrderKanbanProps {
   orders: OrderSchemaType[]
@@ -27,6 +29,8 @@ interface KanbanColumn {
 }
 
 export function LiveOrderKanban({ orders, isLoading }: LiveOrderKanbanProps) {
+  const { getOrderStatusLabel } = useStatusLabel()
+
   const columns = useMemo<KanbanColumn[]>(() => {
     const pending = orders
       .filter(o => o.status === OrderStatus.Pending)
@@ -43,7 +47,7 @@ export function LiveOrderKanban({ orders, isLoading }: LiveOrderKanbanProps) {
     return [
       {
         id: 'pending',
-        title: 'Chờ nấu',
+        title: getOrderStatusLabel(OrderStatus.Pending),
         icon: <Clock className='size-4' />,
         color: 'text-amber-700 dark:text-amber-400',
         bgColor: 'bg-amber-50 dark:bg-amber-950/30',
@@ -52,7 +56,7 @@ export function LiveOrderKanban({ orders, isLoading }: LiveOrderKanbanProps) {
       },
       {
         id: 'processing',
-        title: 'Đang nấu',
+        title: getOrderStatusLabel(OrderStatus.Processing),
         icon: <ChefHat className='size-4' />,
         color: 'text-blue-700 dark:text-blue-400',
         bgColor: 'bg-blue-50 dark:bg-blue-950/30',
@@ -61,7 +65,7 @@ export function LiveOrderKanban({ orders, isLoading }: LiveOrderKanbanProps) {
       },
       {
         id: 'delivered',
-        title: 'Chờ bưng',
+        title: getOrderStatusLabel(OrderStatus.Delivered),
         icon: <CheckCircle2 className='size-4' />,
         color: 'text-emerald-700 dark:text-emerald-400',
         bgColor: 'bg-emerald-50 dark:bg-emerald-950/30',
@@ -69,7 +73,7 @@ export function LiveOrderKanban({ orders, isLoading }: LiveOrderKanbanProps) {
         orders: delivered,
       },
     ]
-  }, [orders])
+  }, [orders, getOrderStatusLabel])
 
   if (isLoading) {
     return (

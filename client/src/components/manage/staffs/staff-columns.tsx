@@ -14,6 +14,8 @@ import {
 import type { AccountType } from '@app/shared'
 import type { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
+import { formatDate } from '@/lib/i18n/use-locale'
+import { getRoleLabel, getRoleOptions, ROLE_EMOJI } from '@/lib/status-label'
 
 export function getInitials(name: string) {
   return name
@@ -25,28 +27,26 @@ export function getInitials(name: string) {
     .toUpperCase()
 }
 
-export function formatDate(dateStr: string | Date | undefined | null) {
-  if (!dateStr) return '-'
-  const date = new Date(dateStr)
-  if (isNaN(date.getTime())) return '-'
-  return new Intl.DateTimeFormat('vi-VN', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  }).format(date)
-}
+export { formatDate }
 
-export const ROLE_OPTIONS = [
-  { value: 'Owner', label: '👑 Chủ quán' },
-  { value: 'Employee', label: '👤 Nhân viên' },
-]
+export const ROLE_OPTIONS = getRoleOptions()
 
 function getRoleBadge(role: string) {
+  const emoji = ROLE_EMOJI[role] ?? ''
+  const label = getRoleLabel(role)
   switch (role) {
     case 'Owner':
-      return <Badge variant='default'>👑 Chủ quán</Badge>
+      return (
+        <Badge variant='default'>
+          {emoji} {label}
+        </Badge>
+      )
     case 'Employee':
-      return <Badge variant='outline'>👤 Nhân viên</Badge>
+      return (
+        <Badge variant='outline'>
+          {emoji} {label}
+        </Badge>
+      )
     default:
       return <Badge variant='secondary'>{role}</Badge>
   }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { formatTime } from '@/lib/i18n/use-locale'
 
 /**
  * Hook đếm thời gian chờ kể từ `createdAt` (ISO string hoặc Date).
@@ -46,6 +47,5 @@ function calcElapsed(createdAt: string | Date) {
  * Hiển thị thời gian đặt dạng "HH:mm"
  */
 export function formatOrderTime(createdAt: string | Date) {
-  const d = new Date(createdAt)
-  return d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+  return formatTime(createdAt)
 }

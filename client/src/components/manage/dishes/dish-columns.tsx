@@ -19,6 +19,7 @@ import { ArrowUpDown, Eye, EyeOff, Loader2, MoreHorizontal, Pencil, Trash2 } fro
 import { useToggleDishStatusMutation } from '@/queries/use-dish'
 
 import { formatCurrency } from '@/lib/format'
+import { getDishStatusLabel, getDishStatusOptions, DISH_STATUS_EMOJI } from '@/lib/status-label'
 
 export function getInitials(name: string) {
   return name
@@ -30,20 +31,30 @@ export function getInitials(name: string) {
     .toUpperCase()
 }
 
-export const DISH_STATUS_OPTIONS = [
-  { value: DishStatus.Available, label: '✅ Đang bán' },
-  { value: DishStatus.Unavailable, label: '⏸️ Tạm hết' },
-  { value: DishStatus.Hidden, label: '🙈 Ẩn' },
-]
+export const DISH_STATUS_OPTIONS = getDishStatusOptions()
 
 function getStatusBadge(status: string) {
+  const emoji = DISH_STATUS_EMOJI[status] ?? ''
+  const label = getDishStatusLabel(status)
   switch (status) {
     case DishStatus.Available:
-      return <Badge variant='default'>✅ Đang bán</Badge>
+      return (
+        <Badge variant='default'>
+          {emoji} {label}
+        </Badge>
+      )
     case DishStatus.Unavailable:
-      return <Badge variant='secondary'>⏸️ Tạm hết</Badge>
+      return (
+        <Badge variant='secondary'>
+          {emoji} {label}
+        </Badge>
+      )
     case DishStatus.Hidden:
-      return <Badge variant='outline'>🙈 Ẩn</Badge>
+      return (
+        <Badge variant='outline'>
+          {emoji} {label}
+        </Badge>
+      )
     default:
       return <Badge variant='secondary'>{status}</Badge>
   }

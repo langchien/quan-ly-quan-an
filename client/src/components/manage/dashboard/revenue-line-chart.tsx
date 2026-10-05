@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/chart'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { RevenueByDateType } from '@app/shared'
+import { formatCurrency } from '@/lib/format'
 
 const chartConfig = {
   revenue: {
@@ -56,7 +57,7 @@ export function RevenueLineChart({ data }: { data: RevenueByDateType[] }) {
                   }}
                   formatter={value => {
                     const num = typeof value === 'number' ? value : Number(value)
-                    return [num.toLocaleString('vi-VN') + ' đ', 'Doanh thu']
+                    return [formatCurrency(num), 'Doanh thu']
                   }}
                 />
               }

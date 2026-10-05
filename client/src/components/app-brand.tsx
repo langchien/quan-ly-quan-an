@@ -34,7 +34,7 @@ export function AppBrand({
   brandName: brandNameProp,
   subtitle: subtitleProp,
   logo,
-  showModeToggle = true,
+  showModeToggle = false,
   inSidebar = false,
   className,
 }: AppBrandProps) {

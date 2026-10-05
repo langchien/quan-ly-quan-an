@@ -8,6 +8,7 @@ import type { OrderSchemaType } from '@app/shared'
 import { OrderCard } from './order-card'
 import { PayGuestDialog } from '@/components/manage/orders/pay-guest-dialog'
 import { cn } from '@/lib/utils'
+import { formatCurrency } from '@/lib/format'
 import { CheckCircle2, Clock, CreditCard, Users } from 'lucide-react'
 
 interface LiveTableGridProps {
@@ -245,7 +246,7 @@ function TableCard({
             onClick={() => onPay(group.orders[0])}
           >
             <CreditCard className='size-3.5' />
-            Thanh toán · {group.totalAmount.toLocaleString('vi-VN')}đ
+            Thanh toán · {formatCurrency(group.totalAmount)}
           </Button>
         )}
       </CardContent>
