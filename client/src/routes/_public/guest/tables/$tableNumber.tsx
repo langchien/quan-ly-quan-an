@@ -10,6 +10,7 @@ import { Role } from '@app/shared'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { UtensilsCrossed } from 'lucide-react'
 import { useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import z from 'zod'
 
@@ -35,6 +36,7 @@ export const Route = createFileRoute('/_public/guest/tables/$tableNumber')({
 // Component
 
 function GuestLoginPage() {
+  const { t } = useTranslation('auth')
   const { tableNumber } = Route.useParams()
   const { token } = Route.useSearch()
   const navigate = useNavigate()
@@ -47,7 +49,7 @@ function GuestLoginPage() {
   async function handleLogin(e: React.SubmitEvent) {
     e.preventDefault()
     if (!name.trim()) {
-      toast.error('Vui lòng nhập tên của bạn')
+      toast.error(t('guestLogin.nameRequired'))
       return
     }
 
@@ -75,8 +77,8 @@ function GuestLoginPage() {
       socket.auth = { Authorization: `Bearer ${accessToken}` }
       socket.connect()
 
-      toast.success(`Xin chào ${guest.name}! 👋`, {
-        description: `Bàn số ${tableNumber} — Chúc bạn ngon miệng!`,
+      toast.success(t('guestLogin.greeting', { name: guest.name }), {
+        description: t('guestLogin.greetingDesc', { number: tableNumber }),
       })
 
       navigate({ to: '/menu' })
@@ -92,20 +94,24 @@ function GuestLoginPage() {
           <div className='mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10'>
             <UtensilsCrossed className='h-7 w-7 text-primary' />
           </div>
-          <CardTitle className='text-2xl'>Chào mừng!</CardTitle>
+          <CardTitle className='text-2xl'>{t('guestLogin.welcome')}</CardTitle>
           <CardDescription>
-            Bàn số <span className='font-semibold text-foreground'>{tableNumber}</span> — Nhập tên
-            của bạn để bắt đầu gọi món
+            <Trans
+              ns='auth'
+              i18nKey='guestLogin.description'
+              values={{ number: tableNumber }}
+              components={{ b: <span className='font-semibold text-foreground' /> }}
+            />
           </CardDescription>
         </CardHeader>
 
         <CardContent>
           <form onSubmit={handleLogin} className='space-y-4'>
             <div className='space-y-2'>
-              <Label htmlFor='guest-name'>Tên của bạn</Label>
+              <Label htmlFor='guest-name'>{t('guestLogin.nameLabel')}</Label>
               <Input
                 id='guest-name'
-                placeholder='VD: Nguyễn Văn A'
+                placeholder={t('guestLogin.namePlaceholder')}
                 value={name}
                 onChange={e => setName(e.target.value)}
                 autoFocus
@@ -120,7 +126,7 @@ function GuestLoginPage() {
               disabled={loginMutation.isPending || !name.trim()}
               id='guest-login-btn'
             >
-              {loginMutation.isPending ? 'Đang vào...' : 'Vào xem thực đơn'}
+              {loginMutation.isPending ? t('guestLogin.entering') : t('guestLogin.submit')}
             </Button>
           </form>
         </CardContent>

@@ -1,6 +1,9 @@
 import { UtensilsCrossedIcon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 export function HeroSection() {
+  const { t } = useTranslation('guest')
+
   return (
     <section className='relative overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 py-20 dark:from-orange-950/30 dark:via-amber-950/20 dark:to-background'>
       {/* Decorative background circles */}
@@ -15,15 +18,14 @@ export function HeroSection() {
 
         {/* Heading */}
         <h1 className='mb-4 text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl'>
-          Thực đơn{' '}
+          {t('home.heroTitle')}{' '}
           <span className='bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent'>
-            hôm nay
+            {t('home.heroHighlight')}
           </span>
         </h1>
 
         <p className='mx-auto max-w-xl text-base text-muted-foreground md:text-lg'>
-          Khám phá những món ăn ngon được chế biến tươi mới mỗi ngày. Chọn món yêu thích và thưởng
-          thức ngay!
+          {t('home.heroDescription')}
         </p>
       </div>
     </section>

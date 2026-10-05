@@ -2,6 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { DishStatus } from '@app/shared'
 import { useGetDishList } from '@/queries/use-dish'
 import { SearchX } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { DishCard } from './dish-card'
 
 function DishCardSkeleton() {
@@ -19,18 +20,19 @@ function DishCardSkeleton() {
 }
 
 function EmptyState() {
+  const { t } = useTranslation('guest')
+
   return (
     <div className='col-span-full flex flex-col items-center justify-center py-20 text-center'>
       <SearchX className='mb-4 size-12 text-muted-foreground/50' />
-      <p className='text-lg font-medium text-muted-foreground'>Chưa có món ăn nào</p>
-      <p className='mt-1 text-sm text-muted-foreground/70'>
-        Thực đơn sẽ được cập nhật sớm. Hãy quay lại sau nhé!
-      </p>
+      <p className='text-lg font-medium text-muted-foreground'>{t('menu.emptyTitle')}</p>
+      <p className='mt-1 text-sm text-muted-foreground/70'>{t('menu.emptyHint')}</p>
     </div>
   )
 }
 
 export function DishListSection() {
+  const { t } = useTranslation('guest')
   const { data: dishes, isLoading } = useGetDishList()
 
   // Chỉ hiển thị món đang bán
@@ -42,10 +44,10 @@ export function DishListSection() {
       <div className='mb-8 flex items-center gap-3'>
         <div className='h-8 w-1 rounded-full bg-orange-500' />
         <div>
-          <h2 className='text-2xl font-bold tracking-tight'>Món đang bán</h2>
+          <h2 className='text-2xl font-bold tracking-tight'>{t('home.sectionTitle')}</h2>
           {!isLoading && (
             <p className='text-sm text-muted-foreground'>
-              {availableDishes.length} món có sẵn hôm nay
+              {t('home.availableToday', { count: availableDishes.length })}
             </p>
           )}
         </div>

@@ -1,5 +1,7 @@
 import { OrderStatus } from '@app/shared'
 import { Check, ChefHat, Clock, CreditCard, UtensilsCrossed } from 'lucide-react'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 // Types
 
@@ -12,23 +14,6 @@ interface StepConfig {
   label: string
   icon: React.ReactNode
 }
-
-// Constants
-
-const STEPS: StepConfig[] = [
-  { key: OrderStatus.Pending, label: 'Chờ xác nhận', icon: <Clock className='h-4 w-4' /> },
-  { key: OrderStatus.Processing, label: 'Đang chuẩn bị', icon: <ChefHat className='h-4 w-4' /> },
-  {
-    key: OrderStatus.Delivered,
-    label: 'Đã phục vụ',
-    icon: <UtensilsCrossed className='h-4 w-4' />,
-  },
-  {
-    key: OrderStatus.Paid,
-    label: 'Đã thanh toán',
-    icon: <CreditCard className='h-4 w-4' />,
-  },
-]
 
 /** Thứ tự ưu tiên của trạng thái (số nhỏ = tiến trình thấp hơn) */
 const STATUS_WEIGHT: Record<string, number> = {
@@ -75,8 +60,35 @@ function computeCurrentStep(orders: { status: string }[]): number {
  * Trạng thái Rejected được hiển thị riêng bên dưới stepper (nếu có).
  */
 export function OrderProgressStepper({ orders }: OrderProgressStepperProps) {
+  const { t } = useTranslation('guest')
   const currentStep = computeCurrentStep(orders)
   const rejectedCount = orders.filter(o => o.status === OrderStatus.Rejected).length
+
+  const steps: StepConfig[] = useMemo(
+    () => [
+      {
+        key: OrderStatus.Pending,
+        label: t('stepper.pending'),
+        icon: <Clock className='h-4 w-4' />,
+      },
+      {
+        key: OrderStatus.Processing,
+        label: t('stepper.processing'),
+        icon: <ChefHat className='h-4 w-4' />,
+      },
+      {
+        key: OrderStatus.Delivered,
+        label: t('stepper.delivered'),
+        icon: <UtensilsCrossed className='h-4 w-4' />,
+      },
+      {
+        key: OrderStatus.Paid,
+        label: t('stepper.paid'),
+        icon: <CreditCard className='h-4 w-4' />,
+      },
+    ],
+    [t]
+  )
 
   // Không hiển thị stepper nếu tất cả orders bị reject hoặc rỗng
   if (currentStep === -1 && rejectedCount === 0) return null
@@ -86,10 +98,10 @@ export function OrderProgressStepper({ orders }: OrderProgressStepperProps) {
       {/* Stepper chính */}
       {currentStep !== -1 && (
         <div className='flex items-center'>
-          {STEPS.map((step, index) => {
+          {steps.map((step, index) => {
             const isCompleted = index < currentStep
             const isCurrent = index === currentStep
-            const isLast = index === STEPS.length - 1
+            const isLast = index === steps.length - 1
 
             return (
               <div key={step.key} className='flex flex-1 items-center'>
@@ -142,8 +154,8 @@ export function OrderProgressStepper({ orders }: OrderProgressStepperProps) {
         >
           <span className='shrink-0 text-base'>⚠️</span>
           <span>
-            {rejectedCount} món bị từ chối
-            {rejectedCount < orders.length ? ' — các món còn lại đang được xử lý' : ''}
+            {t('stepper.rejected', { count: rejectedCount })}
+            {rejectedCount < orders.length ? t('stepper.othersProcessing') : ''}
           </span>
         </div>
       )}

@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { BellRing, Loader2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { socket } from '@/lib/socket'
 import { Button } from '@/components/ui/button'
@@ -30,6 +31,7 @@ interface CallStaffButtonProps {
  * Có cooldown 30s để tránh spam.
  */
 export function CallStaffButton({ iconOnly = false, className }: CallStaffButtonProps) {
+  const { t } = useTranslation(['guest', 'common'])
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -57,8 +59,8 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
         setTimeout(() => reject(new Error('Timeout')), 5000)
       })
 
-      toast.success('🔔 Đã gọi nhân viên!', {
-        description: 'Nhân viên sẽ đến hỗ trợ bạn trong giây lát.',
+      toast.success(t('callStaff.success'), {
+        description: t('callStaff.successDesc'),
       })
 
       setOpen(false)
@@ -68,13 +70,13 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
       // Reset cooldown sau 30s
       setTimeout(() => setCooldownUntil(null), COOLDOWN_MS)
     } catch {
-      toast.error('Gọi nhân viên thất bại', {
-        description: 'Vui lòng thử lại hoặc gọi trực tiếp.',
+      toast.error(t('callStaff.failed'), {
+        description: t('callStaff.failedDesc'),
       })
     } finally {
       setIsLoading(false)
     }
-  }, [isCoolingDown, message])
+  }, [isCoolingDown, message, t])
 
   if (isCoolingDown) {
     return (
@@ -84,10 +86,10 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
         disabled
         className={`gap-2 border-brand/40 text-brand-soft-foreground ${className ?? ''}`}
         id='call-staff-btn'
-        title={`Vui lòng chờ ${remainingSeconds}s trước khi gọi lại`}
+        title={t('callStaff.waitTitle', { seconds: remainingSeconds })}
       >
         <BellRing className='h-4 w-4' />
-        {!iconOnly && `Chờ ${remainingSeconds}s`}
+        {!iconOnly && t('callStaff.wait', { seconds: remainingSeconds })}
       </Button>
     )
   }
@@ -101,10 +103,10 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
             size={iconOnly ? 'icon' : 'default'}
             className={`gap-2 border-brand/40 text-brand-soft-foreground hover:border-brand hover:bg-brand-soft hover:text-brand-soft-foreground ${className ?? ''}`}
             id='call-staff-btn'
-            title='Gọi nhân viên'
+            title={t('callStaff.button')}
           >
             <BellRing className='h-4 w-4' />
-            {!iconOnly && 'Gọi nhân viên'}
+            {!iconOnly && t('callStaff.button')}
           </Button>
         }
       />
@@ -113,20 +115,19 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>
             <BellRing className='h-5 w-5 text-brand' />
-            Gọi nhân viên
+            {t('callStaff.button')}
           </DialogTitle>
-          <DialogDescription>
-            Nhân viên sẽ đến hỗ trợ bạn ngay. Bạn có thể để lại yêu cầu cụ thể bên dưới.
-          </DialogDescription>
+          <DialogDescription>{t('callStaff.description')}</DialogDescription>
         </DialogHeader>
 
         <div className='py-2'>
           <Label htmlFor='call-staff-message' className='mb-2 block text-sm font-medium'>
-            Yêu cầu hỗ trợ <span className='font-normal text-muted-foreground'>(tuỳ chọn)</span>
+            {t('callStaff.requestLabel')}{' '}
+            <span className='font-normal text-muted-foreground'>{t('callStaff.optional')}</span>
           </Label>
           <Textarea
             id='call-staff-message'
-            placeholder='Ví dụ: Cho thêm muỗng đũa, khăn ướt, nước chấm...'
+            placeholder={t('callStaff.placeholder')}
             value={message}
             onChange={e => setMessage(e.target.value)}
             maxLength={200}
@@ -138,7 +139,7 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
 
         <DialogFooter className='gap-2'>
           <Button variant='outline' onClick={() => setOpen(false)} disabled={isLoading}>
-            Huỷ
+            {t('common:actions.cancel')}
           </Button>
           <Button
             onClick={handleCallStaff}
@@ -149,12 +150,12 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
             {isLoading ? (
               <>
                 <Loader2 className='h-4 w-4 animate-spin' />
-                Đang gọi...
+                {t('callStaff.calling')}
               </>
             ) : (
               <>
                 <BellRing className='h-4 w-4' />
-                Gọi ngay
+                {t('callStaff.callNow')}
               </>
             )}
           </Button>

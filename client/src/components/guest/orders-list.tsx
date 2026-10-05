@@ -8,6 +8,7 @@ import { useWaitingTime, formatOrderTime } from '@/hooks/use-waiting-time'
 import type { GuestGetOrdersResType } from '@app/shared'
 import { OrderStatusBadge } from './order-status-badge'
 import { Clock } from 'lucide-react'
+import { Trans, useTranslation } from 'react-i18next'
 
 type Order = GuestGetOrdersResType['data'][number]
 
@@ -104,12 +105,14 @@ interface OrdersListProps {
 }
 
 export function OrdersList({ orders }: OrdersListProps) {
+  const { t } = useTranslation(['guest', 'common'])
+
   if (orders.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center py-20 text-center'>
-        <p className='text-lg font-medium text-muted-foreground'>Chưa có đơn hàng nào</p>
+        <p className='text-lg font-medium text-muted-foreground'>{t('orders.empty')}</p>
         <p className='mt-1 text-sm text-muted-foreground/70'>
-          Hãy vào trang <strong>Gọi món</strong> để đặt món nhé!
+          <Trans ns='guest' i18nKey='orders.emptyListHint' components={{ b: <strong /> }} />
         </p>
       </div>
     )
@@ -133,7 +136,9 @@ export function OrdersList({ orders }: OrdersListProps) {
         <section key={status} id={`orders-section-${status.toLowerCase()}`}>
           <div className='mb-3 flex items-center gap-2'>
             <OrderStatusBadge status={status} />
-            <span className='text-sm text-muted-foreground'>({group.length} món)</span>
+            <span className='text-sm text-muted-foreground'>
+              ({t('common:unit.item', { count: group.length })})
+            </span>
           </div>
           <div className='space-y-3'>
             {group.map(order => (
@@ -146,7 +151,7 @@ export function OrdersList({ orders }: OrdersListProps) {
       {/* Tổng tiền */}
       <Separator />
       <div className='flex items-center justify-between px-1 text-base font-semibold'>
-        <span>Tổng cộng ({orders.length} món)</span>
+        <span>{t('orders.totalWithCount', { count: orders.length })}</span>
         <span className='text-primary'>{formatCurrencyVND(totalAmount)}</span>
       </div>
     </div>

@@ -22,6 +22,7 @@ import { toast } from 'sonner'
 
 import { formatDateTime } from '@/lib/i18n/use-locale'
 import { getPaymentMethodLabel } from '@/lib/status-label'
+import { useTranslation } from 'react-i18next'
 
 type Bill = GetGuestBillsResType['data'][number]
 type BillOrder = Bill['orders'][number]
@@ -58,6 +59,7 @@ export function BillHistorySkeleton() {
 }
 
 function BillCard({ bill, onSelect }: { bill: Bill; onSelect: () => void }) {
+  const { t } = useTranslation(['guest', 'common'])
   const MethodIcon = paymentMethodIcons[bill.paymentMethod]
 
   return (
@@ -79,13 +81,13 @@ function BillCard({ bill, onSelect }: { bill: Bill; onSelect: () => void }) {
           <Receipt className='size-5' />
         </div>
         <div className='min-w-0 flex-1'>
-          <p className='font-medium'>Hóa đơn #{bill.orderCode}</p>
+          <p className='font-medium'>{t('bill.title', { code: bill.orderCode })}</p>
           <p className='text-xs text-muted-foreground'>{formatDateTime(bill.createdAt)}</p>
           <div className='mt-1 flex items-center gap-2 text-xs text-muted-foreground'>
             <MethodIcon className='size-3' />
             <span>{getPaymentMethodLabel(bill.paymentMethod)}</span>
             <span>·</span>
-            <span>{countItems(bill)} món</span>
+            <span>{t('common:unit.item', { count: countItems(bill) })}</span>
           </div>
         </div>
         <div className='flex items-center gap-1'>
@@ -98,6 +100,7 @@ function BillCard({ bill, onSelect }: { bill: Bill; onSelect: () => void }) {
 }
 
 function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () => void }) {
+  const { t } = useTranslation(['guest', 'common'])
   const guest = useAuthStore(s => s.guest)
   const [isExporting, setIsExporting] = useState(false)
 
@@ -107,7 +110,7 @@ function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () =>
       setIsExporting(true)
       const { downloadBillPdf } = await import('@/components/guest/bill-pdf')
       await downloadBillPdf(bill, guest?.name)
-      toast.success(`Đã tải hóa đơn #${bill.orderCode} (PDF)`)
+      toast.success(t('bill.downloaded', { code: bill.orderCode }))
     } catch (error) {
       handleErrorApi({ error })
     } finally {
@@ -123,11 +126,13 @@ function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () =>
             <DialogHeader>
               <DialogTitle className='flex items-center gap-2'>
                 <Receipt className='size-5 text-purple-600 dark:text-purple-400' />
-                Hóa đơn #{bill.orderCode}
+                {t('bill.title', { code: bill.orderCode })}
               </DialogTitle>
               <DialogDescription>
                 {formatDateTime(bill.createdAt)}
-                {bill.tableNumber != null && <> — Bàn {bill.tableNumber}</>}
+                {bill.tableNumber != null && (
+                  <> — {t('table.short', { number: bill.tableNumber })}</>
+                )}
               </DialogDescription>
             </DialogHeader>
 
@@ -154,11 +159,11 @@ function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () =>
 
             <div className='space-y-2'>
               <div className='flex items-center justify-between text-sm text-muted-foreground'>
-                <span>Phương thức</span>
+                <span>{t('bill.method')}</span>
                 <Badge variant='outline'>{getPaymentMethodLabel(bill.paymentMethod)}</Badge>
               </div>
               <div className='flex items-center justify-between text-base font-semibold'>
-                <span>Tổng cộng ({countItems(bill)} món)</span>
+                <span>{t('bill.totalWithCount', { count: countItems(bill) })}</span>
                 <span className='text-primary'>{formatCurrencyVND(bill.totalAmount)}</span>
               </div>
             </div>
@@ -176,10 +181,10 @@ function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () =>
                 ) : (
                   <Download className='size-4' />
                 )}
-                {isExporting ? 'Đang xuất PDF...' : 'Tải hóa đơn PDF'}
+                {isExporting ? t('bill.exporting') : t('bill.download')}
               </Button>
               <Button variant='secondary' onClick={onClose} id='close-bill-dialog-btn'>
-                Đóng
+                {t('common:actions.close')}
               </Button>
             </DialogFooter>
           </>
@@ -194,16 +199,15 @@ interface BillHistoryListProps {
 }
 
 export function BillHistoryList({ bills }: BillHistoryListProps) {
+  const { t } = useTranslation('guest')
   const [selected, setSelected] = useState<Bill | null>(null)
 
   if (bills.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center py-20 text-center'>
         <Receipt className='mb-4 size-12 text-muted-foreground/50' />
-        <p className='text-lg font-medium text-muted-foreground'>Chưa có hóa đơn nào</p>
-        <p className='mt-1 text-sm text-muted-foreground/70'>
-          Hóa đơn sẽ xuất hiện ở đây sau khi bạn thanh toán.
-        </p>
+        <p className='text-lg font-medium text-muted-foreground'>{t('bill.empty')}</p>
+        <p className='mt-1 text-sm text-muted-foreground/70'>{t('bill.emptyHint')}</p>
       </div>
     )
   }
@@ -220,7 +224,7 @@ export function BillHistoryList({ bills }: BillHistoryListProps) {
 
       <Separator />
       <div className='flex items-center justify-between px-1 text-base font-semibold'>
-        <span>Đã thanh toán ({bills.length} hóa đơn)</span>
+        <span>{t('bill.paidSummary', { count: bills.length })}</span>
         <span className='text-primary'>{formatCurrencyVND(total)}</span>
       </div>
 

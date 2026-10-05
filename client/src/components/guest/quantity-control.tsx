@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Minus, Plus } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface QuantityControlProps {
   quantity: number
@@ -21,6 +22,8 @@ export function QuantityControl({
   max = 99,
   className = '',
 }: QuantityControlProps) {
+  const { t } = useTranslation('guest')
+
   return (
     <div className={`flex items-center gap-1 ${className}`}>
       <Button
@@ -29,7 +32,7 @@ export function QuantityControl({
         className='h-8 w-8 shrink-0 rounded-full'
         onClick={onDecrease}
         disabled={quantity <= min}
-        aria-label='Giảm số lượng'
+        aria-label={t('quantity.decrease')}
       >
         <Minus className='h-3 w-3' />
       </Button>
@@ -42,7 +45,7 @@ export function QuantityControl({
         className='h-8 w-8 shrink-0 rounded-full'
         onClick={onIncrease}
         disabled={quantity >= max}
-        aria-label='Tăng số lượng'
+        aria-label={t('quantity.increase')}
       >
         <Plus className='h-3 w-3' />
       </Button>

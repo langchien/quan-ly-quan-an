@@ -3,6 +3,7 @@ import type { PaymentMethod, GetGuestBillsResType } from '@app/shared'
 import { Document, Font, Page, StyleSheet, Text, View, pdf } from '@react-pdf/renderer'
 import { getIntlLocale, formatDateTime as formatDateTimeLocale } from '@/lib/i18n/use-locale'
 import { getPaymentMethodLabel } from '@/lib/status-label'
+import i18n from '@/lib/i18n'
 
 // Module này chỉ được import động (dynamic import) khi khách bấm "Tải PDF"
 // để không kéo @react-pdf/renderer vào bundle chính.
@@ -70,58 +71,68 @@ function getMethodLabel(method: (typeof PaymentMethod)[keyof typeof PaymentMetho
   return getPaymentMethodLabel(method)
 }
 
-function BillPdfDocument({ bill, guestName }: { bill: Bill; guestName?: string }) {
+interface BillPdfDocumentProps {
+  bill: Bill
+  guestName?: string
+}
+
+function BillPdfDocument({ bill, guestName }: BillPdfDocumentProps) {
   const totalQty = bill.orders.reduce((sum: number, o: BillOrder) => sum + o.quantity, 0)
+  const fileTitle = i18n.t('guest:pdf.fileName', { code: bill.orderCode })
 
   return (
-    <Document title={`Hoa-don-${bill.orderCode}`} author={SHOP_INFO.name}>
+    <Document title={fileTitle} author={SHOP_INFO.name}>
       <Page size='A5' style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.shopName}>{SHOP_INFO.name}</Text>
           <Text style={styles.shopMeta}>{SHOP_INFO.address}</Text>
-          <Text style={styles.shopMeta}>Hotline: {SHOP_INFO.phone}</Text>
+          <Text style={styles.shopMeta}>
+            {i18n.t('guest:pdf.hotline', { phone: SHOP_INFO.phone })}
+          </Text>
         </View>
 
-        <Text style={styles.title}>HÓA ĐƠN THANH TOÁN</Text>
+        <Text style={styles.title}>{i18n.t('guest:pdf.heading')}</Text>
 
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Mã hóa đơn</Text>
+          <Text style={styles.infoLabel}>{i18n.t('guest:pdf.code')}</Text>
           <Text>#{bill.orderCode}</Text>
         </View>
         {bill.tableNumber != null && (
           <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Bàn</Text>
+            <Text style={styles.infoLabel}>{i18n.t('guest:pdf.table')}</Text>
             <Text>{bill.tableNumber}</Text>
           </View>
         )}
         {guestName && (
           <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Khách hàng</Text>
+            <Text style={styles.infoLabel}>{i18n.t('guest:pdf.customer')}</Text>
             <Text>{guestName}</Text>
           </View>
         )}
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Thời gian</Text>
+          <Text style={styles.infoLabel}>{i18n.t('guest:pdf.time')}</Text>
           <Text>{formatDateTime(bill.createdAt)}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Phương thức</Text>
+          <Text style={styles.infoLabel}>{i18n.t('guest:pdf.method')}</Text>
           <Text>{getMethodLabel(bill.paymentMethod)}</Text>
         </View>
 
         <View style={styles.divider} />
 
         <View style={styles.tableHeader}>
-          <Text style={styles.colName}>Món</Text>
-          <Text style={styles.colQty}>SL</Text>
-          <Text style={styles.colPrice}>Đơn giá</Text>
-          <Text style={styles.colTotal}>Thành tiền</Text>
+          <Text style={styles.colName}>{i18n.t('guest:pdf.colDish')}</Text>
+          <Text style={styles.colQty}>{i18n.t('guest:pdf.colQty')}</Text>
+          <Text style={styles.colPrice}>{i18n.t('guest:pdf.colPrice')}</Text>
+          <Text style={styles.colTotal}>{i18n.t('guest:pdf.colTotal')}</Text>
         </View>
         {bill.orders.map((order: BillOrder) => (
           <View key={order.id} style={styles.tableRow} wrap={false}>
             <View style={styles.colName}>
               <Text>{order.dishSnapshot.name}</Text>
-              {order.note ? <Text style={styles.note}>Ghi chú: {order.note}</Text> : null}
+              {order.note ? (
+                <Text style={styles.note}>{i18n.t('guest:pdf.note', { note: order.note })}</Text>
+              ) : null}
             </View>
             <Text style={styles.colQty}>{order.quantity}</Text>
             <Text style={styles.colPrice}>{money(order.dishSnapshot.price)}</Text>
@@ -132,11 +143,13 @@ function BillPdfDocument({ bill, guestName }: { bill: Bill; guestName?: string }
         <View style={styles.divider} />
 
         <View style={styles.totalRow}>
-          <Text style={styles.totalLabel}>Tổng cộng ({totalQty} món)</Text>
+          <Text style={styles.totalLabel}>
+            {i18n.t('guest:pdf.totalWithCount', { count: totalQty })}
+          </Text>
           <Text style={styles.totalValue}>{money(bill.totalAmount)}</Text>
         </View>
 
-        <Text style={styles.footer}>{SHOP_INFO.thankYou}</Text>
+        <Text style={styles.footer}>{i18n.t('guest:pdf.thankYou')}</Text>
       </Page>
     </Document>
   )
@@ -148,7 +161,7 @@ export async function downloadBillPdf(bill: Bill, guestName?: string) {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = `hoa-don-${bill.orderCode}.pdf`
+  link.download = `${i18n.t('guest:pdf.fileName', { code: bill.orderCode })}.pdf`
   document.body.appendChild(link)
   link.click()
   link.remove()

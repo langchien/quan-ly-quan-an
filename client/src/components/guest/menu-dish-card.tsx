@@ -8,6 +8,7 @@ import { useCartStore } from '@/hooks/use-cart'
 import type { DishType } from '@app/shared'
 import { Ban, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { QuantityControl } from './quantity-control'
 import { useStatusLabel } from '@/lib/status-label'
 
@@ -16,6 +17,7 @@ interface MenuDishCardProps {
 }
 
 export function MenuDishCard({ dish }: MenuDishCardProps) {
+  const { t } = useTranslation('guest')
   const { getDishStatusLabel } = useStatusLabel()
   const items = useCartStore(s => s.items)
   const addItem = useCartStore(s => s.addItem)
@@ -125,21 +127,21 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
               size='sm'
               disabled
               className='cursor-not-allowed gap-1.5 rounded-full opacity-50'
-              aria-label={`${dish.name} hiện tạm hết`}
-              title='Món này hiện tạm hết, vui lòng chọn món khác'
+              aria-label={t('dishCard.soldOutAria', { name: dish.name })}
+              title={t('dishCard.soldOutHint')}
             >
               <Ban className='h-3.5 w-3.5' />
-              Tạm hết
+              {t('dishCard.soldOut')}
             </Button>
           ) : quantity === 0 ? (
             <Button
               size='sm'
               onClick={handleAdd}
               className='gap-1.5 rounded-full'
-              aria-label={`Thêm ${dish.name} vào giỏ`}
+              aria-label={t('dishCard.addAria', { name: dish.name })}
             >
               <ShoppingCart className='h-3.5 w-3.5' />
-              Thêm
+              {t('dishCard.add')}
             </Button>
           ) : (
             <QuantityControl

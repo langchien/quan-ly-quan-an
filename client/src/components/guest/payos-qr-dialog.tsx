@@ -14,6 +14,7 @@ import { useSocketEvents } from '@/hooks/use-socket-event'
 import { Loader2, QrCode, CheckCircle2, Smartphone, ExternalLink } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 interface PayosQrDialogProps {
@@ -26,6 +27,7 @@ interface PayosQrDialogProps {
 type PaymentState = 'idle' | 'loading' | 'qr-ready' | 'paid'
 
 export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: PayosQrDialogProps) {
+  const { t } = useTranslation(['guest', 'common'])
   const [state, setState] = useState<PaymentState>('idle')
   const [qrData, setQrData] = useState<{
     billId: number
@@ -41,7 +43,7 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
     payment: () => {
       if (open && state === 'qr-ready') {
         setState('paid')
-        toast.success('Thanh toán thành công! 🎉')
+        toast.success(t('payos.successToast'))
       }
     },
   })
@@ -70,16 +72,18 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>
             <QrCode className='size-5 text-info' />
-            Thanh toán VietQR
+            {t('payos.title')}
           </DialogTitle>
-          <DialogDescription>Quét mã QR bằng ứng dụng ngân hàng để thanh toán</DialogDescription>
+          <DialogDescription>{t('payos.description')}</DialogDescription>
         </DialogHeader>
 
         {/* Trạng thái: Chưa tạo mã */}
         {state === 'idle' && (
           <div className='space-y-4'>
             <div className='flex items-center justify-between rounded-lg bg-muted/60 px-4 py-3'>
-              <span className='text-sm text-muted-foreground'>{orderCount} món cần thanh toán</span>
+              <span className='text-sm text-muted-foreground'>
+                {t('payos.itemsToPay', { count: orderCount })}
+              </span>
               <span className='text-xl font-bold text-info'>{formatCurrencyVND(totalAmount)}</span>
             </div>
             <Button
@@ -88,7 +92,7 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
               id='create-payment-link-btn'
             >
               <Smartphone className='size-4' />
-              Tạo mã QR thanh toán
+              {t('payos.createQr')}
             </Button>
           </div>
         )}
@@ -97,7 +101,7 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
         {state === 'loading' && (
           <div className='flex flex-col items-center gap-3 py-8'>
             <Loader2 className='size-8 animate-spin text-info' />
-            <p className='text-sm text-muted-foreground'>Đang tạo mã thanh toán...</p>
+            <p className='text-sm text-muted-foreground'>{t('payos.creating')}</p>
           </div>
         )}
 
@@ -111,7 +115,7 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
                 {qrData.qrCode.startsWith('http') || qrData.qrCode.startsWith('data:') ? (
                   <img
                     src={qrData.qrCode}
-                    alt='Mã QR VietQR'
+                    alt={t('payos.qrAlt')}
                     className='size-[240px] object-contain'
                     id='payos-qr-image'
                   />
@@ -126,7 +130,7 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
                 )}
               </div>
               <div className='flex items-center gap-2 text-xs text-muted-foreground'>
-                <span>Mã đơn: #{qrData.orderCode}</span>
+                <span>{t('payos.orderCode', { code: qrData.orderCode })}</span>
                 {qrData.checkoutUrl && (
                   <>
                     <span>•</span>
@@ -136,29 +140,25 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
                       rel='noreferrer'
                       className='inline-flex items-center gap-1 text-info hover:underline'
                     >
-                      <span>Mở link PayOS</span>
+                      <span>{t('payos.openLink')}</span>
                       <ExternalLink className='size-3' />
                     </a>
                   </>
                 )}
               </div>
-              <p className='text-center text-xs text-muted-foreground'>
-                Mở ứng dụng ngân hàng → Quét QR → Xác nhận thanh toán
-              </p>
+              <p className='text-center text-xs text-muted-foreground'>{t('payos.instructions')}</p>
             </div>
 
             {/* Tổng tiền */}
             <div className='flex items-center justify-between rounded-lg bg-info-soft px-4 py-3'>
-              <span className='font-medium'>Tổng thanh toán</span>
+              <span className='font-medium'>{t('payos.totalPayment')}</span>
               <span className='text-xl font-bold text-info-soft-foreground'>
                 {formatCurrencyVND(totalAmount)}
               </span>
             </div>
 
             {/* Lưu ý */}
-            <p className='text-center text-xs text-muted-foreground'>
-              ⏳ Hệ thống sẽ tự động cập nhật khi nhận được tiền
-            </p>
+            <p className='text-center text-xs text-muted-foreground'>{t('payos.autoUpdate')}</p>
           </div>
         )}
 
@@ -169,20 +169,20 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
               <CheckCircle2 className='size-8 text-success-soft-foreground' />
             </div>
             <p className='text-lg font-semibold text-success-soft-foreground'>
-              Thanh toán thành công!
+              {t('payos.success')}
             </p>
-            <p className='text-sm text-muted-foreground'>Cảm ơn bạn đã sử dụng dịch vụ 🎉</p>
+            <p className='text-sm text-muted-foreground'>{t('payos.thanks')}</p>
           </div>
         )}
 
         <DialogFooter>
           {state === 'paid' ? (
             <Button onClick={handleClose} className='w-full' id='close-payment-btn'>
-              Đóng
+              {t('common:actions.close')}
             </Button>
           ) : state === 'qr-ready' ? (
             <Button variant='outline' onClick={handleClose} className='w-full'>
-              Hủy thanh toán
+              {t('payos.cancel')}
             </Button>
           ) : null}
         </DialogFooter>

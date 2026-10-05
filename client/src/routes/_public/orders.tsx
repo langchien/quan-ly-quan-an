@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useSocketEvents } from '@/hooks/use-socket-event'
 import { socket } from '@/lib/socket'
+import { useStatusLabel } from '@/lib/status-label'
 import { useGuestBillsQuery } from '@/queries/use-bill'
 import { useGuestGetOrdersQuery, useGuestLogoutMutation } from '@/queries/use-guest'
 import { useAuthStore } from '@/store/useAuthStore'
@@ -13,6 +14,7 @@ import { OrderStatus, Role } from '@app/shared'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { ClipboardList, LogOut, QrCode, RefreshCw } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 // Route
@@ -30,6 +32,8 @@ export const Route = createFileRoute('/_public/orders')({
 // Component
 
 function OrdersPage() {
+  const { t } = useTranslation('guest')
+  const { getOrderStatusLabel } = useStatusLabel()
   const navigate = useNavigate()
   const guest = useAuthStore(s => s.guest)
   const logout = useAuthStore(s => s.logout)
@@ -64,16 +68,18 @@ function OrdersPage() {
     'update-order': updatedOrder => {
       refetch()
       const order = updatedOrder as { dishSnapshot?: { name?: string }; status?: string }
-      toast.info(`Cập nhật đơn hàng: ${order.dishSnapshot?.name ?? ''}`, {
-        description: `Trạng thái mới: ${order.status ?? ''}`,
+      toast.info(t('orders.updated', { name: order.dishSnapshot?.name ?? '' }), {
+        description: t('orders.newStatus', {
+          status: order.status ? getOrderStatusLabel(order.status) : '',
+        }),
       })
     },
     payment: paidOrders => {
       refetch()
       refetchBills()
       setPayosDialogOpen(false) // Tự đóng dialog QR khi thanh toán xong
-      toast.success('Thanh toán thành công! 🎉', {
-        description: `${paidOrders.length} món đã được thanh toán.`,
+      toast.success(t('orders.paymentSuccess'), {
+        description: t('orders.paymentSuccessDesc', { count: paidOrders.length }),
       })
     },
   })
@@ -86,7 +92,7 @@ function OrdersPage() {
       socket.disconnect()
       logout()
       navigate({ to: '/' })
-      toast.success('Đã đăng xuất thành công')
+      toast.success(t('orders.loggedOut'))
     }
   }
 
@@ -98,17 +104,12 @@ function OrdersPage() {
           <div>
             <div className='flex items-center gap-3'>
               <div className='h-8 w-1 rounded-full bg-brand' />
-              <h1 className='text-2xl font-bold tracking-tight'>Đơn hàng của tôi</h1>
+              <h1 className='text-2xl font-bold tracking-tight'>{t('orders.title')}</h1>
             </div>
             {guest && (
               <p className='mt-1 ml-4 text-sm text-muted-foreground'>
                 <span className='font-medium'>{guest.name}</span>
-                {guest.tableNumber && (
-                  <>
-                    {' '}
-                    — Bàn số <span className='font-semibold'>{guest.tableNumber}</span>
-                  </>
-                )}
+                {guest.tableNumber && <> — {t('table.number', { number: guest.tableNumber })}</>}
               </p>
             )}
           </div>
@@ -126,7 +127,7 @@ function OrdersPage() {
                 refetchBills()
               }}
               disabled={isLoading}
-              title='Làm mới'
+              title={t('orders.refresh')}
               id='refresh-orders-btn'
             >
               <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -141,7 +142,7 @@ function OrdersPage() {
               id='guest-logout-btn'
             >
               <LogOut className='h-4 w-4' />
-              {logoutMutation.isPending ? 'Đang đăng xuất...' : 'Đăng xuất'}
+              {logoutMutation.isPending ? t('orders.loggingOut') : t('orders.logout')}
             </Button>
           </div>
         </div>
@@ -150,7 +151,7 @@ function OrdersPage() {
         <Tabs value={activeTab} onValueChange={value => setActiveTab(String(value))}>
           <TabsList className='mb-4 w-full max-w-sm'>
             <TabsTrigger value='current' id='orders-tab-current'>
-              Đơn hiện tại
+              {t('orders.tabCurrent')}
               {currentOrders.length > 0 && (
                 <span className='rounded-full bg-brand px-1.5 text-xs text-brand-foreground'>
                   {currentOrders.length}
@@ -158,7 +159,7 @@ function OrdersPage() {
               )}
             </TabsTrigger>
             <TabsTrigger value='history' id='orders-tab-history'>
-              Lịch sử hóa đơn
+              {t('orders.tabHistory')}
             </TabsTrigger>
           </TabsList>
 
@@ -179,7 +180,7 @@ function OrdersPage() {
                       id='pay-vietqr-btn'
                     >
                       <QrCode className='size-5' />
-                      Thanh toán VietQR
+                      {t('orders.payVietQR')}
                     </Button>
                   </div>
                 )}
@@ -196,9 +197,7 @@ function OrdersPage() {
               <div className='flex flex-col items-center justify-center py-20 text-center'>
                 <ClipboardList className='mb-4 size-12 text-muted-foreground/50' />
                 <p className='text-lg font-medium text-muted-foreground'>
-                  {orders && orders.length > 0
-                    ? 'Bạn đã thanh toán tất cả đơn'
-                    : 'Chưa có đơn hàng nào'}
+                  {orders && orders.length > 0 ? t('orders.allPaid') : t('orders.empty')}
                 </p>
                 <p className='mt-1 text-sm text-muted-foreground/70'>
                   {orders && orders.length > 0 && (
@@ -207,19 +206,19 @@ function OrdersPage() {
                         onClick={() => setActiveTab('history')}
                         className='font-medium text-primary underline-offset-4 hover:underline'
                       >
-                        Xem lịch sử hóa đơn
+                        {t('orders.viewBillHistory')}
                       </button>{' '}
-                      hoặc{' '}
+                      {t('orders.or')}{' '}
                     </>
                   )}
-                  Hãy vào{' '}
+                  {t('orders.goTo')}{' '}
                   <button
                     onClick={() => navigate({ to: '/menu' })}
                     className='font-medium text-primary underline-offset-4 hover:underline'
                   >
-                    Gọi món
+                    {t('orders.orderLink')}
                   </button>{' '}
-                  để đặt món nhé!
+                  {t('orders.toOrder')}
                 </p>
               </div>
             )}

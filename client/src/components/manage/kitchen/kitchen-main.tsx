@@ -6,6 +6,7 @@ import { KitchenOrderCard } from './kitchen-order-card'
 import { KitchenStatsBar } from './kitchen-stats-bar'
 import { ChefHat, Clock, Inbox } from 'lucide-react'
 import type { OrderSchemaType } from '@app/shared'
+import { useTranslation } from 'react-i18next'
 
 /**
  * Render một nhóm đơn theo bàn trong cột Kanban
@@ -36,6 +37,7 @@ function TableGroup({ tableNumber, orders }: { tableNumber: number; orders: Orde
  * Đơn được nhóm theo bàn trong mỗi cột, sắp xếp FIFO (chờ lâu nhất lên đầu).
  */
 export function KitchenMain() {
+  const { t } = useTranslation('manage')
   const {
     pendingByTable,
     processingByTable,
@@ -49,7 +51,7 @@ export function KitchenMain() {
   const columns = [
     {
       id: 'pending',
-      title: 'Chờ nấu',
+      title: t('kitchen.pending'),
       icon: <Clock className='size-5' />,
       count: pendingCount,
       color: 'text-amber-700 dark:text-amber-400',
@@ -60,7 +62,7 @@ export function KitchenMain() {
     },
     {
       id: 'processing',
-      title: 'Đang nấu',
+      title: t('kitchen.processing'),
       icon: <ChefHat className='size-5' />,
       count: processingCount,
       color: 'text-blue-700 dark:text-blue-400',
@@ -77,11 +79,9 @@ export function KitchenMain() {
       <div>
         <h1 className='flex items-center gap-2 text-2xl font-bold tracking-tight'>
           <ChefHat className='size-7 text-primary' />
-          Bếp (KDS)
+          {t('kitchen.title')}
         </h1>
-        <p className='text-sm text-muted-foreground'>
-          Màn hình hiển thị đơn hàng cho bộ phận bếp — cập nhật realtime
-        </p>
+        <p className='text-sm text-muted-foreground'>{t('kitchen.description')}</p>
       </div>
 
       {/* Stats Bar */}

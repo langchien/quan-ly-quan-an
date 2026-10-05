@@ -4,24 +4,25 @@ import { DishStatus } from '@app/shared'
 import type { DishType } from '@app/shared'
 
 import { formatCurrencyVND } from '@/lib/format'
-import { getDishStatusLabel } from '@/lib/status-label'
-
-function getStatusBadge(status: string) {
-  switch (status) {
-    case DishStatus.Available:
-      return <Badge variant='default'>{getDishStatusLabel(DishStatus.Available)}</Badge>
-    case DishStatus.Unavailable:
-      return <Badge variant='secondary'>{getDishStatusLabel(DishStatus.Unavailable)}</Badge>
-    default:
-      return null
-  }
-}
+import { useStatusLabel } from '@/lib/status-label'
 
 interface DishCardProps {
   dish: DishType
 }
 
 export function DishCard({ dish }: DishCardProps) {
+  const { getDishStatusLabel } = useStatusLabel()
+
+  function renderStatusBadge(status: string) {
+    switch (status) {
+      case DishStatus.Available:
+        return <Badge variant='default'>{getDishStatusLabel(DishStatus.Available)}</Badge>
+      case DishStatus.Unavailable:
+        return <Badge variant='secondary'>{getDishStatusLabel(DishStatus.Unavailable)}</Badge>
+      default:
+        return null
+    }
+  }
   return (
     <Card className='group overflow-hidden border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg'>
       {/* Ảnh món ăn */}
@@ -38,7 +39,7 @@ export function DishCard({ dish }: DishCardProps) {
           </div>
         )}
         {/* Badge trạng thái */}
-        <div className='absolute top-2 right-2'>{getStatusBadge(dish.status)}</div>
+        <div className='absolute top-2 right-2'>{renderStatusBadge(dish.status)}</div>
       </div>
 
       {/* Nội dung */}

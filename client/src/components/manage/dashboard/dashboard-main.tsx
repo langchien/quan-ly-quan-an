@@ -6,6 +6,7 @@ import { LiveStatsBar } from './live-stats-bar'
 import { LiveTableGrid } from './live-table-grid'
 import { LiveOrderKanban } from './live-order-kanban'
 import { Armchair, ChefHat } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 /**
  * Dashboard Vận Hành Trực Tiếp (Live Operations Hub)
@@ -16,6 +17,7 @@ import { Armchair, ChefHat } from 'lucide-react'
  * 3. Không gian điều hành chính – LiveTableGrid hoặc LiveOrderKanban
  */
 export function DashboardMain() {
+  const { t } = useTranslation('manage')
   const {
     liveOrders,
     pendingCount,
@@ -49,7 +51,7 @@ export function DashboardMain() {
           <TabsList>
             <TabsTrigger value='tables' className='gap-1.5'>
               <Armchair className='size-4' />
-              Xem theo Bàn
+              {t('dashboard.viewByTable')}
               {servingTableCount > 0 && (
                 <span className='ml-1 flex size-5 items-center justify-center rounded-full bg-primary/15 text-[10px] font-semibold text-primary'>
                   {servingTableCount}
@@ -58,7 +60,7 @@ export function DashboardMain() {
             </TabsTrigger>
             <TabsTrigger value='kanban' className='gap-1.5'>
               <ChefHat className='size-4' />
-              Xem theo Món
+              {t('dashboard.viewByDish')}
               {pendingCount + processingCount > 0 && (
                 <span className='ml-1 flex size-5 items-center justify-center rounded-full bg-amber-500/15 text-[10px] font-semibold text-amber-600'>
                   {pendingCount + processingCount}

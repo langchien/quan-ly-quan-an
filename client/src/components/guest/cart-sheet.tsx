@@ -17,10 +17,12 @@ import { useGuestCreateOrdersMutation } from '@/queries/use-guest'
 import { DishStatus } from '@app/shared'
 import { AlertCircle, MessageSquare, ShoppingCart, Trash2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { QuantityControl } from './quantity-control'
 
 export function CartSheet() {
+  const { t } = useTranslation('guest')
   const items = useCartStore(s => s.items)
   const totalItems = useCartStore(selectCartTotalItems)
   const totalPrice = useCartStore(selectCartTotal)
@@ -56,7 +58,7 @@ export function CartSheet() {
 
   function removeUnavailableItems() {
     unavailableDishIds.forEach(id => removeItem(id))
-    toast.info(`Đã xóa ${unavailableDishIds.length} món tạm hết khỏi giỏ hàng`)
+    toast.info(t('cart.removedUnavailable', { count: unavailableDishIds.length }))
   }
 
   function toggleNoteExpand(dishId: number) {
@@ -82,13 +84,13 @@ export function CartSheet() {
       await createOrdersMutation.mutateAsync(orders)
       clearCart()
       setExpandedNotes(new Set())
-      toast.success('Đặt món thành công! 🎉', {
-        description: `Đã đặt ${orders.length} món. Vui lòng đợi nhà bếp xử lý.`,
+      toast.success(t('cart.orderSuccess'), {
+        description: t('cart.orderSuccessDesc', { count: orders.length }),
       })
     } catch (error: unknown) {
       const err = error as { response?: { data?: { message?: string } }; message?: string }
-      const errorMsg = err.response?.data?.message || err.message || 'Vui lòng thử lại.'
-      toast.error('Đặt món thất bại', {
+      const errorMsg = err.response?.data?.message || err.message || t('cart.tryAgain')
+      toast.error(t('cart.orderFailed'), {
         description: errorMsg,
       })
     }
@@ -102,7 +104,7 @@ export function CartSheet() {
           size='icon'
           className='relative'
           id='cart-trigger'
-          aria-label='Mở giỏ hàng'
+          aria-label={t('cart.open')}
         >
           <ShoppingCart className='h-5 w-5' />
           {totalItems > 0 && (
@@ -117,9 +119,11 @@ export function CartSheet() {
         <SheetHeader className='px-6 pt-6 pb-4'>
           <SheetTitle className='flex items-center gap-2 text-lg'>
             <ShoppingCart className='h-5 w-5' />
-            Giỏ hàng
+            {t('cart.title')}
             {totalItems > 0 && (
-              <span className='text-sm font-normal text-muted-foreground'>({totalItems} món)</span>
+              <span className='text-sm font-normal text-muted-foreground'>
+                {t('cart.itemCount', { count: totalItems })}
+              </span>
             )}
           </SheetTitle>
         </SheetHeader>
@@ -131,7 +135,7 @@ export function CartSheet() {
           <div className='mx-6 mt-3 flex items-center justify-between rounded-lg border border-amber-300 bg-amber-50 p-2.5 text-xs text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-300'>
             <div className='flex items-center gap-1.5 font-medium'>
               <AlertCircle className='size-4 shrink-0 text-amber-600 dark:text-amber-400' />
-              <span>Có {unavailableDishIds.length} món trong giỏ hiện tạm hết</span>
+              <span>{t('cart.unavailableBanner', { count: unavailableDishIds.length })}</span>
             </div>
             <Button
               variant='outline'
@@ -139,7 +143,7 @@ export function CartSheet() {
               onClick={removeUnavailableItems}
               className='h-7 text-xs font-semibold text-amber-900 hover:bg-amber-200 dark:text-amber-200 dark:hover:bg-amber-900/50'
             >
-              Xóa món hết
+              {t('cart.removeUnavailable')}
             </Button>
           </div>
         )}
@@ -149,8 +153,8 @@ export function CartSheet() {
           {items.length === 0 ? (
             <div className='flex flex-col items-center justify-center py-16 text-center'>
               <ShoppingCart className='mb-3 h-12 w-12 text-muted-foreground/30' />
-              <p className='text-muted-foreground'>Giỏ hàng trống</p>
-              <p className='mt-1 text-sm text-muted-foreground/70'>Thêm món từ thực đơn nhé!</p>
+              <p className='text-muted-foreground'>{t('cart.empty')}</p>
+              <p className='mt-1 text-sm text-muted-foreground/70'>{t('cart.emptyHint')}</p>
             </div>
           ) : (
             <ul className='space-y-4'>
@@ -187,7 +191,7 @@ export function CartSheet() {
                         {isItemUnavailable && (
                           <div className='absolute inset-0 flex items-center justify-center bg-background/60'>
                             <span className='text-[10px] font-bold text-amber-600 dark:text-amber-400'>
-                              Hết
+                              {t('cart.soldOutShort')}
                             </span>
                           </div>
                         )}
@@ -202,7 +206,7 @@ export function CartSheet() {
                               variant='secondary'
                               className='h-4 border-amber-500/30 bg-amber-500/10 px-1 text-[10px] font-normal text-amber-700 dark:text-amber-400'
                             >
-                              Tạm hết
+                              {t('cart.soldOut')}
                             </Badge>
                           )}
                         </div>
@@ -212,7 +216,7 @@ export function CartSheet() {
                         <div className='mt-1.5 flex items-center justify-between'>
                           {isItemUnavailable ? (
                             <span className='text-xs font-medium text-amber-600 dark:text-amber-400'>
-                              Số lượng: {item.quantity} (Tạm hết)
+                              {t('cart.quantitySoldOut', { quantity: item.quantity })}
                             </span>
                           ) : (
                             <QuantityControl
@@ -236,8 +240,8 @@ export function CartSheet() {
                                     ? 'text-brand hover:text-brand/80'
                                     : 'text-muted-foreground hover:text-foreground'
                                 }`}
-                                aria-label={`Ghi chú cho ${item.dishName}`}
-                                title='Thêm ghi chú'
+                                aria-label={t('cart.noteFor', { name: item.dishName })}
+                                title={t('cart.addNote')}
                               >
                                 <MessageSquare className='h-4 w-4' />
                               </button>
@@ -245,7 +249,7 @@ export function CartSheet() {
                             <button
                               onClick={() => removeItem(item.dishId)}
                               className='text-muted-foreground transition-colors hover:text-destructive'
-                              aria-label={`Xóa ${item.dishName} khỏi giỏ`}
+                              aria-label={t('cart.removeItem', { name: item.dishName })}
                             >
                               <Trash2 className='h-4 w-4' />
                             </button>
@@ -258,7 +262,7 @@ export function CartSheet() {
                     {isNoteExpanded && (
                       <div className='ml-[76px]'>
                         <Textarea
-                          placeholder='Ví dụ: không hành, ít cay, thêm ớt...'
+                          placeholder={t('cart.notePlaceholder')}
                           value={item.note ?? ''}
                           onChange={e => updateNote(item.dishId, e.target.value)}
                           maxLength={200}
@@ -295,12 +299,12 @@ export function CartSheet() {
             <Separator />
             <SheetFooter className='flex-col gap-3 px-6 py-4'>
               <div className='flex items-center justify-between text-base font-semibold'>
-                <span>Tổng cộng</span>
+                <span>{t('cart.total')}</span>
                 <span className='text-primary'>{formatCurrencyVND(totalPrice)}</span>
               </div>
               {hasUnavailableItems && (
                 <p className='text-center text-xs font-medium text-amber-600 dark:text-amber-400'>
-                  ⚠️ Vui lòng xóa món tạm hết trước khi đặt món
+                  {t('cart.removeUnavailableWarning')}
                 </p>
               )}
               <Button
@@ -310,7 +314,9 @@ export function CartSheet() {
                 disabled={createOrdersMutation.isPending || hasUnavailableItems}
                 id='place-order-btn'
               >
-                {createOrdersMutation.isPending ? 'Đang đặt...' : `Đặt món (${totalItems})`}
+                {createOrdersMutation.isPending
+                  ? t('cart.placing')
+                  : t('cart.placeOrder', { count: totalItems })}
               </Button>
             </SheetFooter>
           </>

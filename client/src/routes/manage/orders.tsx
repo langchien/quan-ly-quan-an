@@ -1,6 +1,7 @@
 import { OrderTable } from '@/components/manage/orders/order-table'
 import { ordersQueryOptions } from '@/queries/use-order'
 import { createFileRoute } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/manage/orders')({
   loader: ({ context: { queryClient } }) => {
@@ -10,13 +11,13 @@ export const Route = createFileRoute('/manage/orders')({
 })
 
 function RouteComponent() {
+  const { t } = useTranslation('manage')
+
   return (
     <div className='flex flex-col gap-6'>
       <div>
-        <h1 className='text-2xl font-bold tracking-tight'>Quản lý đơn hàng</h1>
-        <p className='text-sm text-muted-foreground'>
-          Theo dõi và xử lý các đơn gọi món của khách hàng
-        </p>
+        <h1 className='text-2xl font-bold tracking-tight'>{t('orders.title')}</h1>
+        <p className='text-sm text-muted-foreground'>{t('orders.description')}</p>
       </div>
 
       <OrderTable />

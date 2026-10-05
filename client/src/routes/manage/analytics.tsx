@@ -16,6 +16,8 @@ import { Role } from '@app/shared'
 import { accountMeQueryOptions } from '@/queries/use-account'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
+import { useTranslation } from 'react-i18next'
+
 export const Route = createFileRoute('/manage/analytics')({
   beforeLoad: async ({ context: { queryClient } }) => {
     const account = queryClient.getQueryData(accountMeQueryOptions.queryKey)
@@ -39,6 +41,7 @@ function getDefaultToDate() {
 }
 
 function AnalyticsPage() {
+  const { t } = useTranslation('manage')
   const [fromDate, setFromDate] = useState<Date>(getDefaultFromDate)
   const [toDate, setToDate] = useState<Date>(getDefaultToDate)
 
@@ -52,10 +55,8 @@ function AnalyticsPage() {
   return (
     <div className='flex flex-col gap-6'>
       <div>
-        <h1 className='text-2xl font-bold tracking-tight'>Phân tích & Báo cáo</h1>
-        <p className='text-sm text-muted-foreground'>
-          Thống kê doanh thu, đơn hàng và xếp hạng món ăn theo khoảng thời gian
-        </p>
+        <h1 className='text-2xl font-bold tracking-tight'>{t('analytics.title')}</h1>
+        <p className='text-sm text-muted-foreground'>{t('analytics.description')}</p>
       </div>
 
       <div className='space-y-4'>

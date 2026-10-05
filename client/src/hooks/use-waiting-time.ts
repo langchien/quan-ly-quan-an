@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { formatTime } from '@/lib/i18n/use-locale'
+import i18n from '@/lib/i18n'
 
 /**
  * Hook đếm thời gian chờ kể từ `createdAt` (ISO string hoặc Date).
@@ -10,14 +11,16 @@ export function useWaitingTime(createdAt: string | Date) {
   const [elapsed, setElapsed] = useState(() => calcElapsed(createdAt))
 
   useEffect(() => {
-    // Cập nhật ngay lập tức
-    setElapsed(calcElapsed(createdAt))
+    const handleUpdate = () => setElapsed(calcElapsed(createdAt))
+    handleUpdate()
 
-    const interval = setInterval(() => {
-      setElapsed(calcElapsed(createdAt))
-    }, 1000)
+    const interval = setInterval(handleUpdate, 1000)
+    i18n.on('languageChanged', handleUpdate)
 
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+      i18n.off('languageChanged', handleUpdate)
+    }
   }, [createdAt])
 
   return elapsed
@@ -34,10 +37,17 @@ function calcElapsed(createdAt: string | Date) {
   const seconds = totalSeconds % 60
 
   if (hours > 0) {
-    return { text: `${hours}g ${minutes}p`, minutes: hours * 60 + minutes, isLong: true }
+    return {
+      text: i18n.t('guest:waiting.hoursMinutes', { hours, minutes }),
+      minutes: hours * 60 + minutes,
+      isLong: true,
+    }
   }
   return {
-    text: `${minutes}p ${seconds.toString().padStart(2, '0')}s`,
+    text: i18n.t('guest:waiting.minutesSeconds', {
+      minutes,
+      seconds: seconds.toString().padStart(2, '0'),
+    }),
     minutes,
     isLong: minutes >= 15,
   }

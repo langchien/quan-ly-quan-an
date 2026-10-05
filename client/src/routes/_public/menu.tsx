@@ -12,6 +12,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { Search, SearchX, X } from 'lucide-react'
 import { useRef, useMemo, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 
 // Constants
 const ALL_CATEGORY_ID = '__all__' as const
@@ -36,6 +37,7 @@ export const Route = createFileRoute('/_public/menu')({
 // Component
 
 function MenuPage() {
+  const { t } = useTranslation(['guest', 'common'])
   const queryClient = useQueryClient()
   const guest = useAuthStore(s => s.guest)
 
@@ -110,11 +112,11 @@ function MenuPage() {
           <div>
             <div className='flex items-center gap-3'>
               <div className='h-8 w-1 rounded-full bg-brand' />
-              <h1 className='text-2xl font-bold tracking-tight'>Thực đơn</h1>
+              <h1 className='text-2xl font-bold tracking-tight'>{t('menu.title')}</h1>
             </div>
             {guest?.tableNumber && (
               <p className='mt-1 ml-4 text-sm text-muted-foreground'>
-                Bàn số <span className='font-semibold'>{guest.tableNumber}</span> —{' '}
+                {t('table.number', { number: guest.tableNumber })} —{' '}
                 <span className='font-medium'>{guest.name}</span>
               </p>
             )}
@@ -132,18 +134,18 @@ function MenuPage() {
           <Search className='pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
           <Input
             type='text'
-            placeholder='Tìm món ăn...'
+            placeholder={t('menu.searchPlaceholder')}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             className='pr-9 pl-9'
             id='menu-search-input'
-            aria-label='Tìm kiếm món ăn'
+            aria-label={t('menu.searchLabel')}
           />
           {hasSearch && (
             <button
               onClick={() => setSearchQuery('')}
               className='absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-0.5 text-muted-foreground transition-colors hover:text-foreground'
-              aria-label='Xóa tìm kiếm'
+              aria-label={t('common:actions.clearSearch')}
             >
               <X className='h-4 w-4' />
             </button>
@@ -157,11 +159,11 @@ function MenuPage() {
               ref={scrollRef}
               className='scrollbar-hide flex gap-2 overflow-x-auto pb-2'
               role='tablist'
-              aria-label='Lọc theo danh mục'
+              aria-label={t('menu.filterByCategory')}
             >
               {/* Tab "Tất cả" */}
               <CategoryTab
-                label='Tất cả'
+                label={t('menu.allCategory')}
                 count={totalVisibleDishes}
                 isActive={selectedCategory === ALL_CATEGORY_ID}
                 onClick={() => setSelectedCategory(ALL_CATEGORY_ID)}
@@ -186,7 +188,7 @@ function MenuPage() {
               {/* Tab "Khác" — nếu có món chưa gán category */}
               {uncategorizedCount > 0 && visibleCategories.length > 0 && (
                 <CategoryTab
-                  label='Khác'
+                  label={t('menu.otherCategory')}
                   count={uncategorizedCount}
                   isActive={selectedCategory === 'uncategorized'}
                   onClick={() => setSelectedCategory('uncategorized')}
@@ -199,8 +201,12 @@ function MenuPage() {
         {/* Kết quả tìm kiếm — số lượng */}
         {(hasSearch || selectedCategory !== ALL_CATEGORY_ID) && filteredDishes.length > 0 && (
           <p className='mb-4 text-sm text-muted-foreground'>
-            Hiển thị <span className='font-semibold text-foreground'>{filteredDishes.length}</span>{' '}
-            / {totalVisibleDishes} món
+            <Trans
+              ns='guest'
+              i18nKey='menu.showing'
+              values={{ shown: filteredDishes.length, total: totalVisibleDishes }}
+              components={{ b: <span className='font-semibold text-foreground' /> }}
+            />
           </p>
         )}
 
@@ -211,10 +217,10 @@ function MenuPage() {
             {hasSearch ? (
               <>
                 <p className='text-lg font-medium text-muted-foreground'>
-                  Không tìm thấy món ăn nào
+                  {t('menu.noResultTitle')}
                 </p>
                 <p className='mt-1 text-sm text-muted-foreground/70'>
-                  Thử tìm với từ khóa khác hoặc{' '}
+                  {t('menu.noResultHint')}{' '}
                   <button
                     onClick={() => {
                       setSearchQuery('')
@@ -222,30 +228,28 @@ function MenuPage() {
                     }}
                     className='font-medium text-primary underline-offset-4 hover:underline'
                   >
-                    xem toàn bộ thực đơn
+                    {t('menu.viewFullMenu')}
                   </button>
                 </p>
               </>
             ) : selectedCategory !== ALL_CATEGORY_ID ? (
               <>
                 <p className='text-lg font-medium text-muted-foreground'>
-                  Danh mục này chưa có món ăn
+                  {t('menu.emptyCategory')}
                 </p>
                 <p className='mt-1 text-sm text-muted-foreground/70'>
                   <button
                     onClick={() => setSelectedCategory(ALL_CATEGORY_ID)}
                     className='font-medium text-primary underline-offset-4 hover:underline'
                   >
-                    Xem tất cả món
+                    {t('menu.viewAllDishes')}
                   </button>
                 </p>
               </>
             ) : (
               <>
-                <p className='text-lg font-medium text-muted-foreground'>Chưa có món ăn nào</p>
-                <p className='mt-1 text-sm text-muted-foreground/70'>
-                  Thực đơn sẽ được cập nhật sớm. Hãy quay lại sau nhé!
-                </p>
+                <p className='text-lg font-medium text-muted-foreground'>{t('menu.emptyTitle')}</p>
+                <p className='mt-1 text-sm text-muted-foreground/70'>{t('menu.emptyHint')}</p>
               </>
             )}
           </div>
