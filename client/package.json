@@ -11,8 +11,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "format": "prettier --write . && eslint --fix",
-    "check": "prettier --check ."
+    "check": "prettier --check . && tsc --noEmit"
   },
   "dependencies": {
     "@app/shared": "workspace:*",

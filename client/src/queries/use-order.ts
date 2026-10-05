@@ -3,7 +3,7 @@ import type {
   CreateOrdersBodyType,
   CreateOrdersResType,
   GetOrderDetailResType,
-  GetOrdersQueryParamsType,
+  GetOrdersQueryParamsInputType,
   GetOrdersResType,
   PayGuestOrdersBodyType,
   PayGuestOrdersResType,
@@ -18,7 +18,7 @@ export const adminOrdersQueryKey = ['admin', 'orders'] as const
 
 // Query Options Factory
 
-export function ordersQueryOptions(params?: GetOrdersQueryParamsType) {
+export function ordersQueryOptions(params?: GetOrdersQueryParamsInputType) {
   return queryOptions({
     queryKey: [...adminOrdersQueryKey, params] as const,
     queryFn: async () => {
@@ -37,7 +37,7 @@ export function ordersQueryOptions(params?: GetOrdersQueryParamsType) {
 // Query Hooks
 
 /** Lấy danh sách đơn hàng (admin) */
-export function useGetOrdersQuery(params?: GetOrdersQueryParamsType) {
+export function useGetOrdersQuery(params?: GetOrdersQueryParamsInputType) {
   return useQuery(ordersQueryOptions(params))
 }
 

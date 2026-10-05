@@ -14,8 +14,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { formatCurrencyVND } from '@/lib/format'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { useAuthStore } from '@/store/useAuthStore'
-import { PaymentMethod } from '@app/shared'
 import type { GetGuestBillsResType } from '@app/shared'
+import { PaymentMethod } from '@app/shared'
 import { Banknote, ChevronRight, Download, Loader2, QrCode, Receipt } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -106,7 +106,6 @@ function BillCard({ bill, onSelect }: { bill: Bill; onSelect: () => void }) {
 }
 
 function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () => void }) {
-  const method = bill ? paymentMethodConfig[bill.paymentMethod] : null
   const guest = useAuthStore(s => s.guest)
   const [isExporting, setIsExporting] = useState(false)
 

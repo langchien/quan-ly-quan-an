@@ -1,0 +1,11 @@
+{
+  "name": "quan-ly-quan-an",
+  "private": true,
+  "scripts": {
+    "typecheck": "pnpm -r exec tsc --noEmit",
+    "typecheck:client": "pnpm --filter client run typecheck",
+    "typecheck:server": "pnpm --filter server run typecheck",
+    "lint": "pnpm -r run lint",
+    "check": "pnpm --filter client run check"
+  }
+}

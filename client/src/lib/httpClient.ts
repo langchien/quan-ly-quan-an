@@ -171,6 +171,9 @@ export const httpClient = {
   put<T>(url: string, data?: any, config?: object) {
     return axiosInstance.put<T>(url, data, config)
   },
+  patch<T>(url: string, data?: any, config?: object) {
+    return axiosInstance.patch<T>(url, data, config)
+  },
   delete<T>(url: string, config?: object) {
     return axiosInstance.delete<T>(url, config)
   },

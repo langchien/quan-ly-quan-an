@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge'
-import { buttonVariants, Button  } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
   CardAction,
@@ -19,11 +19,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { DishStatus } from '@app/shared'
-import type { DishType } from '@app/shared'
-import { Eye, EyeOff, Loader2, MoreHorizontal, Pencil, Trash2, UtensilsCrossed } from 'lucide-react'
 import { formatCurrency } from '@/lib/format'
 import { useToggleDishStatusMutation } from '@/queries/use-dish'
+import type { DishType } from '@app/shared'
+import { DishStatus } from '@app/shared'
+import { Eye, EyeOff, Loader2, MoreHorizontal, Pencil, Trash2, UtensilsCrossed } from 'lucide-react'
 
 function getStatusConfig(status: string) {
   switch (status) {
@@ -118,23 +118,25 @@ function GridQuickToggle({ dish }: { dish: DishType }) {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant='outline'
-            size='icon-sm'
-            disabled={isPending}
-            onClick={() => toggleMutation.mutate({ id: dish.id, status: nextStatus })}
-            aria-label={label}
-          >
-            {isPending ? (
-              <Loader2 className='size-3 animate-spin' />
-            ) : dish.status === DishStatus.Available ? (
-              <EyeOff className='size-3 text-amber-500' />
-            ) : (
-              <Eye className='size-3 text-emerald-500' />
-            )}
-          </Button>
-        </TooltipTrigger>
+        <TooltipTrigger
+          render={
+            <Button
+              variant='outline'
+              size='icon-sm'
+              disabled={isPending}
+              onClick={() => toggleMutation.mutate({ id: dish.id, status: nextStatus })}
+              aria-label={label}
+            >
+              {isPending ? (
+                <Loader2 className='size-3 animate-spin' />
+              ) : dish.status === DishStatus.Available ? (
+                <EyeOff className='size-3 text-amber-500' />
+              ) : (
+                <Eye className='size-3 text-emerald-500' />
+              )}
+            </Button>
+          }
+        />
         <TooltipContent side='top'>
           <p>{label}</p>
         </TooltipContent>

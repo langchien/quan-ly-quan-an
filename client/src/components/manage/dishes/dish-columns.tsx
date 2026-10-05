@@ -61,11 +61,13 @@ function QuickToggleButton({ dish }: { dish: DishType }) {
     return (
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild>
-            <span className='inline-flex cursor-not-allowed items-center gap-1 text-xs text-muted-foreground/50'>
-              <EyeOff className='size-3.5' />
-            </span>
-          </TooltipTrigger>
+          <TooltipTrigger
+            render={
+              <span className='inline-flex cursor-not-allowed items-center gap-1 text-xs text-muted-foreground/50'>
+                <EyeOff className='size-3.5' />
+              </span>
+            }
+          />
           <TooltipContent side='left'>
             <p>Dùng nút Chỉnh sửa để thay đổi món đang Ẩn</p>
           </TooltipContent>
@@ -82,24 +84,26 @@ function QuickToggleButton({ dish }: { dish: DishType }) {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            id={`toggle-dish-status-${dish.id}`}
-            variant='ghost'
-            size='icon-sm'
-            disabled={isPending}
-            onClick={() => toggleMutation.mutate({ id: dish.id, status: nextStatus })}
-            aria-label={label}
-          >
-            {isPending ? (
-              <Loader2 className='size-3.5 animate-spin' />
-            ) : dish.status === DishStatus.Available ? (
-              <EyeOff className='size-3.5 text-amber-500' />
-            ) : (
-              <Eye className='size-3.5 text-emerald-500' />
-            )}
-          </Button>
-        </TooltipTrigger>
+        <TooltipTrigger
+          render={
+            <Button
+              id={`toggle-dish-status-${dish.id}`}
+              variant='ghost'
+              size='icon-sm'
+              disabled={isPending}
+              onClick={() => toggleMutation.mutate({ id: dish.id, status: nextStatus })}
+              aria-label={label}
+            >
+              {isPending ? (
+                <Loader2 className='size-3.5 animate-spin' />
+              ) : dish.status === DishStatus.Available ? (
+                <EyeOff className='size-3.5 text-amber-500' />
+              ) : (
+                <Eye className='size-3.5 text-emerald-500' />
+              )}
+            </Button>
+          }
+        />
         <TooltipContent side='left'>
           <p>{label}</p>
         </TooltipContent>
