@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Moon, Sun, Monitor, BellRing, BellOff } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { useTheme } from '@/components/theme-provider'
 import { Switch } from '@/components/ui/switch'
 import { Separator } from '@/components/ui/separator'
+import { LANGUAGE_OPTIONS, useAppLanguage } from '@/components/language-switcher'
 
 const SOUND_KEY = 'notification-sound-enabled'
 
@@ -16,7 +18,9 @@ function getSoundEnabled(): boolean {
 }
 
 export function SettingsPreferencesTab() {
+  const { t } = useTranslation(['settings', 'common'])
   const { theme, setTheme } = useTheme()
+  const { language, setLanguage } = useAppLanguage()
   const [soundEnabled, setSoundEnabled] = useState<boolean>(getSoundEnabled)
 
   const isDark =
@@ -40,26 +44,61 @@ export function SettingsPreferencesTab() {
 
   const themeOptions: {
     value: 'light' | 'dark' | 'system'
-    label: string
+    labelKey: 'light' | 'dark' | 'system'
     Icon: React.FC<{ className?: string }>
   }[] = [
-    { value: 'light', label: 'Sáng', Icon: Sun },
-    { value: 'dark', label: 'Tối', Icon: Moon },
-    { value: 'system', label: 'Hệ thống', Icon: Monitor },
+    { value: 'light', labelKey: 'light', Icon: Sun },
+    { value: 'dark', labelKey: 'dark', Icon: Moon },
+    { value: 'system', labelKey: 'system', Icon: Monitor },
   ]
 
   return (
     <div className='flex flex-col gap-6'>
+      {/* Ngôn ngữ */}
+      <div className='flex flex-col gap-4'>
+        <div>
+          <p className='text-sm font-semibold'>{t('settings:preferences.language')}</p>
+          <p className='mt-0.5 text-xs text-muted-foreground'>
+            {t('settings:preferences.languageDesc')}
+          </p>
+        </div>
+
+        {/* 2 nút chọn ngôn ngữ dạng card */}
+        <div className='grid grid-cols-2 gap-2'>
+          {LANGUAGE_OPTIONS.map(({ value, flag }) => (
+            <button
+              key={value}
+              type='button'
+              onClick={() => void setLanguage(value)}
+              className={[
+                'flex items-center justify-center gap-2 rounded-xl border-2 p-3 text-sm font-medium transition-all',
+                'hover:border-primary/50 hover:bg-primary/5',
+                language === value
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border text-muted-foreground',
+              ].join(' ')}
+            >
+              <span className='text-lg leading-none'>{flag}</span>
+              <span>{t(`common:language.${value}`)}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
       {/* Giao diện */}
       <div className='flex flex-col gap-4'>
         <div>
-          <p className='text-sm font-semibold'>Giao diện</p>
-          <p className='mt-0.5 text-xs text-muted-foreground'>Chọn chủ đề hiển thị cho ứng dụng</p>
+          <p className='text-sm font-semibold'>{t('settings:preferences.appearance')}</p>
+          <p className='mt-0.5 text-xs text-muted-foreground'>
+            {t('settings:preferences.appearanceDesc')}
+          </p>
         </div>
 
         {/* 3 nút chọn theme dạng card */}
         <div className='grid grid-cols-3 gap-2'>
-          {themeOptions.map(({ value, label, Icon }) => (
+          {themeOptions.map(({ value, labelKey, Icon }) => (
             <button
               key={value}
               type='button'
@@ -73,7 +112,7 @@ export function SettingsPreferencesTab() {
               ].join(' ')}
             >
               <Icon className='size-5' />
-              {label}
+              {t(`common:theme.${labelKey}`)}
             </button>
           ))}
         </div>
@@ -88,9 +127,13 @@ export function SettingsPreferencesTab() {
             )}
             <div>
               <p className='text-sm font-medium'>
-                {isDark ? 'Đang dùng chế độ Tối' : 'Đang dùng chế độ Sáng'}
+                {isDark
+                  ? t('settings:preferences.usingDark')
+                  : t('settings:preferences.usingLight')}
               </p>
-              <p className='text-xs text-muted-foreground'>Bật để chuyển sang chế độ Tối</p>
+              <p className='text-xs text-muted-foreground'>
+                {t('settings:preferences.toggleDarkHint')}
+              </p>
             </div>
           </div>
           <Switch checked={isDark} onCheckedChange={handleToggleTheme} />
@@ -102,9 +145,9 @@ export function SettingsPreferencesTab() {
       {/* Thông báo âm thanh */}
       <div className='flex flex-col gap-4'>
         <div>
-          <p className='text-sm font-semibold'>Thông báo</p>
+          <p className='text-sm font-semibold'>{t('settings:preferences.notifications')}</p>
           <p className='mt-0.5 text-xs text-muted-foreground'>
-            Cài đặt âm thanh và thông báo realtime
+            {t('settings:preferences.notificationsDesc')}
           </p>
         </div>
 
@@ -116,11 +159,11 @@ export function SettingsPreferencesTab() {
               <BellOff className='size-4 text-muted-foreground' />
             )}
             <div>
-              <p className='text-sm font-medium'>Âm thanh thông báo đơn mới</p>
+              <p className='text-sm font-medium'>{t('settings:preferences.sound')}</p>
               <p className='text-xs text-muted-foreground'>
                 {soundEnabled
-                  ? 'Phát tiếng chuông khi có đơn đặt món mới từ bàn'
-                  : 'Tắt tiếng – chỉ hiện popup thông báo'}
+                  ? t('settings:preferences.soundOn')
+                  : t('settings:preferences.soundOff')}
               </p>
             </div>
           </div>

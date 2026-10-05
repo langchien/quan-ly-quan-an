@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { UtensilsCrossedIcon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { ModeToggle } from '@/components/mode-toggle'
 import {
@@ -30,13 +31,16 @@ export interface AppBrandProps {
 }
 
 export function AppBrand({
-  brandName = 'Quản Lý Quán Ăn',
-  subtitle = 'Hệ thống quản lý',
+  brandName: brandNameProp,
+  subtitle: subtitleProp,
   logo,
   showModeToggle = true,
   inSidebar = false,
   className,
 }: AppBrandProps) {
+  const { t } = useTranslation()
+  const brandName = brandNameProp ?? t('brand.name')
+  const subtitle = subtitleProp ?? t('brand.subtitle')
   const { state } = useSidebarState()
 
   const brandContent = (

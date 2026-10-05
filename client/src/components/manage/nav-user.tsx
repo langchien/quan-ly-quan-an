@@ -18,8 +18,10 @@ import { useLogout } from '@/hooks/use-logout'
 import { useAccountMe } from '@/queries/use-account'
 import { useSettingsStore } from '@/store/useSettingsStore'
 import { ChevronsUpDownIcon, LogOutIcon, LockIcon, PaletteIcon, UserCircleIcon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 export function NavUser({ ...props }: React.ComponentProps<typeof SidebarMenuItem>) {
+  const { t } = useTranslation()
   const { data: user } = useAccountMe()
   const { isMobile } = useSidebar()
   const { onLogout } = useLogout()
@@ -86,15 +88,15 @@ export function NavUser({ ...props }: React.ComponentProps<typeof SidebarMenuIte
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={() => openSettings('profile')}>
                 <UserCircleIcon className='size-4' />
-                Hồ sơ cá nhân
+                {t('userMenu.profile')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => openSettings('security')}>
                 <LockIcon className='size-4' />
-                Đổi mật khẩu
+                {t('userMenu.changePassword')}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => openSettings('preferences')}>
                 <PaletteIcon className='size-4' />
-                Giao diện & Thông báo
+                {t('userMenu.preferences')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
 
@@ -107,7 +109,7 @@ export function NavUser({ ...props }: React.ComponentProps<typeof SidebarMenuIte
                 className='text-destructive focus:bg-destructive/10 focus:text-destructive'
               >
                 <LogOutIcon className='size-4' />
-                Đăng xuất
+                {t('userMenu.logout')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

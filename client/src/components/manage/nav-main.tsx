@@ -9,8 +9,10 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { useRole } from '@/hooks/useRole'
+import { useTranslation } from 'react-i18next'
 
 export function NavMain({ items }: { items: NavLinkItem[] }) {
+  const { t } = useTranslation()
   const { location } = useRouterState()
   const { role } = useRole()
 
@@ -22,10 +24,11 @@ export function NavMain({ items }: { items: NavLinkItem[] }) {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Quản lý</SidebarGroupLabel>
+      <SidebarGroupLabel>{t('manageNav.group')}</SidebarGroupLabel>
       <SidebarMenu>
-        {visibleItems.map(({ title, href, Icon }) => {
+        {visibleItems.map(({ titleKey, href, Icon }) => {
           const isActive = location.pathname.startsWith(href)
+          const title = t(`manageNav.${titleKey}`)
           return (
             <SidebarMenuItem key={href}>
               <SidebarMenuButton tooltip={title} isActive={isActive} render={<Link to={href} />}>

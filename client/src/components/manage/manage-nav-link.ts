@@ -11,8 +11,13 @@ import {
 } from 'lucide-react'
 import type React from 'react'
 
+import type { common } from '@/locales/vi/common'
+
+export type ManageNavKey = keyof typeof common.manageNav
+
 export type NavLinkItem = {
-  title: string
+  /** Key dịch trong namespace `common` → `manageNav.*` */
+  titleKey: ManageNavKey
   Icon: React.ForwardRefExoticComponent<
     Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
   >
@@ -22,35 +27,35 @@ export type NavLinkItem = {
 }
 
 export const manageNavLink: NavLinkItem[] = [
-  { title: 'Dashboard', href: '/manage/dashboard', Icon: Home },
+  { titleKey: 'dashboard', href: '/manage/dashboard', Icon: Home },
   {
-    title: 'Đơn hàng',
+    titleKey: 'orders',
     href: '/manage/orders',
     Icon: ShoppingCart,
   },
   {
-    title: 'Bếp',
+    titleKey: 'kitchen',
     href: '/manage/kitchen',
     Icon: ChefHat,
   },
   {
-    title: 'Bàn ăn',
+    titleKey: 'tables',
     href: '/manage/tables',
     Icon: Table,
   },
   {
-    title: 'Món ăn',
+    titleKey: 'dishes',
     href: '/manage/dishes',
     Icon: Salad,
   },
   {
-    title: 'Phân tích',
+    titleKey: 'analytics',
     href: '/manage/analytics',
     Icon: LineChart,
     requiredRoles: [Role.Owner],
   },
   {
-    title: 'Nhân viên',
+    titleKey: 'staffs',
     href: '/manage/staffs',
     Icon: Users2,
     requiredRoles: [Role.Owner],

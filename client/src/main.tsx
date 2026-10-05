@@ -1,5 +1,6 @@
 import { RouterProvider } from '@tanstack/react-router'
 import ReactDOM from 'react-dom/client'
+import './lib/i18n'
 import { router } from './router'
 
 const rootElement = document.getElementById('app')!

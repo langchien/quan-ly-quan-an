@@ -7,6 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
+import { useTranslation } from 'react-i18next'
 
 /**
  * Số trang "lân cận" hiển thị quanh trang hiện tại.
@@ -98,6 +99,7 @@ export function DataTablePagination({
   onPreviousPage,
   onNextPage,
 }: DataTablePaginationProps) {
+  const { t } = useTranslation()
   const pages = getPageRange(pageIndex, pageCount)
 
   if (pageCount <= 1) return null
@@ -107,7 +109,7 @@ export function DataTablePagination({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            text='Trước'
+            text={t('pagination.previous')}
             onClick={canPreviousPage ? onPreviousPage : undefined}
             className={!canPreviousPage ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
           />
@@ -140,7 +142,7 @@ export function DataTablePagination({
 
         <PaginationItem>
           <PaginationNext
-            text='Sau'
+            text={t('pagination.next')}
             onClick={canNextPage ? onNextPage : undefined}
             className={!canNextPage ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
           />

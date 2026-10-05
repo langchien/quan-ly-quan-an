@@ -1,11 +1,14 @@
 import { Role } from '@app/shared'
 import { useAuthStore } from '@/store/useAuthStore'
 import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { AppBrand } from './app-brand'
+import { LanguageSwitcher } from './language-switcher'
 import { ModeToggle } from './mode-toggle'
 import { Card } from './ui/card'
 
 export function NavItems() {
+  const { t } = useTranslation()
   const accessToken = useAuthStore(s => s.accessToken)
   const guest = useAuthStore(s => s.guest)
 
@@ -17,10 +20,10 @@ export function NavItems() {
     return (
       <>
         <Link to='/menu' className='[&.active]:text-foreground' activeOptions={{ exact: true }}>
-          Gọi món
+          {t('nav.order')}
         </Link>
         <Link to='/orders' className='[&.active]:text-foreground'>
-          Đơn hàng
+          {t('nav.orders')}
         </Link>
       </>
     )
@@ -30,7 +33,7 @@ export function NavItems() {
     // Owner/Employee: Quản lý
     return (
       <Link to='/manage/dashboard' className='[&.active]:text-foreground'>
-        Quản lý
+        {t('nav.manage')}
       </Link>
     )
   }
@@ -39,13 +42,13 @@ export function NavItems() {
   return (
     <>
       <Link to='/menu' className='[&.active]:text-foreground'>
-        Món ăn
+        {t('nav.dishes')}
       </Link>
       <Link to='/login' className='[&.active]:text-foreground'>
-        Đăng nhập
+        {t('nav.login')}
       </Link>
       <Link to='/signup' className='[&.active]:text-foreground'>
-        Đăng ký
+        {t('nav.signup')}
       </Link>
     </>
   )
@@ -61,7 +64,8 @@ export function PublicHeader() {
         <div className='scrollbar-hide flex min-w-0 flex-row items-center gap-4 overflow-x-auto text-sm font-semibold whitespace-nowrap text-muted-foreground sm:gap-6'>
           <NavItems />
         </div>
-        <div className='ms-auto shrink-0'>
+        <div className='ms-auto flex shrink-0 items-center gap-2'>
+          <LanguageSwitcher />
           <ModeToggle />
         </div>
       </div>

@@ -1,0 +1,56 @@
+import type { Translation } from '@/lib/i18n/types'
+import type { settings as vi } from '../vi/settings'
+
+export const settings = {
+  dialog: {
+    title: 'Account settings',
+    description: 'Update your profile, change password and customize the system',
+    heading: 'Settings',
+    close: 'Close',
+  },
+  tabs: {
+    profile: 'Profile',
+    profileDesc: 'Personal info & avatar',
+    security: 'Security',
+    securityDesc: 'Password & access',
+    preferences: 'System',
+    preferencesDesc: 'Language, appearance & notifications',
+  },
+  profile: {
+    owner: '👑 Owner',
+    employee: '👤 Employee',
+    displayName: 'Display name',
+    namePlaceholder: 'Enter your name',
+    undo: 'Undo',
+    save: 'Save changes',
+    updated: 'Profile updated successfully!',
+    unsaved: '⚠ Unsaved:',
+    unsavedHint: 'The selected image will be uploaded when you click "Save changes".',
+  },
+  security: {
+    title: 'Password & Security',
+    description: 'Update your password to keep your account secure',
+    oldPassword: 'Current password',
+    oldPasswordPlaceholder: 'Enter current password',
+    newPassword: 'New password',
+    newPasswordPlaceholder: 'At least 6 characters',
+    confirmPassword: 'Confirm new password',
+    confirmPasswordPlaceholder: 'Re-enter new password',
+    cancel: 'Cancel',
+    submit: 'Change password',
+  },
+  preferences: {
+    language: 'Language',
+    languageDesc: 'Choose the display language for the app',
+    appearance: 'Appearance',
+    appearanceDesc: 'Choose the display theme for the app',
+    usingDark: 'Dark mode is on',
+    usingLight: 'Light mode is on',
+    toggleDarkHint: 'Turn on to switch to dark mode',
+    notifications: 'Notifications',
+    notificationsDesc: 'Sound and realtime notification settings',
+    sound: 'New order sound',
+    soundOn: 'Play a chime when a table places a new order',
+    soundOff: 'Muted – show popup notifications only',
+  },
+} satisfies Translation<typeof vi>

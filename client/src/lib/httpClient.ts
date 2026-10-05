@@ -1,5 +1,6 @@
 import { envConfig } from '@/envConfig'
 import type { RefreshTokenResType } from '@app/shared'
+import { getCurrentLanguage, i18n } from '@/lib/i18n'
 import { useAuthStore } from '@/store/useAuthStore'
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
@@ -20,7 +21,7 @@ export class HttpError extends Error {
   constructor({
     status,
     payload,
-    message = 'Lỗi HTTP',
+    message = i18n.t('common:error.http'),
   }: {
     status: number
     payload: any
@@ -36,7 +37,7 @@ export class EntityError extends HttpError {
   declare status: 422
   declare payload: EntityErrorPayload
   constructor(payload: EntityErrorPayload) {
-    super({ status: 422, payload, message: 'Lỗi thực thể' })
+    super({ status: 422, payload, message: i18n.t('common:error.entity') })
   }
 }
 
@@ -75,6 +76,8 @@ axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`
   }
+  // Gửi ngôn ngữ hiện tại để server có thể trả message theo ngôn ngữ (nếu hỗ trợ)
+  config.headers['Accept-Language'] = getCurrentLanguage()
   // Với FormData, axios tự bỏ Content-Type để browser tự đặt boundary
   if (config.data instanceof FormData) {
     delete config.headers['Content-Type']

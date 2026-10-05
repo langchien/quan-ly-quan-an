@@ -1,5 +1,6 @@
 import { Lock, Palette, User } from 'lucide-react'
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import {
@@ -18,24 +19,25 @@ import { SettingsProfileTab } from './settings-profile-tab'
 import { SettingsSecurityTab } from './settings-security-tab'
 
 // Cấu hình các Tab
-const TABS: { id: SettingsTab; label: string; icon: React.ElementType; description: string }[] = [
+const TABS: {
+  id: SettingsTab
+  labelKey: 'profile' | 'security' | 'preferences'
+  icon: React.ElementType
+}[] = [
   {
     id: 'profile',
-    label: 'Hồ sơ',
+    labelKey: 'profile',
     icon: User,
-    description: 'Thông tin cá nhân & ảnh đại diện',
   },
   {
     id: 'security',
-    label: 'Bảo mật',
+    labelKey: 'security',
     icon: Lock,
-    description: 'Mật khẩu & quyền truy cập',
   },
   {
     id: 'preferences',
-    label: 'Hệ thống',
+    labelKey: 'preferences',
     icon: Palette,
-    description: 'Giao diện & thông báo',
   },
 ]
 
@@ -53,9 +55,12 @@ function TabContent({ tab }: { tab: SettingsTab }) {
 
 // Component chính
 export function SettingsDialog() {
+  const { t } = useTranslation('settings')
   const { open, activeTab, setOpen, setActiveTab } = useSettingsStore()
 
-  const currentTab = TABS.find(t => t.id === activeTab) ?? TABS[0]
+  const currentTab = TABS.find(tab => tab.id === activeTab) ?? TABS[0]
+  const currentTabLabel = t(`tabs.${currentTab.labelKey}`)
+  const currentTabDesc = t(`tabs.${currentTab.labelKey}Desc`)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -63,10 +68,8 @@ export function SettingsDialog() {
         className='overflow-hidden p-0 md:max-h-[560px] md:max-w-[680px] lg:max-w-[760px]'
         showCloseButton={false}
       >
-        <DialogTitle className='sr-only'>Cài đặt tài khoản</DialogTitle>
-        <DialogDescription className='sr-only'>
-          Cập nhật hồ sơ, đổi mật khẩu và tuỳ chỉnh hệ thống
-        </DialogDescription>
+        <DialogTitle className='sr-only'>{t('dialog.title')}</DialogTitle>
+        <DialogDescription className='sr-only'>{t('dialog.description')}</DialogDescription>
 
         <SidebarProvider
           className='h-full items-start'
@@ -78,7 +81,7 @@ export function SettingsDialog() {
               {/* Tiêu đề nhỏ ở đầu sidebar */}
               <div className='px-4 pt-1 pb-2'>
                 <p className='text-xs font-semibold tracking-wider text-muted-foreground uppercase'>
-                  Cài đặt
+                  {t('dialog.heading')}
                 </p>
               </div>
 
@@ -94,7 +97,7 @@ export function SettingsDialog() {
                           className='mx-2 w-[calc(100%-16px)] rounded-lg'
                         >
                           <tab.icon className='size-4' />
-                          <span>{tab.label}</span>
+                          <span>{t(`tabs.${tab.labelKey}`)}</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}
@@ -109,15 +112,15 @@ export function SettingsDialog() {
             {/* Header của content area */}
             <header className='flex h-14 shrink-0 items-center justify-between border-b px-6'>
               <div>
-                <p className='text-sm leading-tight font-semibold'>{currentTab.label}</p>
-                <p className='text-xs text-muted-foreground'>{currentTab.description}</p>
+                <p className='text-sm leading-tight font-semibold'>{currentTabLabel}</p>
+                <p className='text-xs text-muted-foreground'>{currentTabDesc}</p>
               </div>
               {/* Nút đóng */}
               <button
                 type='button'
                 onClick={() => setOpen(false)}
                 className='flex size-7 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground'
-                aria-label='Đóng'
+                aria-label={t('dialog.close')}
               >
                 <svg width='14' height='14' viewBox='0 0 14 14' fill='none' aria-hidden='true'>
                   <path
@@ -147,7 +150,7 @@ export function SettingsDialog() {
                     ].join(' ')}
                   >
                     <tab.icon className='size-3.5' />
-                    {tab.label}
+                    {t(`tabs.${tab.labelKey}`)}
                   </button>
                 ))}
               </div>
