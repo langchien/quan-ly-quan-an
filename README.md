@@ -1,5 +1,7 @@
 # DỰ ÁN HỆ THỐNG QUẢN LÝ QUÁN ĂN & ĐẶT MÓN QUA MÃ QR (QR ORDER)
 
+> ⚡ **Bạn muốn bắt đầu nhanh trên máy mới từ con số 0?** Xem ngay tài liệu [HƯỚNG DẪN QUICK START CHO WINDOWS](file:///p:/Nodejs/quan-ly-quan-an/docs/QUICK_START.md).
+
 ---
 
 ## 1. Tổng quan dự án
