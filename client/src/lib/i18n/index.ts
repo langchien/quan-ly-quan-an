@@ -25,6 +25,9 @@ function syncLanguageSideEffects(lng: string) {
   z.config(language === 'en' ? z.locales.en() : z.locales.vi())
 }
 
+// Khởi tạo ngay lập tức cho Zod và thẻ html
+syncLanguageSideEffects(DEFAULT_LANGUAGE)
+
 i18n.on('languageChanged', syncLanguageSideEffects)
 
 void i18n
@@ -47,6 +50,9 @@ void i18n
       caches: ['localStorage'],
       convertDetectedLanguage: lng => normalizeLanguage(lng),
     },
+  })
+  .then(() => {
+    syncLanguageSideEffects(i18n.resolvedLanguage ?? i18n.language)
   })
 
 /** Ngôn ngữ hiện tại đã chuẩn hoá ('vi' | 'en') – dùng ngoài React component */

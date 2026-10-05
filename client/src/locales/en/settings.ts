@@ -38,6 +38,7 @@ export const settings = {
     confirmPasswordPlaceholder: 'Re-enter new password',
     cancel: 'Cancel',
     submit: 'Change password',
+    success: 'Password changed successfully!',
   },
   preferences: {
     language: 'Language',

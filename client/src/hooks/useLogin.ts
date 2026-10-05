@@ -1,10 +1,12 @@
 import { handleErrorApi } from '@/lib/handleErrorApi'
+import i18n from '@/lib/i18n'
 import { useLoginMutation } from '@/queries/use-auth'
 import { LoginBody, type LoginBodyType } from '@app/shared'
 import { useAuthStore } from '@/store/useAuthStore'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 const REMEMBERED_EMAIL_KEY = 'qr-order:remembered-email'
 
@@ -40,6 +42,7 @@ export function useLogin() {
         // Bỏ qua nếu localStorage không khả dụng
       }
       setTokens(result.data.data)
+      toast.success(i18n.t('auth:login.success'))
       router.navigate({ to: '/manage/dashboard' })
     } catch (error: any) {
       handleErrorApi({
@@ -49,5 +52,5 @@ export function useLogin() {
     }
   }
 
-  return { form, onSubmit }
+  return { form, onSubmit, isPending: loginMutation.isPending }
 }

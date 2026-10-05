@@ -35,6 +35,7 @@ export const settings = {
     confirmPasswordPlaceholder: 'Nhập lại mật khẩu mới',
     cancel: 'Hủy',
     submit: 'Đổi mật khẩu',
+    success: 'Đổi mật khẩu thành công!',
   },
   preferences: {
     language: 'Ngôn ngữ',

@@ -14,10 +14,14 @@ import { Input } from '@/components/ui/input'
 import { useLogin } from '@/hooks/useLogin'
 import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
+import { Loader2 } from 'lucide-react'
 import { Controller } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
-  const { form, onSubmit } = useLogin()
+  const { t } = useTranslation('auth')
+  const { form, onSubmit, isPending } = useLogin()
+
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className='overflow-hidden p-0'>
@@ -25,17 +29,15 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
           <form className='p-6 md:p-8' onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
               <div className='flex flex-col items-center gap-2 text-center'>
-                <h1 className='text-2xl font-bold'>Xin chào quay trở lại</h1>
-                <p className='text-balance text-muted-foreground'>
-                  Đăng nhập vào tài khoản của bạn
-                </p>
+                <h1 className='text-2xl font-bold'>{t('login.title')}</h1>
+                <p className='text-balance text-muted-foreground'>{t('login.subtitle')}</p>
               </div>
               <Controller
                 name='email'
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='email'>Email</FieldLabel>
+                    <FieldLabel htmlFor='email'>{t('common.email')}</FieldLabel>
                     <Input
                       {...field}
                       aria-invalid={fieldState.invalid}
@@ -54,9 +56,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <div className='flex items-center'>
-                      <FieldLabel htmlFor='password'>Mật khẩu</FieldLabel>
+                      <FieldLabel htmlFor='password'>{t('common.password')}</FieldLabel>
                       <a href='#' className='ml-auto text-sm underline-offset-2 hover:underline'>
-                        Quên mật khẩu?
+                        {t('login.forgotPassword')}
                       </a>
                     </div>
                     <InputPassword
@@ -71,31 +73,34 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
               />
 
               <Field>
-                <Button type='submit'>Đăng nhập</Button>
+                <Button type='submit' disabled={isPending} className='w-full gap-2'>
+                  {isPending && <Loader2 className='size-4 animate-spin' />}
+                  {isPending ? t('login.submitting') : t('login.submit')}
+                </Button>
               </Field>
               <FieldSeparator className='*:data-[slot=field-separator-content]:bg-card'>
-                Hoặc tiếp tục với
+                {t('common.orContinueWith')}
               </FieldSeparator>
               <Field>
-                <GoogleButton>Đăng nhập bằng Google</GoogleButton>
+                <GoogleButton>{t('login.google')}</GoogleButton>
               </Field>
               <FieldDescription className='text-center'>
-                Chưa có tài khoản? <Link to='/signup'>Đăng ký</Link>
+                {t('login.noAccount')} <Link to='/signup'>{t('login.signup')}</Link>
               </FieldDescription>
             </FieldGroup>
           </form>
           <div className='relative hidden bg-muted md:block'>
             <img
               src='/banner-login.png'
-              alt='Quản lý quán ăn'
+              alt={t('common.bannerAlt')}
               className='absolute inset-0 h-full w-full object-cover'
             />
           </div>
         </CardContent>
       </Card>
       <FieldDescription className='px-6 text-center'>
-        Bằng việc tiếp tục, bạn đồng ý với <a href='#'>Điều khoản dịch vụ</a> và{' '}
-        <a href='#'>Chính sách bảo mật</a> của chúng tôi.
+        {t('common.termsPrefix')} <a href='#'>{t('common.terms')}</a> {t('common.and')}{' '}
+        <a href='#'>{t('common.privacy')}</a> {t('common.termsSuffix')}
       </FieldDescription>
     </div>
   )

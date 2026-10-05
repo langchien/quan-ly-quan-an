@@ -17,9 +17,14 @@ export const auth = {
     subtitle: 'Đăng nhập vào tài khoản của bạn',
     forgotPassword: 'Quên mật khẩu?',
     submit: 'Đăng nhập',
+    submitting: 'Đang đăng nhập...',
     google: 'Đăng nhập bằng Google',
     noAccount: 'Chưa có tài khoản?',
     signup: 'Đăng ký',
+    success: 'Đăng nhập thành công!',
+  },
+  logout: {
+    success: 'Đăng xuất thành công!',
   },
   signup: {
     title: 'Tạo tài khoản',

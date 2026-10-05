@@ -20,9 +20,14 @@ export const auth = {
     subtitle: 'Log in to your account',
     forgotPassword: 'Forgot password?',
     submit: 'Log in',
+    submitting: 'Logging in...',
     google: 'Log in with Google',
     noAccount: "Don't have an account?",
     signup: 'Sign up',
+    success: 'Logged in successfully!',
+  },
+  logout: {
+    success: 'Logged out successfully!',
   },
   signup: {
     title: 'Create an account',

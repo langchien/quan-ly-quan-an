@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Loader2, Save, ShieldCheck } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { ChangePasswordBody, type ChangePasswordBodyType } from '@app/shared'
 import { useChangePasswordMutation } from '@/queries/use-account'
@@ -12,6 +13,7 @@ import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 
 export function SettingsSecurityTab() {
+  const { t, i18n } = useTranslation('settings')
   const changePasswordMutation = useChangePasswordMutation()
 
   const form = useForm<ChangePasswordBodyType>({
@@ -27,7 +29,9 @@ export function SettingsSecurityTab() {
     if (changePasswordMutation.isPending) return
     try {
       const res = await changePasswordMutation.mutateAsync(values)
-      toast.success(res.data.message)
+      toast.success(
+        i18n.language === 'en' ? t('security.success') : res.data.message || t('security.success')
+      )
       form.reset()
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
@@ -42,10 +46,8 @@ export function SettingsSecurityTab() {
           <ShieldCheck className='size-5' />
         </div>
         <div>
-          <p className='text-sm font-semibold'>Mật khẩu & Bảo mật</p>
-          <p className='text-xs text-muted-foreground'>
-            Cập nhật mật khẩu để bảo vệ tài khoản của bạn
-          </p>
+          <p className='text-sm font-semibold'>{t('security.title')}</p>
+          <p className='text-xs text-muted-foreground'>{t('security.description')}</p>
         </div>
       </div>
 
@@ -56,11 +58,11 @@ export function SettingsSecurityTab() {
         {/* Mật khẩu cũ */}
         <div className='flex flex-col gap-2'>
           <Label htmlFor='settings-oldPassword' className='text-sm font-medium'>
-            Mật khẩu hiện tại
+            {t('security.oldPassword')}
           </Label>
           <InputPassword
             id='settings-oldPassword'
-            placeholder='Nhập mật khẩu hiện tại'
+            placeholder={t('security.oldPasswordPlaceholder')}
             {...form.register('oldPassword')}
           />
           {form.formState.errors.oldPassword && (
@@ -73,11 +75,11 @@ export function SettingsSecurityTab() {
         {/* Mật khẩu mới */}
         <div className='flex flex-col gap-2'>
           <Label htmlFor='settings-password' className='text-sm font-medium'>
-            Mật khẩu mới
+            {t('security.newPassword')}
           </Label>
           <InputPassword
             id='settings-password'
-            placeholder='Tối thiểu 6 ký tự'
+            placeholder={t('security.newPasswordPlaceholder')}
             {...form.register('password')}
           />
           {form.formState.errors.password && (
@@ -88,11 +90,11 @@ export function SettingsSecurityTab() {
         {/* Xác nhận mật khẩu mới */}
         <div className='flex flex-col gap-2'>
           <Label htmlFor='settings-confirmPassword' className='text-sm font-medium'>
-            Xác nhận mật khẩu mới
+            {t('security.confirmPassword')}
           </Label>
           <InputPassword
             id='settings-confirmPassword'
-            placeholder='Nhập lại mật khẩu mới'
+            placeholder={t('security.confirmPasswordPlaceholder')}
             {...form.register('confirmPassword')}
           />
           {form.formState.errors.confirmPassword && (
@@ -104,7 +106,7 @@ export function SettingsSecurityTab() {
 
         <div className='flex items-center gap-2 pt-1'>
           <Button type='button' variant='outline' size='sm' onClick={() => form.reset()}>
-            Hủy
+            {t('security.cancel')}
           </Button>
           <Button
             type='submit'
@@ -117,7 +119,7 @@ export function SettingsSecurityTab() {
             ) : (
               <Save className='size-3.5' />
             )}
-            Đổi mật khẩu
+            {t('security.submit')}
           </Button>
         </div>
       </form>

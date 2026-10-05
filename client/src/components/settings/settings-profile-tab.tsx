@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { Camera, Loader2, RotateCcw, Save } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { UpdateMeBody, type UpdateMeBodyType } from '@app/shared'
 import { useAccountMe, useUpdateMeMutation, useUploadAvatarMutation } from '@/queries/use-account'
@@ -15,6 +16,7 @@ import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 
 export function SettingsProfileTab() {
+  const { t } = useTranslation('settings')
   const [file, setFile] = useState<File | null>(null)
   const avatarInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -78,7 +80,7 @@ export function SettingsProfileTab() {
       await updateMeMutation.mutateAsync(body)
       setFile(null)
       await refetch()
-      toast.success('Cập nhật thông tin thành công!')
+      toast.success(t('profile.updated'))
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
     }
@@ -131,7 +133,7 @@ export function SettingsProfileTab() {
           <p className='text-base leading-tight font-semibold'>{user?.name ?? '—'}</p>
           <p className='text-sm text-muted-foreground'>{user?.email ?? '—'}</p>
           <Badge variant='outline' className='mt-0.5 w-fit text-xs capitalize'>
-            {user?.role === 'Owner' ? '👑 Chủ quán' : '👤 Nhân viên'}
+            {user?.role === 'Owner' ? t('profile.owner') : t('profile.employee')}
           </Badge>
         </div>
       </div>
@@ -147,12 +149,12 @@ export function SettingsProfileTab() {
       >
         <div className='flex flex-col gap-2'>
           <Label htmlFor='settings-name' className='text-sm font-medium'>
-            Tên hiển thị
+            {t('profile.displayName')}
           </Label>
           <Input
             id='settings-name'
             type='text'
-            placeholder='Nhập tên của bạn'
+            placeholder={t('profile.namePlaceholder')}
             {...form.register('name')}
             className={form.formState.errors.name ? 'border-destructive' : ''}
           />
@@ -164,7 +166,7 @@ export function SettingsProfileTab() {
         <div className='flex items-center gap-2 pt-1'>
           <Button type='reset' variant='outline' size='sm' className='gap-2'>
             <RotateCcw className='size-3.5' />
-            Hoàn tác
+            {t('profile.undo')}
           </Button>
           <Button type='submit' size='sm' disabled={isPending} className='gap-2'>
             {isPending ? (
@@ -172,15 +174,15 @@ export function SettingsProfileTab() {
             ) : (
               <Save className='size-3.5' />
             )}
-            Lưu thay đổi
+            {t('profile.save')}
           </Button>
         </div>
       </form>
 
       {file && (
         <p className='-mt-3 text-xs text-muted-foreground'>
-          <span className='font-medium text-amber-500'>⚠ Chưa lưu:</span> Ảnh mới chọn sẽ được
-          upload khi bạn nhấn "Lưu thay đổi".
+          <span className='font-medium text-amber-500'>{t('profile.unsaved')}</span>{' '}
+          {t('profile.unsavedHint')}
         </p>
       )}
     </div>

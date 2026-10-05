@@ -12,8 +12,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 
 export function SignupForm({ className, ...props }: React.ComponentProps<'div'>) {
+  const { t } = useTranslation('auth')
+
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className='overflow-hidden p-0'>
@@ -21,58 +24,55 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
           <form className='p-6 md:p-8'>
             <FieldGroup>
               <div className='flex flex-col items-center gap-2 text-center'>
-                <h1 className='text-2xl font-bold'>Tạo tài khoản</h1>
-                <p className='text-sm text-balance text-muted-foreground'>
-                  Nhập email của bạn bên dưới để tạo tài khoản
-                </p>
+                <h1 className='text-2xl font-bold'>{t('signup.title')}</h1>
+                <p className='text-sm text-balance text-muted-foreground'>{t('signup.subtitle')}</p>
               </div>
               <Field>
-                <FieldLabel htmlFor='email'>Email</FieldLabel>
+                <FieldLabel htmlFor='email'>{t('common.email')}</FieldLabel>
                 <Input id='email' type='email' placeholder='m@example.com' required />
-                <FieldDescription>
-                  Chúng tôi sẽ dùng email này để liên hệ với bạn. Chúng tôi sẽ không chia sẻ email
-                  của bạn với bất kỳ ai khác.
-                </FieldDescription>
+                <FieldDescription>{t('signup.emailHint')}</FieldDescription>
               </Field>
               <Field>
                 <Field className='grid grid-cols-2 gap-4'>
                   <Field>
-                    <FieldLabel htmlFor='password'>Mật khẩu</FieldLabel>
+                    <FieldLabel htmlFor='password'>{t('common.password')}</FieldLabel>
                     <InputPassword id='password' required />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor='confirm-password'>Xác nhận mật khẩu</FieldLabel>
+                    <FieldLabel htmlFor='confirm-password'>
+                      {t('signup.confirmPassword')}
+                    </FieldLabel>
                     <InputPassword id='confirm-password' required />
                   </Field>
                 </Field>
-                <FieldDescription>Mật khẩu phải có ít nhất 8 ký tự.</FieldDescription>
+                <FieldDescription>{t('signup.passwordHint')}</FieldDescription>
               </Field>
               <Field>
-                <Button type='submit'>Tạo tài khoản</Button>
+                <Button type='submit'>{t('signup.submit')}</Button>
               </Field>
               <FieldSeparator className='*:data-[slot=field-separator-content]:bg-card'>
-                Hoặc tiếp tục với
+                {t('common.orContinueWith')}
               </FieldSeparator>
               <Field>
-                <GoogleButton>Đăng ký bằng Google</GoogleButton>
+                <GoogleButton>{t('signup.google')}</GoogleButton>
               </Field>
               <FieldDescription className='text-center'>
-                Đã có tài khoản? <Link to='/login'>Đăng nhập</Link>
+                {t('signup.hasAccount')} <Link to='/login'>{t('signup.login')}</Link>
               </FieldDescription>
             </FieldGroup>
           </form>
           <div className='relative hidden bg-muted md:block'>
             <img
               src='/banner-login.png'
-              alt='Quản lý quán ăn'
+              alt={t('common.bannerAlt')}
               className='absolute inset-0 h-full w-full object-cover'
             />
           </div>
         </CardContent>
       </Card>
       <FieldDescription className='px-6 text-center'>
-        Bằng việc tiếp tục, bạn đồng ý với <a href='#'>Điều khoản dịch vụ</a> và{' '}
-        <a href='#'>Chính sách bảo mật</a> của chúng tôi.
+        {t('common.termsPrefix')} <a href='#'>{t('common.terms')}</a> {t('common.and')}{' '}
+        <a href='#'>{t('common.privacy')}</a> {t('common.termsSuffix')}
       </FieldDescription>
     </div>
   )
