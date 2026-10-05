@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/manage/orders')({
   loader: ({ context: { queryClient } }) => {
-    return queryClient.ensureQueryData(ordersQueryOptions())
+    return queryClient.query({ ...ordersQueryOptions(), staleTime: 'static' })
   },
   component: RouteComponent,
 })

@@ -13,7 +13,7 @@ import { useAccountMe } from '@/queries/use-account'
  */
 export function useRole() {
   const { data: account } = useAccountMe()
-  const role = (account?.role as RoleType) ?? null
+  const role: RoleType | null = account?.role ?? null
 
   return {
     role,

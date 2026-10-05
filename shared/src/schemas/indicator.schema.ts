@@ -1,10 +1,12 @@
-import z from 'zod'
+import z from "zod";
 
 export const DashboardIndicatorQueryParams = z.object({
   fromDate: z.coerce.date(),
   toDate: z.coerce.date(),
-})
-export type DashboardIndicatorQueryParamsType = z.TypeOf<typeof DashboardIndicatorQueryParams>
+});
+export type DashboardIndicatorQueryParamsType = z.output<
+  typeof DashboardIndicatorQueryParams
+>;
 
 export const DishIndicatorSchema = z.object({
   id: z.number(),
@@ -16,14 +18,14 @@ export const DishIndicatorSchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   successOrders: z.number(),
-})
-export type DishIndicatorType = z.TypeOf<typeof DishIndicatorSchema>
+});
+export type DishIndicatorType = z.output<typeof DishIndicatorSchema>;
 
 export const RevenueByDateSchema = z.object({
   date: z.string(),
   revenue: z.number(),
-})
-export type RevenueByDateType = z.TypeOf<typeof RevenueByDateSchema>
+});
+export type RevenueByDateType = z.output<typeof RevenueByDateSchema>;
 
 export const DashboardIndicatorRes = z.object({
   data: z.object({
@@ -34,5 +36,5 @@ export const DashboardIndicatorRes = z.object({
     dishIndicator: z.array(DishIndicatorSchema),
     revenueByDate: z.array(RevenueByDateSchema),
   }),
-})
-export type DashboardIndicatorResType = z.TypeOf<typeof DashboardIndicatorRes>
+});
+export type DashboardIndicatorResType = z.output<typeof DashboardIndicatorRes>;

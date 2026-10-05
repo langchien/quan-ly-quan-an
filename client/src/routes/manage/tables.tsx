@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/manage/tables')({
   loader: ({ context: { queryClient } }) => {
-    return queryClient.ensureQueryData(tableListQueryOptions)
+    return queryClient.query({ ...tableListQueryOptions, staleTime: 'static' })
   },
   component: RouteComponent,
 })

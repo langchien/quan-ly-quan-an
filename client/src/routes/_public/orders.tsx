@@ -72,9 +72,8 @@ function OrdersPage() {
       refetch()
       refetchBills()
       setPayosDialogOpen(false) // Tự đóng dialog QR khi thanh toán xong
-      const orders = paidOrders
       toast.success('Thanh toán thành công! 🎉', {
-        description: `${orders.length} món đã được thanh toán.`,
+        description: `${paidOrders.length} món đã được thanh toán.`,
       })
     },
   })

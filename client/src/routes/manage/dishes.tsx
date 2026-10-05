@@ -7,8 +7,8 @@ import { createFileRoute } from '@tanstack/react-router'
 export const Route = createFileRoute('/manage/dishes')({
   loader: ({ context: { queryClient } }) => {
     return Promise.all([
-      queryClient.ensureQueryData(dishListQueryOptions),
-      queryClient.ensureQueryData(categoryListQueryOptions),
+      queryClient.query({ ...dishListQueryOptions, staleTime: 'static' }),
+      queryClient.query({ ...categoryListQueryOptions, staleTime: 'static' }),
     ])
   },
   component: RouteComponent,

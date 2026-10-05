@@ -15,7 +15,7 @@ export const DishSnapshotSchema = z.object({
   updatedAt: z.coerce.date(),
 });
 
-export type DishSnapshotType = z.TypeOf<typeof DishSnapshotSchema>;
+export type DishSnapshotType = z.output<typeof DishSnapshotSchema>;
 
 export const OrderSchema = z.object({
   id: z.number(),
@@ -41,13 +41,13 @@ export const OrderSchema = z.object({
   updatedAt: z.coerce.date(),
 });
 
-export type OrderSchemaType = z.TypeOf<typeof OrderSchema>;
+export type OrderSchemaType = z.output<typeof OrderSchema>;
 
 export const OrderParam = z.object({
   orderId: z.coerce.number(),
 });
 
-export type OrderParamType = z.TypeOf<typeof OrderParam>;
+export type OrderParamType = z.output<typeof OrderParam>;
 
 export const GetOrdersQueryParams = z.object({
   fromDate: z.coerce.date().optional(),
@@ -56,7 +56,7 @@ export const GetOrdersQueryParams = z.object({
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
 });
 
-export type GetOrdersQueryParamsType = z.TypeOf<typeof GetOrdersQueryParams>;
+export type GetOrdersQueryParamsType = z.output<typeof GetOrdersQueryParams>;
 export type GetOrdersQueryParamsInputType = Partial<GetOrdersQueryParamsType>;
 
 export const PaginationMeta = z.object({
@@ -66,7 +66,7 @@ export const PaginationMeta = z.object({
   pageSize: z.number(),
 });
 
-export type PaginationMetaType = z.TypeOf<typeof PaginationMeta>;
+export type PaginationMetaType = z.output<typeof PaginationMeta>;
 
 export const GetOrdersRes = z.object({
   message: z.string(),
@@ -74,7 +74,7 @@ export const GetOrdersRes = z.object({
   pagination: PaginationMeta,
 });
 
-export type GetOrdersResType = z.TypeOf<typeof GetOrdersRes>;
+export type GetOrdersResType = z.output<typeof GetOrdersRes>;
 
 export const GetOrderDetailRes = z.object({
   message: z.string(),
@@ -83,7 +83,7 @@ export const GetOrderDetailRes = z.object({
   }),
 });
 
-export type GetOrderDetailResType = z.TypeOf<typeof GetOrderDetailRes>;
+export type GetOrderDetailResType = z.output<typeof GetOrderDetailRes>;
 
 export const UpdateOrderBody = z.object({
   status: z.enum(OrderStatusValues),
@@ -91,14 +91,14 @@ export const UpdateOrderBody = z.object({
   quantity: z.number(),
 });
 
-export type UpdateOrderBodyType = z.TypeOf<typeof UpdateOrderBody>;
+export type UpdateOrderBodyType = z.output<typeof UpdateOrderBody>;
 
 export const UpdateOrderRes = z.object({
   message: z.string(),
   data: OrderSchema,
 });
 
-export type UpdateOrderResType = z.TypeOf<typeof UpdateOrderRes>;
+export type UpdateOrderResType = z.output<typeof UpdateOrderRes>;
 
 export const CreateOrdersBody = z
   .object({
@@ -113,21 +113,21 @@ export const CreateOrdersBody = z
   })
   .strict();
 
-export type CreateOrdersBodyType = z.TypeOf<typeof CreateOrdersBody>;
+export type CreateOrdersBodyType = z.output<typeof CreateOrdersBody>;
 
 export const CreateOrdersRes = z.object({
   message: z.string(),
   data: z.array(OrderSchema),
 });
 
-export type CreateOrdersResType = z.TypeOf<typeof CreateOrdersRes>;
+export type CreateOrdersResType = z.output<typeof CreateOrdersRes>;
 
 export const PayGuestOrdersBody = z.object({
   guestId: z.number(),
 });
 
-export type PayGuestOrdersBodyType = z.TypeOf<typeof PayGuestOrdersBody>;
+export type PayGuestOrdersBodyType = z.output<typeof PayGuestOrdersBody>;
 
 export const PayGuestOrdersRes = GetOrdersRes;
 
-export type PayGuestOrdersResType = z.TypeOf<typeof PayGuestOrdersRes>;
+export type PayGuestOrdersResType = z.output<typeof PayGuestOrdersRes>;

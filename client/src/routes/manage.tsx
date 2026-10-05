@@ -14,7 +14,7 @@ export const Route = createFileRoute('/manage')({
     }
   },
   loader: ({ context: { queryClient } }) => {
-    return queryClient.ensureQueryData(accountMeQueryOptions)
+    return queryClient.query({ ...accountMeQueryOptions, staleTime: 'static' })
   },
   component: RouteComponent,
 })

@@ -1,6 +1,6 @@
 import { StaffTable } from '@/components/manage/staffs/staff-table'
-import { Role } from '@app/shared'
 import { accountListQueryOptions, accountMeQueryOptions } from '@/queries/use-account'
+import { Role } from '@app/shared'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/manage/staffs')({
@@ -12,7 +12,7 @@ export const Route = createFileRoute('/manage/staffs')({
     }
   },
   loader: ({ context: { queryClient } }) => {
-    return queryClient.ensureQueryData(accountListQueryOptions)
+    return queryClient.query({ ...accountListQueryOptions, staleTime: 'static' })
   },
   component: RouteComponent,
 })

@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_public/')({
   loader: ({ context: { queryClient } }) => {
-    return queryClient.ensureQueryData(dishListQueryOptions)
+    return queryClient.query({ ...dishListQueryOptions, staleTime: 'static' })
   },
   component: HomePage,
 })

@@ -1,6 +1,6 @@
-import z from 'zod'
-import { RoleValues } from '../constants.js'
-import { OrderSchema } from './order.schema.js'
+import z from "zod";
+import { RoleValues } from "../constants.js";
+import { OrderSchema } from "./order.schema.js";
 
 export const GuestLoginBody = z
   .object({
@@ -8,9 +8,9 @@ export const GuestLoginBody = z
     tableNumber: z.number(),
     token: z.string(),
   })
-  .strict()
+  .strict();
 
-export type GuestLoginBodyType = z.TypeOf<typeof GuestLoginBody>
+export type GuestLoginBodyType = z.output<typeof GuestLoginBody>;
 
 export const GuestLoginRes = z.object({
   data: z.object({
@@ -26,15 +26,17 @@ export const GuestLoginRes = z.object({
     }),
   }),
   message: z.string(),
-})
+});
 
-export type GuestLoginResType = z.TypeOf<typeof GuestLoginRes>
+export type GuestLoginResType = z.output<typeof GuestLoginRes>;
 
-export const GuestLogoutBody = z.object({ refreshToken: z.string() }).strict()
-export type GuestLogoutBodyType = z.TypeOf<typeof GuestLogoutBody>
+export const GuestLogoutBody = z.object({ refreshToken: z.string() }).strict();
+export type GuestLogoutBodyType = z.output<typeof GuestLogoutBody>;
 
-export const GuestRefreshTokenBody = z.object({ refreshToken: z.string() }).strict()
-export type GuestRefreshTokenBodyType = z.TypeOf<typeof GuestRefreshTokenBody>
+export const GuestRefreshTokenBody = z
+  .object({ refreshToken: z.string() })
+  .strict();
+export type GuestRefreshTokenBodyType = z.output<typeof GuestRefreshTokenBody>;
 
 export const GuestRefreshTokenRes = z.object({
   message: z.string(),
@@ -42,29 +44,29 @@ export const GuestRefreshTokenRes = z.object({
     accessToken: z.string(),
     refreshToken: z.string(),
   }),
-})
-export type GuestRefreshTokenResType = z.TypeOf<typeof GuestRefreshTokenRes>
+});
+export type GuestRefreshTokenResType = z.output<typeof GuestRefreshTokenRes>;
 
 export const GuestCreateOrdersBody = z.array(
   z.object({
     dishId: z.number(),
     quantity: z.number(),
     note: z.string().max(200).trim().optional(),
-  })
-)
+  }),
+);
 
-export type GuestCreateOrdersBodyType = z.TypeOf<typeof GuestCreateOrdersBody>
+export type GuestCreateOrdersBodyType = z.output<typeof GuestCreateOrdersBody>;
 
 export const GuestCreateOrdersRes = z.object({
   message: z.string(),
   data: z.array(OrderSchema),
-})
+});
 
-export type GuestCreateOrdersResType = z.TypeOf<typeof GuestCreateOrdersRes>
+export type GuestCreateOrdersResType = z.output<typeof GuestCreateOrdersRes>;
 
-export const GuestGetOrdersRes = GuestCreateOrdersRes
+export const GuestGetOrdersRes = GuestCreateOrdersRes;
 
-export type GuestGetOrdersResType = z.TypeOf<typeof GuestGetOrdersRes>
+export type GuestGetOrdersResType = z.output<typeof GuestGetOrdersRes>;
 
 export const GetListGuestsRes = z.object({
   data: z.array(
@@ -74,28 +76,30 @@ export const GetListGuestsRes = z.object({
       tableNumber: z.number().nullable(),
       createdAt: z.coerce.date(),
       updatedAt: z.coerce.date(),
-    })
+    }),
   ),
   message: z.string(),
-})
+});
 
-export type GetListGuestsResType = z.TypeOf<typeof GetListGuestsRes>
+export type GetListGuestsResType = z.output<typeof GetListGuestsRes>;
 
 export const GetGuestListQueryParams = z.object({
   fromDate: z.coerce.date().optional(),
   toDate: z.coerce.date().optional(),
-})
+});
 
-export type GetGuestListQueryParamsType = z.TypeOf<typeof GetGuestListQueryParams>
+export type GetGuestListQueryParamsType = z.output<
+  typeof GetGuestListQueryParams
+>;
 
 export const CreateGuestBody = z
   .object({
     name: z.string().trim().min(2).max(256),
     tableNumber: z.number(),
   })
-  .strict()
+  .strict();
 
-export type CreateGuestBodyType = z.TypeOf<typeof CreateGuestBody>
+export type CreateGuestBodyType = z.output<typeof CreateGuestBody>;
 
 export const CreateGuestRes = z.object({
   message: z.string(),
@@ -107,6 +111,6 @@ export const CreateGuestRes = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
   }),
-})
+});
 
-export type CreateGuestResType = z.TypeOf<typeof CreateGuestRes>
+export type CreateGuestResType = z.output<typeof CreateGuestRes>;

@@ -209,7 +209,7 @@ export function TableGridView({
             <CardContent className='flex flex-col items-center gap-3 pt-2'>
               {/* QR Code */}
               <div className='rounded-xl border bg-white p-2 shadow-sm transition-transform duration-200 group-hover:scale-105'>
-                <QRCodeCanvas value={url} size={100} includeMargin={false} />
+                <QRCodeCanvas value={url} size={100} />
               </div>
 
               {/* Info badges */}

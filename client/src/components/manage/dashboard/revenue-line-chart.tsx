@@ -51,7 +51,7 @@ export function RevenueLineChart({ data }: { data: RevenueByDateType[] }) {
               content={
                 <ChartTooltipContent
                   labelFormatter={(_, payload) => {
-                    const item = payload?.[0]?.payload as RevenueByDateType | undefined
+                    const item = payload[0]?.payload as RevenueByDateType | undefined
                     return item?.date ?? ''
                   }}
                   formatter={value => {

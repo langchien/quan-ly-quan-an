@@ -14,9 +14,10 @@ export default [
       'pnpm/json-enforce-catalog': 'off',
       'import/consistent-type-specifier-style': 'off',
       '@typescript-eslint/no-unnecessary-condition': 'warn',
+      '@typescript-eslint/no-deprecated': 'error',
     },
   },
   {
-    ignores: ['eslint.config.js', 'prettier.config.js'],
+    ignores: ['eslint.config.js', 'prettier.config.js', 'src/components/ui'],
   },
 ]

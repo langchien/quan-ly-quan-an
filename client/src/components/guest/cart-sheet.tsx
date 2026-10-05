@@ -86,11 +86,8 @@ export function CartSheet() {
         description: `Đã đặt ${orders.length} món. Vui lòng đợi nhà bếp xử lý.`,
       })
     } catch (error: unknown) {
-      const errorMsg =
-        (error as { response?: { data?: { message?: string } }; message?: string })?.response?.data
-          ?.message ||
-        (error as { message?: string })?.message ||
-        'Vui lòng thử lại.'
+      const err = error as { response?: { data?: { message?: string } }; message?: string }
+      const errorMsg = err.response?.data?.message || err.message || 'Vui lòng thử lại.'
       toast.error('Đặt món thất bại', {
         description: errorMsg,
       })

@@ -27,8 +27,8 @@ export const Route = createFileRoute('/_public/menu')({
   },
   loader: ({ context: { queryClient } }) =>
     Promise.all([
-      queryClient.ensureQueryData(dishListQueryOptions),
-      queryClient.ensureQueryData(categoryListQueryOptions),
+      queryClient.query({ ...dishListQueryOptions, staleTime: 'static' }),
+      queryClient.query({ ...categoryListQueryOptions, staleTime: 'static' }),
     ]),
   component: MenuPage,
 })

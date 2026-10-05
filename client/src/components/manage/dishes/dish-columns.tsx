@@ -55,7 +55,7 @@ function getStatusBadge(status: string) {
  */
 function QuickToggleButton({ dish }: { dish: DishType }) {
   const toggleMutation = useToggleDishStatusMutation()
-  const isPending = toggleMutation.isPending && toggleMutation.variables?.id === dish.id
+  const isPending = toggleMutation.isPending && toggleMutation.variables.id === dish.id
 
   if (dish.status === DishStatus.Hidden) {
     return (

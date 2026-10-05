@@ -14,7 +14,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "lint": "node ../client/node_modules/eslint/bin/eslint.js src"
   },
   "dependencies": {
     "zod": "^4.6.5"

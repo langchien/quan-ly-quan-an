@@ -116,7 +116,7 @@ export function getTableColumns({
         return (
           <div className='flex items-center justify-center p-2'>
             <div className='inline-block rounded-md border bg-white p-1'>
-              <QRCodeCanvas value={url} size={80} includeMargin={false} />
+              <QRCodeCanvas value={url} size={80} />
             </div>
           </div>
         )

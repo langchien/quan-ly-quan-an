@@ -1,5 +1,5 @@
-import z from 'zod'
-import { RoleValues } from '../constants.js'
+import z from "zod";
+import { RoleValues } from "../constants.js";
 
 export const AccountSchema = z.object({
   id: z.number(),
@@ -9,31 +9,31 @@ export const AccountSchema = z.object({
   avatar: z.string().nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-})
+});
 
-export type AccountType = z.TypeOf<typeof AccountSchema>
+export type AccountType = z.output<typeof AccountSchema>;
 
 export const AccountListRes = z.object({
   data: z.array(AccountSchema),
   message: z.string(),
-})
+});
 
-export type AccountListResType = z.TypeOf<typeof AccountListRes>
+export type AccountListResType = z.output<typeof AccountListRes>;
 
 export const AccountRes = z
   .object({
     data: AccountSchema,
     message: z.string(),
   })
-  .strict()
+  .strict();
 
-export type AccountResType = z.TypeOf<typeof AccountRes>
+export type AccountResType = z.output<typeof AccountRes>;
 
 export const CreateEmployeeAccountBody = z
   .object({
     name: z.string().trim().min(2).max(256),
     email: z.string().email(),
-    avatar: z.string().url().optional(),
+    avatar: z.url().optional(),
     password: z.string().min(6).max(100),
     confirmPassword: z.string().min(6).max(100),
   })
@@ -41,20 +41,22 @@ export const CreateEmployeeAccountBody = z
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
       ctx.addIssue({
-        code: 'custom',
-        message: 'Mật khẩu không khớp',
-        path: ['confirmPassword'],
-      })
+        code: "custom",
+        message: "Mật khẩu không khớp",
+        path: ["confirmPassword"],
+      });
     }
-  })
+  });
 
-export type CreateEmployeeAccountBodyType = z.TypeOf<typeof CreateEmployeeAccountBody>
+export type CreateEmployeeAccountBodyType = z.output<
+  typeof CreateEmployeeAccountBody
+>;
 
 export const UpdateEmployeeAccountBody = z
   .object({
     name: z.string().trim().min(2).max(256),
     email: z.string().email(),
-    avatar: z.string().url().optional(),
+    avatar: z.url().optional(),
     changePassword: z.boolean().optional(),
     password: z.string().min(6).max(100).optional(),
     confirmPassword: z.string().min(6).max(100).optional(),
@@ -64,30 +66,32 @@ export const UpdateEmployeeAccountBody = z
     if (changePassword) {
       if (!password || !confirmPassword) {
         ctx.addIssue({
-          code: 'custom',
-          message: 'Hãy nhập mật khẩu mới và xác nhận mật khẩu mới',
-          path: ['changePassword'],
-        })
+          code: "custom",
+          message: "Hãy nhập mật khẩu mới và xác nhận mật khẩu mới",
+          path: ["changePassword"],
+        });
       } else if (confirmPassword !== password) {
         ctx.addIssue({
-          code: 'custom',
-          message: 'Mật khẩu không khớp',
-          path: ['confirmPassword'],
-        })
+          code: "custom",
+          message: "Mật khẩu không khớp",
+          path: ["confirmPassword"],
+        });
       }
     }
-  })
+  });
 
-export type UpdateEmployeeAccountBodyType = z.TypeOf<typeof UpdateEmployeeAccountBody>
+export type UpdateEmployeeAccountBodyType = z.output<
+  typeof UpdateEmployeeAccountBody
+>;
 
 export const UpdateMeBody = z
   .object({
     name: z.string().trim().min(2).max(256),
-    avatar: z.string().url().optional(),
+    avatar: z.url().optional(),
   })
-  .strict()
+  .strict();
 
-export type UpdateMeBodyType = z.TypeOf<typeof UpdateMeBody>
+export type UpdateMeBodyType = z.output<typeof UpdateMeBody>;
 
 export const ChangePasswordBody = z
   .object({
@@ -99,17 +103,17 @@ export const ChangePasswordBody = z
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
       ctx.addIssue({
-        code: 'custom',
-        message: 'Mật khẩu mới không khớp',
-        path: ['confirmPassword'],
-      })
+        code: "custom",
+        message: "Mật khẩu mới không khớp",
+        path: ["confirmPassword"],
+      });
     }
-  })
+  });
 
-export type ChangePasswordBodyType = z.TypeOf<typeof ChangePasswordBody>
+export type ChangePasswordBodyType = z.output<typeof ChangePasswordBody>;
 
 export const AccountIdParam = z.object({
   id: z.coerce.number(),
-})
+});
 
-export type AccountIdParamType = z.TypeOf<typeof AccountIdParam>
+export type AccountIdParamType = z.output<typeof AccountIdParam>;

@@ -4,7 +4,6 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 // Guest Type
-
 const GuestInfoSchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -12,7 +11,7 @@ const GuestInfoSchema = z.object({
   tableNumber: z.number().nullable(),
 })
 
-export type GuestInfoType = z.TypeOf<typeof GuestInfoSchema>
+export type GuestInfoType = z.output<typeof GuestInfoSchema>
 
 // Store Types
 

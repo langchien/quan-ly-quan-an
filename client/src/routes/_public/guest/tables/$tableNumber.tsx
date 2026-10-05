@@ -2,11 +2,11 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Role } from '@app/shared'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import { socket } from '@/lib/socket'
 import { useGuestLoginMutation } from '@/queries/use-guest'
 import { useAuthStore } from '@/store/useAuthStore'
+import { Role } from '@app/shared'
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { UtensilsCrossed } from 'lucide-react'
 import { useState } from 'react'
@@ -44,7 +44,7 @@ function GuestLoginPage() {
   const [name, setName] = useState('')
   const loginMutation = useGuestLoginMutation()
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.SubmitEvent) {
     e.preventDefault()
     if (!name.trim()) {
       toast.error('Vui lòng nhập tên của bạn')

@@ -1,6 +1,6 @@
 import z from "zod";
-import { BillStatusValues, PaymentMethodValues } from '../constants.js'
-import { OrderSchema } from './order.schema.js'
+import { BillStatusValues, PaymentMethodValues } from "../constants.js";
+import { OrderSchema } from "./order.schema.js";
 
 export const BillSchema = z.object({
   id: z.number(),
@@ -18,7 +18,7 @@ export const BillSchema = z.object({
   updatedAt: z.coerce.date(),
 });
 
-export type BillSchemaType = z.TypeOf<typeof BillSchema>;
+export type BillSchemaType = z.output<typeof BillSchema>;
 
 export const BillWithOrdersSchema = BillSchema.extend({
   orders: z.array(OrderSchema),
@@ -32,7 +32,7 @@ export const CreatePaymentLinkBody = z.object({
   guestId: z.number(),
 });
 
-export type CreatePaymentLinkBodyType = z.TypeOf<typeof CreatePaymentLinkBody>;
+export type CreatePaymentLinkBodyType = z.output<typeof CreatePaymentLinkBody>;
 
 export const CreatePaymentLinkRes = z.object({
   message: z.string(),
@@ -44,7 +44,7 @@ export const CreatePaymentLinkRes = z.object({
   }),
 });
 
-export type CreatePaymentLinkResType = z.TypeOf<typeof CreatePaymentLinkRes>;
+export type CreatePaymentLinkResType = z.output<typeof CreatePaymentLinkRes>;
 
 export const PayOSWebhookBody = z.object({
   code: z.string(),
@@ -73,18 +73,18 @@ export const PayOSWebhookBody = z.object({
   signature: z.string(),
 });
 
-export type PayOSWebhookBodyType = z.TypeOf<typeof PayOSWebhookBody>;
+export type PayOSWebhookBodyType = z.output<typeof PayOSWebhookBody>;
 
 export const GetBillRes = z.object({
   message: z.string(),
   data: BillWithOrdersSchema,
 });
 
-export type GetBillResType = z.TypeOf<typeof GetBillRes>;
+export type GetBillResType = z.output<typeof GetBillRes>;
 
 export const GetGuestBillsRes = z.object({
   message: z.string(),
   data: z.array(BillWithOrdersSchema),
 });
 
-export type GetGuestBillsResType = z.TypeOf<typeof GetGuestBillsRes>;
+export type GetGuestBillsResType = z.output<typeof GetGuestBillsRes>;

@@ -100,21 +100,21 @@ function AnalyticsPage() {
           />
           <KPICard
             title='Khách'
-            value={data?.guestCount?.toString()}
+            value={data?.guestCount.toString()}
             subtitle='Gọi món'
             icon={Users}
             isLoading={isLoading}
           />
           <KPICard
             title='Đơn hàng'
-            value={data?.orderCount?.toString()}
+            value={data?.orderCount.toString()}
             subtitle='Đã thanh toán'
             icon={ShoppingBag}
             isLoading={isLoading}
           />
           <KPICard
             title='Bàn đang phục vụ'
-            value={data?.servingTableCount?.toString()}
+            value={data?.servingTableCount.toString()}
             icon={Armchair}
             isLoading={isLoading}
           />

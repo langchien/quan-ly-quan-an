@@ -6,6 +6,8 @@
     "typecheck:client": "pnpm --filter client run typecheck",
     "typecheck:server": "pnpm --filter server run typecheck",
     "lint": "pnpm -r run lint",
+    "lint:client": "pnpm --filter client run lint",
+    "lint:shared": "pnpm --filter @app/shared run lint",
     "check": "pnpm --filter client run check"
   }
 }
