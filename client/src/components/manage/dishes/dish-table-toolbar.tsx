@@ -89,16 +89,16 @@ export function DishTableToolbar({
   return (
     <div className='flex flex-wrap items-center justify-between gap-2'>
       {/* Left: search + filters */}
-      <div className='flex flex-1 items-center gap-2'>
+      <div className='flex flex-1 flex-wrap items-center gap-2'>
         {/* Search */}
-        <div className='relative'>
+        <div className='relative w-full sm:w-auto'>
           <Search className='absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground' />
           <Input
             id='dish-search'
             placeholder='Tìm món ăn...'
             value={(table.getState().globalFilter as string) || ''}
             onChange={e => table.setGlobalFilter(e.target.value)}
-            className='h-8 w-[200px] pl-8 lg:w-[280px]'
+            className='h-8 w-full pl-8 sm:w-[200px] lg:w-[280px]'
           />
         </div>
 
@@ -235,7 +235,7 @@ export function DishTableToolbar({
       </div>
 
       {/* Right: view toggle + column visibility + add */}
-      <div className='flex items-center gap-2'>
+      <div className='flex w-full items-center gap-2 sm:w-auto'>
         {/* View mode toggle */}
         <div className='flex h-8 items-center rounded-md border bg-muted p-0.5'>
           <Tooltip>

@@ -106,10 +106,10 @@ function MenuPage() {
     <main className='min-h-screen pt-20'>
       <div className='container mx-auto px-4 py-8'>
         {/* Header */}
-        <div className='mb-6 flex items-start justify-between'>
+        <div className='mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
           <div>
             <div className='flex items-center gap-3'>
-              <div className='h-8 w-1 rounded-full bg-orange-500' />
+              <div className='h-8 w-1 rounded-full bg-brand' />
               <h1 className='text-2xl font-bold tracking-tight'>Thực đơn</h1>
             </div>
             {guest?.tableNumber && (
@@ -278,8 +278,8 @@ function CategoryTab({ label, count, isActive, onClick }: CategoryTabProps) {
       onClick={onClick}
       className={`flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 ${
         isActive
-          ? 'border-orange-500 bg-orange-500 text-white shadow-sm'
-          : 'border-border bg-background text-muted-foreground hover:border-orange-300 hover:text-foreground'
+          ? 'border-brand bg-brand text-brand-foreground shadow-sm'
+          : 'border-border bg-background text-muted-foreground hover:border-brand/60 hover:text-foreground'
       }`}
     >
       {label}

@@ -168,7 +168,7 @@ export function StaffDataTable({
 
           {/* Footer: selection info + pagination */}
           {(pageCount > 1 || table.getFilteredSelectedRowModel().rows.length > 0) && (
-            <div className='flex items-center justify-between text-sm text-muted-foreground'>
+            <div className='flex flex-col items-center gap-2 text-sm text-muted-foreground sm:flex-row sm:justify-between'>
               {/* Selection info */}
               <span>
                 {table.getFilteredSelectedRowModel().rows.length > 0

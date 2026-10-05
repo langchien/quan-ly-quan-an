@@ -54,14 +54,14 @@ export function NavItems() {
 export function PublicHeader() {
   return (
     <Card className='fixed z-10 h-20 w-full rounded-none'>
-      <div className='container mx-auto flex h-20 items-center'>
-        <Link to='/' className='mr-10 transition-opacity hover:opacity-90'>
+      <div className='container mx-auto flex h-20 items-center gap-3 px-4'>
+        <Link to='/' className='shrink-0 transition-opacity hover:opacity-90 sm:mr-6 lg:mr-10'>
           <AppBrand showModeToggle={false} />
         </Link>
-        <div className='flex-row space-x-6 text-sm font-semibold text-muted-foreground'>
+        <div className='scrollbar-hide flex min-w-0 flex-row items-center gap-4 overflow-x-auto text-sm font-semibold whitespace-nowrap text-muted-foreground sm:gap-6'>
           <NavItems />
         </div>
-        <div className='ms-auto'>
+        <div className='ms-auto shrink-0'>
           <ModeToggle />
         </div>
       </div>

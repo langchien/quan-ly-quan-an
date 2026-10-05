@@ -82,7 +82,7 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
         variant='outline'
         size={iconOnly ? 'icon' : 'default'}
         disabled
-        className={`gap-2 border-orange-200 text-orange-600 ${className ?? ''}`}
+        className={`gap-2 border-brand/40 text-brand-soft-foreground ${className ?? ''}`}
         id='call-staff-btn'
         title={`Vui lòng chờ ${remainingSeconds}s trước khi gọi lại`}
       >
@@ -99,7 +99,7 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
           <Button
             variant='outline'
             size={iconOnly ? 'icon' : 'default'}
-            className={`gap-2 border-orange-200 text-orange-600 hover:border-orange-400 hover:bg-orange-50 hover:text-orange-700 dark:border-orange-800 dark:text-orange-400 dark:hover:bg-orange-950 ${className ?? ''}`}
+            className={`gap-2 border-brand/40 text-brand-soft-foreground hover:border-brand hover:bg-brand-soft hover:text-brand-soft-foreground ${className ?? ''}`}
             id='call-staff-btn'
             title='Gọi nhân viên'
           >
@@ -112,7 +112,7 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
       <DialogContent className='sm:max-w-[400px]'>
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>
-            <BellRing className='h-5 w-5 text-orange-500' />
+            <BellRing className='h-5 w-5 text-brand' />
             Gọi nhân viên
           </DialogTitle>
           <DialogDescription>
@@ -143,7 +143,7 @@ export function CallStaffButton({ iconOnly = false, className }: CallStaffButton
           <Button
             onClick={handleCallStaff}
             disabled={isLoading}
-            className='gap-2 bg-orange-500 hover:bg-orange-600'
+            className='gap-2 bg-brand text-brand-foreground hover:bg-brand/90'
             id='confirm-call-staff-btn'
           >
             {isLoading ? (

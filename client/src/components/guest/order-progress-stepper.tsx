@@ -101,7 +101,7 @@ export function OrderProgressStepper({ orders }: OrderProgressStepperProps) {
                         ? 'border-emerald-500 bg-emerald-500 text-white'
                         : isCurrent
                           ? 'border-orange-500 bg-orange-500/10 text-orange-600 ring-4 ring-orange-500/20 dark:text-orange-400'
-                          : 'border-muted-foreground/20 bg-muted text-muted-foreground/40'
+                          : 'border-muted-foreground/30 bg-muted text-muted-foreground/60'
                     }`}
                   >
                     {isCompleted ? <Check className='h-4 w-4' /> : step.icon}
@@ -112,7 +112,7 @@ export function OrderProgressStepper({ orders }: OrderProgressStepperProps) {
                         ? 'text-emerald-600 dark:text-emerald-400'
                         : isCurrent
                           ? 'text-orange-600 dark:text-orange-400'
-                          : 'text-muted-foreground/50'
+                          : 'text-muted-foreground/70'
                     }`}
                   >
                     {step.label}

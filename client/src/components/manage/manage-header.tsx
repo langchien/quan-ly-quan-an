@@ -50,18 +50,21 @@ export function ManageHeader() {
   }, [pathSegments])
 
   return (
-    <header className='flex h-16 shrink-0 items-center gap-2 border-b px-4 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12'>
-      <div className='flex items-center gap-2'>
+    <header className='flex h-14 shrink-0 items-center gap-2 border-b px-3 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 sm:h-16 sm:px-4'>
+      <div className='flex min-w-0 items-center gap-2'>
         <SidebarTrigger className='-ml-1' />
         <Separator orientation='vertical' className='mr-2 data-[orientation=vertical]:h-4' />
         <Breadcrumb>
-          <BreadcrumbList>
+          <BreadcrumbList className='flex-nowrap'>
             {breadcrumbs.map((item, index) => (
               <React.Fragment key={item.href}>
-                {index > 0 && <BreadcrumbSeparator />}
-                <BreadcrumbItem>
+                {index > 0 && (
+                  <BreadcrumbSeparator className={item.isLast ? '' : 'hidden sm:block'} />
+                )}
+                {/* Mobile: chỉ hiển thị mục hiện tại để không tràn header */}
+                <BreadcrumbItem className={item.isLast ? 'min-w-0' : 'hidden sm:inline-flex'}>
                   {item.isLast ? (
-                    <BreadcrumbPage>{item.title}</BreadcrumbPage>
+                    <BreadcrumbPage className='truncate'>{item.title}</BreadcrumbPage>
                   ) : (
                     <BreadcrumbLink render={<Link to={item.href} />}>{item.title}</BreadcrumbLink>
                   )}

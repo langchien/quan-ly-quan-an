@@ -94,10 +94,10 @@ function OrdersPage() {
     <main className='min-h-screen pt-20'>
       <div className='container mx-auto px-4 py-8'>
         {/* Header */}
-        <div className='mb-6 flex items-start justify-between'>
+        <div className='mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
           <div>
             <div className='flex items-center gap-3'>
-              <div className='h-8 w-1 rounded-full bg-orange-500' />
+              <div className='h-8 w-1 rounded-full bg-brand' />
               <h1 className='text-2xl font-bold tracking-tight'>Đơn hàng của tôi</h1>
             </div>
             {guest && (
@@ -113,7 +113,7 @@ function OrdersPage() {
             )}
           </div>
 
-          <div className='flex items-center gap-2'>
+          <div className='flex flex-wrap items-center gap-2'>
             {/* Gọi nhân viên */}
             <CallStaffButton />
 
@@ -152,7 +152,7 @@ function OrdersPage() {
             <TabsTrigger value='current' id='orders-tab-current'>
               Đơn hiện tại
               {currentOrders.length > 0 && (
-                <span className='rounded-full bg-orange-500 px-1.5 text-xs text-white'>
+                <span className='rounded-full bg-brand px-1.5 text-xs text-brand-foreground'>
                   {currentOrders.length}
                 </span>
               )}
@@ -174,7 +174,7 @@ function OrdersPage() {
                   <div className='mt-6 flex justify-center'>
                     <Button
                       size='lg'
-                      className='w-full max-w-sm gap-2 bg-blue-600 text-base hover:bg-blue-700'
+                      className='w-full max-w-sm gap-2 bg-info text-base text-white hover:bg-info/90'
                       onClick={() => setPayosDialogOpen(true)}
                       id='pay-vietqr-btn'
                     >

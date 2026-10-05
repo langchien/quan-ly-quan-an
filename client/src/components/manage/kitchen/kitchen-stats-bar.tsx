@@ -56,7 +56,7 @@ export function KitchenStatsBar({
 
   if (isLoading) {
     return (
-      <div className='grid grid-cols-3 gap-3'>
+      <div className='grid grid-cols-1 gap-3 sm:grid-cols-3'>
         {Array.from({ length: 3 }).map((_, i) => (
           <div key={i} className='h-20 animate-pulse rounded-xl bg-muted' />
         ))}
@@ -67,12 +67,12 @@ export function KitchenStatsBar({
   return (
     <div className='flex items-center gap-3'>
       {/* Stats cards */}
-      <div className='grid flex-1 grid-cols-3 gap-3'>
+      <div className='grid flex-1 grid-cols-1 gap-3 min-[480px]:grid-cols-3'>
         {stats.map(stat => (
           <div
             key={stat.label}
             className={cn(
-              'flex items-center gap-3 rounded-xl border px-4 py-3',
+              'flex items-center gap-3 rounded-xl border px-3 py-3 sm:px-4',
               stat.bgColor,
               stat.borderColor
             )}

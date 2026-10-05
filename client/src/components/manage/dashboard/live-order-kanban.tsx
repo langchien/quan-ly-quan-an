@@ -86,12 +86,12 @@ export function LiveOrderKanban({ orders, isLoading }: LiveOrderKanbanProps) {
   }
 
   return (
-    <div className='grid gap-4 md:grid-cols-3'>
+    <div className='-mx-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-3 pb-2 md:mx-0 md:grid md:grid-cols-3 md:gap-4 md:overflow-visible md:px-0 md:pb-0'>
       {columns.map(col => (
         <div
           key={col.id}
           className={cn(
-            'min-h-[200px] space-y-3 rounded-xl border p-3',
+            'min-h-[200px] w-[85%] shrink-0 snap-center space-y-3 rounded-xl border p-3 md:w-auto',
             col.bgColor,
             col.borderColor
           )}

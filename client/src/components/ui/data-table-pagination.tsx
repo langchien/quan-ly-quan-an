@@ -113,13 +113,20 @@ export function DataTablePagination({
           />
         </PaginationItem>
 
+        {/* Mobile: chỉ hiển thị "Trang x/y" thay cho dãy số trang */}
+        <PaginationItem className='sm:hidden'>
+          <span className='px-2 text-sm text-muted-foreground'>
+            {pageIndex + 1}/{pageCount}
+          </span>
+        </PaginationItem>
+
         {pages.map(page =>
           typeof page === 'string' ? (
-            <PaginationItem key={page}>
+            <PaginationItem key={page} className='hidden sm:block'>
               <PaginationEllipsis />
             </PaginationItem>
           ) : (
-            <PaginationItem key={page}>
+            <PaginationItem key={page} className='hidden sm:block'>
               <PaginationLink
                 isActive={page === pageIndex}
                 onClick={() => onPageChange(page)}

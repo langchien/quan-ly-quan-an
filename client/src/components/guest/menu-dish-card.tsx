@@ -54,7 +54,7 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
               alt={dish.name}
               loading='lazy'
               onLoad={() => setImageLoaded(true)}
-              className={`h-full w-full object-cover transition-all duration-500 ${
+              className={`h-full w-full object-cover transition-all duration-500 dark:brightness-90 ${
                 isUnavailable ? '' : 'group-hover:scale-105'
               } ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             />
@@ -81,7 +81,7 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
           {isUnavailable && (
             <Badge
               variant='secondary'
-              className='border-amber-500/30 bg-amber-500/20 text-amber-700 dark:text-amber-400'
+              className='border-warning/30 bg-warning-soft text-warning-soft-foreground'
             >
               ⏸️ Tạm hết
             </Badge>
@@ -91,7 +91,7 @@ export function MenuDishCard({ dish }: MenuDishCardProps) {
         {/* Badge số lượng trong giỏ */}
         {quantity > 0 && !isUnavailable && (
           <div className='absolute top-2 left-2'>
-            <Badge variant='secondary' className='bg-orange-500 text-white hover:bg-orange-500'>
+            <Badge variant='secondary' className='bg-brand text-brand-foreground hover:bg-brand'>
               ×{quantity}
             </Badge>
           </div>

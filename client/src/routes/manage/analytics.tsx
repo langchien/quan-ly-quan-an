@@ -61,7 +61,7 @@ function AnalyticsPage() {
       <div className='space-y-4'>
         {/* Date Range Filter */}
         <div className='flex flex-wrap items-center gap-3'>
-          <div className='flex items-center gap-2'>
+          <div className='flex w-full items-center gap-2 sm:w-auto'>
             <span className='text-sm font-medium text-muted-foreground'>Từ</span>
             <DatePicker
               date={fromDate}
@@ -73,7 +73,7 @@ function AnalyticsPage() {
               }}
             />
           </div>
-          <div className='flex items-center gap-2'>
+          <div className='flex w-full items-center gap-2 sm:w-auto'>
             <span className='text-sm font-medium text-muted-foreground'>Đến</span>
             <DatePicker
               date={toDate}
@@ -91,7 +91,7 @@ function AnalyticsPage() {
         </div>
 
         {/* KPI Cards */}
-        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+        <div className='grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-4'>
           <KPICard
             title='Tổng doanh thu'
             value={data ? formatCurrency(data.revenue) : undefined}
@@ -208,7 +208,7 @@ function DatePicker({
           <Button
             variant='outline'
             className={cn(
-              'w-[200px] justify-start text-left font-normal',
+              'w-full justify-start text-left font-normal sm:w-[200px]',
               !date && 'text-muted-foreground'
             )}
           />

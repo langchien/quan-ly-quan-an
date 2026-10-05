@@ -41,10 +41,10 @@ export function AppBrand({
 
   const brandContent = (
     <div className={cn('flex items-center gap-3', className)}>
-      <div className='flex aspect-square size-9 shrink-0 items-center justify-center rounded-lg bg-orange-500 text-white shadow-sm'>
+      <div className='flex aspect-square size-9 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground shadow-sm'>
         {logo || <UtensilsCrossedIcon className='size-5' />}
       </div>
-      <div className='grid text-left text-sm leading-tight group-data-[collapsible=icon]:hidden'>
+      <div className='grid text-left text-sm leading-tight group-data-[collapsible=icon]:hidden max-sm:hidden'>
         <span className='truncate font-semibold text-foreground'>{brandName}</span>
         <span className='truncate text-xs text-muted-foreground'>{subtitle}</span>
       </div>
@@ -59,7 +59,7 @@ export function AppBrand({
             size='lg'
             className='flex-1 cursor-default hover:bg-transparent active:bg-transparent data-[state=open]:bg-transparent'
           >
-            <div className='flex aspect-square size-9 shrink-0 items-center justify-center rounded-lg bg-orange-500 text-white shadow-sm'>
+            <div className='flex aspect-square size-9 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground shadow-sm'>
               {logo || <UtensilsCrossedIcon className='size-5' />}
             </div>
             <div className='grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden'>

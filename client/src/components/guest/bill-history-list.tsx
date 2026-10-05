@@ -130,7 +130,7 @@ function BillDetailDialog({ bill, onClose }: { bill: Bill | null; onClose: () =>
           <>
             <DialogHeader>
               <DialogTitle className='flex items-center gap-2'>
-                <Receipt className='size-5 text-purple-600' />
+                <Receipt className='size-5 text-purple-600 dark:text-purple-400' />
                 Hóa đơn #{bill.orderCode}
               </DialogTitle>
               <DialogDescription>

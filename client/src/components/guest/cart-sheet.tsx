@@ -233,7 +233,7 @@ export function CartSheet() {
                                 onClick={() => toggleNoteExpand(item.dishId)}
                                 className={`rounded-full p-1 transition-colors ${
                                   isNoteExpanded || hasNote
-                                    ? 'text-orange-500 hover:text-orange-600'
+                                    ? 'text-brand hover:text-brand/80'
                                     : 'text-muted-foreground hover:text-foreground'
                                 }`}
                                 aria-label={`Ghi chú cho ${item.dishName}`}

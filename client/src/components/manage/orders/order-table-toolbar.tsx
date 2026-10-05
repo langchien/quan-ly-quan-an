@@ -46,14 +46,14 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
       {/* Left: search + filters */}
       <div className='flex flex-1 flex-wrap items-center gap-2'>
         {/* Search */}
-        <div className='relative'>
+        <div className='relative w-full sm:w-auto'>
           <Search className='absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground' />
           <Input
             id='order-search'
             placeholder='Tìm khách, món ăn...'
             value={(table.getState().globalFilter as string) || ''}
             onChange={e => table.setGlobalFilter(e.target.value)}
-            className='h-8 w-[200px] pl-8 lg:w-[280px]'
+            className='h-8 w-full pl-8 sm:w-[200px] lg:w-[280px]'
           />
         </div>
 
@@ -129,7 +129,7 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
       </div>
 
       {/* Right: column visibility + add */}
-      <div className='flex items-center gap-2'>
+      <div className='flex w-full items-center gap-2 sm:w-auto'>
         {/* Column visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger
@@ -175,7 +175,12 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
         </DropdownMenu>
 
         {/* Add order */}
-        <Button id='open-create-order-dialog' size='sm' className='h-8' onClick={onAddOrder}>
+        <Button
+          id='open-create-order-dialog'
+          size='sm'
+          className='h-8 flex-1 sm:flex-none'
+          onClick={onAddOrder}
+        >
           <ClipboardPlus className='mr-2 size-4' />
           Tạo đơn hàng
         </Button>

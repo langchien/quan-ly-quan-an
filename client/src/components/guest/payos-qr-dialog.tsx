@@ -69,7 +69,7 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
       <DialogContent className='max-w-[420px]'>
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>
-            <QrCode className='size-5 text-blue-600' />
+            <QrCode className='size-5 text-info' />
             Thanh toán VietQR
           </DialogTitle>
           <DialogDescription>Quét mã QR bằng ứng dụng ngân hàng để thanh toán</DialogDescription>
@@ -80,9 +80,7 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
           <div className='space-y-4'>
             <div className='flex items-center justify-between rounded-lg bg-muted/60 px-4 py-3'>
               <span className='text-sm text-muted-foreground'>{orderCount} món cần thanh toán</span>
-              <span className='text-xl font-bold text-blue-600'>
-                {formatCurrencyVND(totalAmount)}
-              </span>
+              <span className='text-xl font-bold text-info'>{formatCurrencyVND(totalAmount)}</span>
             </div>
             <Button
               className='w-full gap-2'
@@ -98,7 +96,7 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
         {/* Trạng thái: Đang tạo mã */}
         {state === 'loading' && (
           <div className='flex flex-col items-center gap-3 py-8'>
-            <Loader2 className='size-8 animate-spin text-blue-600' />
+            <Loader2 className='size-8 animate-spin text-info' />
             <p className='text-sm text-muted-foreground'>Đang tạo mã thanh toán...</p>
           </div>
         )}
@@ -108,7 +106,8 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
           <div className='space-y-4'>
             {/* QR Code */}
             <div className='flex flex-col items-center gap-3'>
-              <div className='overflow-hidden rounded-xl border-2 border-blue-100 bg-white p-3 shadow-sm'>
+              {/* Luôn nền trắng (kể cả dark mode): mã QR cần tương phản cao để app ngân hàng quét được */}
+              <div className='overflow-hidden rounded-xl border-2 border-info/30 bg-white p-3 shadow-sm'>
                 {qrData.qrCode.startsWith('http') || qrData.qrCode.startsWith('data:') ? (
                   <img
                     src={qrData.qrCode}
@@ -135,7 +134,7 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
                       href={qrData.checkoutUrl}
                       target='_blank'
                       rel='noreferrer'
-                      className='inline-flex items-center gap-1 text-blue-600 hover:underline'
+                      className='inline-flex items-center gap-1 text-info hover:underline'
                     >
                       <span>Mở link PayOS</span>
                       <ExternalLink className='size-3' />
@@ -149,9 +148,9 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
             </div>
 
             {/* Tổng tiền */}
-            <div className='flex items-center justify-between rounded-lg bg-blue-50 px-4 py-3 dark:bg-blue-950/30'>
+            <div className='flex items-center justify-between rounded-lg bg-info-soft px-4 py-3'>
               <span className='font-medium'>Tổng thanh toán</span>
-              <span className='text-xl font-bold text-blue-600'>
+              <span className='text-xl font-bold text-info-soft-foreground'>
                 {formatCurrencyVND(totalAmount)}
               </span>
             </div>
@@ -166,10 +165,12 @@ export function PayosQrDialog({ open, onOpenChange, totalAmount, orderCount }: P
         {/* Trạng thái: Đã thanh toán */}
         {state === 'paid' && (
           <div className='flex flex-col items-center gap-3 py-8'>
-            <div className='flex size-16 items-center justify-center rounded-full bg-green-100'>
-              <CheckCircle2 className='size-8 text-green-600' />
+            <div className='flex size-16 items-center justify-center rounded-full bg-success-soft'>
+              <CheckCircle2 className='size-8 text-success-soft-foreground' />
             </div>
-            <p className='text-lg font-semibold text-green-600'>Thanh toán thành công!</p>
+            <p className='text-lg font-semibold text-success-soft-foreground'>
+              Thanh toán thành công!
+            </p>
             <p className='text-sm text-muted-foreground'>Cảm ơn bạn đã sử dụng dịch vụ 🎉</p>
           </div>
         )}
