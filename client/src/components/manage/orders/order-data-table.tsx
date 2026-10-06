@@ -24,6 +24,7 @@ import {
 import { ClipboardList } from 'lucide-react'
 import { useState } from 'react'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { useTranslation } from 'react-i18next'
 import { OrderTableToolbar } from './order-table-toolbar'
 
 const PAGE_SIZE = 10
@@ -52,6 +53,7 @@ function LoadingSkeleton({ colCount }: { colCount: number }) {
 }
 
 export function OrderDataTable({ columns, data, isLoading, onAddOrder }: OrderDataTableProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const isMobile = useIsMobile()
   const [sorting, setSorting] = useState<SortingState>([{ id: 'createdAt', desc: true }])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -130,8 +132,8 @@ export function OrderDataTable({ columns, data, isLoading, onAddOrder }: OrderDa
               <ClipboardList className='size-10 text-muted-foreground/40' />
               <p className='text-sm text-muted-foreground'>
                 {globalFilter || columnFilters.length
-                  ? 'Không tìm thấy kết quả phù hợp'
-                  : 'Chưa có đơn hàng nào'}
+                  ? t('common:table.noResults')
+                  : t('orders.empty', { defaultValue: 'Chưa có đơn hàng nào' })}
               </p>
             </div>
           )}
@@ -172,8 +174,8 @@ export function OrderDataTable({ columns, data, isLoading, onAddOrder }: OrderDa
                       <ClipboardList className='size-10 text-muted-foreground/40' />
                       <p className='text-sm text-muted-foreground'>
                         {globalFilter || columnFilters.length
-                          ? 'Không tìm thấy kết quả phù hợp'
-                          : 'Chưa có đơn hàng nào'}
+                          ? t('common:table.noResults')
+                          : t('orders.empty', { defaultValue: 'Chưa có đơn hàng nào' })}
                       </p>
                     </div>
                   </TableCell>
@@ -187,7 +189,16 @@ export function OrderDataTable({ columns, data, isLoading, onAddOrder }: OrderDa
       {/* Footer: row count + pagination */}
       {(pageCount > 1 || totalFiltered > 0) && (
         <div className='flex flex-col items-center gap-2 text-sm text-muted-foreground sm:flex-row sm:justify-between'>
-          <span>{totalFiltered > 0 ? `${from}–${to} / ${totalFiltered} đơn hàng` : ''}</span>
+          <span>
+            {totalFiltered > 0
+              ? t('orders.summary', {
+                  from,
+                  to,
+                  total: totalFiltered,
+                  defaultValue: `${from}–${to} / ${totalFiltered} đơn hàng`,
+                })
+              : ''}
+          </span>
 
           {pageCount > 1 && (
             <DataTablePagination

@@ -6,6 +6,7 @@ import { useGetTableList } from '@/queries/use-table'
 import { useAudioChime } from '@/hooks/use-audio-chime'
 import { OrderStatus } from '@app/shared'
 import { toast } from 'sonner'
+import i18n from '@/lib/i18n'
 
 /**
  * Hook tập trung logic data cho Live Dashboard.
@@ -41,8 +42,8 @@ export function useLiveOrders() {
   // Socket events — dùng useSocketEvents hook chuẩn hóa
   useSocketEvents({
     'new-order': () => {
-      toast.info('🔔 Có đơn hàng mới!', {
-        description: 'Danh sách đơn hàng vừa được cập nhật.',
+      toast.info(i18n.t('manage:dashboard.toastNewOrder'), {
+        description: i18n.t('manage:dashboard.toastNewOrderDesc'),
       })
       audioChime.playChime()
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
@@ -58,15 +59,15 @@ export function useLiveOrders() {
       const { tableNumber } = payload as { tableNumber: number }
       queryClient.invalidateQueries({ queryKey: ['tables', 'list'] })
       queryClient.invalidateQueries({ queryKey: ['tables', 'detail', tableNumber] })
-      toast.info(`🔑 QR bàn ${tableNumber} đã được làm mới`, {
-        description: 'Token bàn đã thay đổi, mã QR cũ không còn hiệu lực.',
+      toast.info(i18n.t('manage:dashboard.toastQrRotated', { tableNumber }), {
+        description: i18n.t('manage:dashboard.toastQrRotatedDesc'),
       })
     },
     'call-staff': payload => {
       const { tableNumber, guestName, message } = payload
       audioChime.playChime()
-      toast.warning(`🔔 Bàn ${tableNumber} cần hỗ trợ!`, {
-        description: message ? `${guestName}: ${message}` : `${guestName} đang gọi nhân viên.`,
+      toast.warning(i18n.t('manage:dashboard.toastCallStaff', { tableNumber }), {
+        description: message ? `${guestName}: ${message}` : i18n.t('manage:dashboard.toastCallStaffDesc', { guestName }),
         duration: 10_000,
       })
     },

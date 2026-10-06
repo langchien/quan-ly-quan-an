@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { Armchair, Bell, BellOff, ChefHat, Clock, DollarSign } from 'lucide-react'
 
 import { formatCurrencyCompact } from '@/lib/format'
+import { useTranslation } from 'react-i18next'
 
 interface LiveStatsBarProps {
   pendingCount: number
@@ -28,16 +29,18 @@ export function LiveStatsBar({
   isAudioEnabled,
   onToggleAudio,
 }: LiveStatsBarProps) {
+  const { t } = useTranslation('manage')
+
   const stats = [
     {
-      label: 'Bàn đang ngồi',
+      label: t('dashboard.stats.seatedTables'),
       value: `${servingTableCount}/${totalTableCount}`,
       icon: Armchair,
       color: 'text-emerald-600 dark:text-emerald-400',
       bgColor: 'bg-emerald-500/10',
     },
     {
-      label: 'Món chờ nấu',
+      label: t('dashboard.stats.pendingDishes'),
       value: pendingCount.toString(),
       icon: Clock,
       color: pendingCount > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-muted-foreground',
@@ -45,14 +48,14 @@ export function LiveStatsBar({
       highlight: pendingCount > 0,
     },
     {
-      label: 'Đang nấu',
+      label: t('dashboard.stats.cookingDishes'),
       value: processingCount.toString(),
       icon: ChefHat,
       color: processingCount > 0 ? 'text-blue-600 dark:text-blue-400' : 'text-muted-foreground',
       bgColor: processingCount > 0 ? 'bg-blue-500/10' : 'bg-muted',
     },
     {
-      label: 'Doanh thu hôm nay',
+      label: t('dashboard.stats.todayRevenue'),
       value: formatCurrencyCompact(todayRevenue),
       icon: DollarSign,
       color: 'text-violet-600 dark:text-violet-400',
@@ -118,7 +121,9 @@ export function LiveStatsBar({
           )}
           <Switch size='sm' checked={isAudioEnabled} onCheckedChange={onToggleAudio} />
         </TooltipTrigger>
-        <TooltipContent>{isAudioEnabled ? 'Tắt chuông báo' : 'Bật chuông báo'}</TooltipContent>
+        <TooltipContent>
+          {isAudioEnabled ? t('dashboard.muteChime') : t('dashboard.unmuteChime')}
+        </TooltipContent>
       </Tooltip>
     </div>
   )

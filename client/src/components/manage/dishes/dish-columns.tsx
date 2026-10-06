@@ -20,6 +20,8 @@ import { useToggleDishStatusMutation } from '@/queries/use-dish'
 
 import { formatCurrency } from '@/lib/format'
 import { getDishStatusLabel, getDishStatusOptions, DISH_STATUS_EMOJI } from '@/lib/status-label'
+import { useTranslation } from 'react-i18next'
+import i18n from '@/lib/i18n'
 
 export function getInitials(name: string) {
   return name
@@ -65,6 +67,7 @@ function getStatusBadge(status: string) {
  * Món Hidden không hiển thị nút này (cần dùng dialog Edit).
  */
 function QuickToggleButton({ dish }: { dish: DishType }) {
+  const { t } = useTranslation('manage')
   const toggleMutation = useToggleDishStatusMutation()
   const isPending = toggleMutation.isPending && toggleMutation.variables.id === dish.id
 
@@ -80,7 +83,7 @@ function QuickToggleButton({ dish }: { dish: DishType }) {
             }
           />
           <TooltipContent side='left'>
-            <p>Dùng nút Chỉnh sửa để thay đổi món đang Ẩn</p>
+            <p>{t('dishes.toggleStatus.hiddenHint')}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -90,7 +93,9 @@ function QuickToggleButton({ dish }: { dish: DishType }) {
   const nextStatus =
     dish.status === DishStatus.Available ? DishStatus.Unavailable : DishStatus.Available
   const label =
-    dish.status === DishStatus.Available ? 'Đánh dấu Tạm hết' : 'Đánh dấu Đang bán trở lại'
+    dish.status === DishStatus.Available
+      ? t('dishes.toggleStatus.markUnavailable')
+      : t('dishes.toggleStatus.markAvailable')
 
   return (
     <TooltipProvider>
@@ -124,11 +129,16 @@ function QuickToggleButton({ dish }: { dish: DishType }) {
 }
 
 interface GetDishColumnsOptions {
+  t?: (key: any, options?: any) => string
   onEdit: (dish: DishType) => void
   onDelete?: (dish: DishType) => void
 }
 
-export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): ColumnDef<DishType>[] {
+export function getDishColumns({
+  t = i18n.t,
+  onEdit,
+  onDelete,
+}: GetDishColumnsOptions): ColumnDef<DishType>[] {
   return [
     // Checkbox select
     {
@@ -137,14 +147,14 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
         <Checkbox
           checked={table.getIsAllPageRowsSelected() || table.getIsSomePageRowsSelected()}
           onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
-          aria-label='Chọn tất cả'
+          aria-label={t('common:table.selectAll')}
         />
       ),
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={value => row.toggleSelected(!!value)}
-          aria-label='Chọn dòng'
+          aria-label={t('common:table.selectRow')}
         />
       ),
       enableSorting: false,
@@ -162,7 +172,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Món ăn
+          {t('dishes.columns.name')}
           <ArrowUpDown className='ml-2 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -192,7 +202,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Giá
+          {t('dishes.columns.price')}
           <ArrowUpDown className='ml-2 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -204,12 +214,12 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
     // Mô tả
     {
       accessorKey: 'description',
-      header: 'Mô tả',
+      header: t('dishes.columns.description'),
       cell: ({ row }) => {
         const desc: string = row.getValue('description') || ''
         return (
           <span className='block max-w-[240px] truncate text-sm text-muted-foreground' title={desc}>
-            {desc || <span className='italic opacity-50'>Chưa có mô tả</span>}
+            {desc || <span className='italic opacity-50'>{t('dishes.columns.noDescription')}</span>}
           </span>
         )
       },
@@ -219,7 +229,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
     {
       id: 'category',
       accessorFn: row => row.category?.name ?? null,
-      header: 'Danh mục',
+      header: t('dishes.columns.category'),
       cell: ({ row }) => {
         const category = row.original.category
         return category ? (
@@ -239,7 +249,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
     // Trạng thái + Quick Toggle
     {
       accessorKey: 'status',
-      header: 'Trạng thái',
+      header: t('dishes.columns.status'),
       cell: ({ row }) => {
         const dish = row.original
         return (
@@ -255,7 +265,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
     // Actions
     {
       id: 'actions',
-      header: () => <span className='sr-only'>Thao tác</span>,
+      header: () => <span className='sr-only'>{t('dishes.columns.actions')}</span>,
       cell: ({ row }) => {
         const dish = row.original
         return (
@@ -270,15 +280,15 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
                 })}
               >
                 <MoreHorizontal className='size-4' />
-                <span className='sr-only'>Mở menu</span>
+                <span className='sr-only'>{t('common:actions.openMenu')}</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end' className='w-40'>
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                  <DropdownMenuLabel>{t('dishes.columns.actions')}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem id={`edit-dish-${dish.id}`} onClick={() => onEdit(dish)}>
                     <Pencil className='mr-2 size-4' />
-                    Chỉnh sửa
+                    {t('common:actions.edit')}
                   </DropdownMenuItem>
                   {onDelete && (
                     <DropdownMenuItem
@@ -287,7 +297,7 @@ export function getDishColumns({ onEdit, onDelete }: GetDishColumnsOptions): Col
                       className='text-destructive focus:text-destructive'
                     >
                       <Trash2 className='mr-2 size-4' />
-                      Xóa
+                      {t('common:actions.delete')}
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuGroup>

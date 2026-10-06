@@ -27,6 +27,7 @@ import { UtensilsCrossed } from 'lucide-react'
 import { useState } from 'react'
 import { DishGridView } from './dish-grid-view'
 import { DishTableToolbar, type ViewMode } from './dish-table-toolbar'
+import { useTranslation } from 'react-i18next'
 
 const PAGE_SIZE = 10
 
@@ -63,6 +64,7 @@ export function DishDataTable({
   onEdit,
   onDelete,
 }: DishDataTableProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -160,8 +162,8 @@ export function DishDataTable({
                         <UtensilsCrossed className='size-10 text-muted-foreground/40' />
                         <p className='text-sm text-muted-foreground'>
                           {globalFilter || columnFilters.length
-                            ? 'Không tìm thấy kết quả phù hợp'
-                            : 'Chưa có món ăn nào'}
+                            ? t('common:table.noResults')
+                            : t('dishes.empty')}
                         </p>
                       </div>
                     </TableCell>
@@ -177,9 +179,12 @@ export function DishDataTable({
               {/* Selection info */}
               <span>
                 {table.getFilteredSelectedRowModel().rows.length > 0
-                  ? `${table.getFilteredSelectedRowModel().rows.length} / ${totalFiltered} dòng được chọn`
+                  ? t('common:table.selectedRows', {
+                      selected: table.getFilteredSelectedRowModel().rows.length,
+                      total: totalFiltered,
+                    })
                   : totalFiltered > 0
-                    ? `${from}–${to} / ${totalFiltered} món ăn`
+                    ? t('dishes.summary', { from, to, total: totalFiltered })
                     : ''}
               </span>
 

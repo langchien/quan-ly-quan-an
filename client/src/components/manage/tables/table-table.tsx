@@ -9,8 +9,10 @@ import type { TableSchema } from '@app/shared'
 import { LayoutGrid } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import type { z } from 'zod'
+import { useTranslation } from 'react-i18next'
 
 export function TableTable() {
+  const { t } = useTranslation(['manage', 'common'])
   const { data: tableList, isLoading, isError } = useGetTableList()
   const { isOwner } = useRole()
   const [createOpen, setCreateOpen] = useState(false)
@@ -20,10 +22,11 @@ export function TableTable() {
   const columns = useMemo(
     () =>
       getTableColumns({
+        t,
         onEdit: table => setEditTarget(table),
         onDelete: isOwner ? table => setDeleteTarget(table) : undefined,
       }),
-    [isOwner]
+    [isOwner, t]
   )
 
   if (isError) {
@@ -31,8 +34,8 @@ export function TableTable() {
       <div className='flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-16 text-center'>
         <LayoutGrid className='size-12 text-muted-foreground/50' />
         <div>
-          <p className='font-medium text-destructive'>Không thể tải danh sách bàn ăn</p>
-          <p className='text-sm text-muted-foreground'>Vui lòng thử lại sau</p>
+          <p className='font-medium text-destructive'>{t('tables.loadError')}</p>
+          <p className='text-sm text-muted-foreground'>{t('tables.tryAgainLater')}</p>
         </div>
       </div>
     )

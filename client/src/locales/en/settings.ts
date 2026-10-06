@@ -39,6 +39,7 @@ export const settings = {
     cancel: 'Cancel',
     submit: 'Change password',
     success: 'Password changed successfully!',
+    passwordMismatch: 'New passwords do not match',
   },
   preferences: {
     language: 'Language',

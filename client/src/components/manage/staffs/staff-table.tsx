@@ -7,8 +7,12 @@ import { useGetAccountList } from '@/queries/use-account'
 import type { AccountType } from '@app/shared'
 import { UserX } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useStatusLabel } from '@/lib/status-label'
 
 export function StaffTable() {
+  const { t } = useTranslation(['manage', 'common'])
+  const { getRoleLabel } = useStatusLabel()
   const { data: staffList, isLoading, isError } = useGetAccountList()
   const [createOpen, setCreateOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<AccountType | null>(null)
@@ -19,8 +23,10 @@ export function StaffTable() {
       getStaffColumns({
         onEdit: staff => setEditTarget(staff),
         onDelete: staff => setDeleteTarget(staff),
+        t,
+        getRoleLabel,
       }),
-    []
+    [t, getRoleLabel]
   )
 
   if (isError) {
@@ -28,12 +34,17 @@ export function StaffTable() {
       <div className='flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-16 text-center'>
         <UserX className='size-12 text-muted-foreground/50' />
         <div>
-          <p className='font-medium text-destructive'>Không thể tải danh sách nhân viên</p>
-          <p className='text-sm text-muted-foreground'>Vui lòng thử lại sau</p>
+          <p className='font-medium text-destructive'>
+            {t('staffs.loadError', { defaultValue: 'Không thể tải danh sách nhân viên' })}
+          </p>
+          <p className='text-sm text-muted-foreground'>
+            {t('staffs.tryAgainLater', { defaultValue: 'Vui lòng thử lại sau' })}
+          </p>
         </div>
       </div>
     )
   }
+
 
   return (
     <>

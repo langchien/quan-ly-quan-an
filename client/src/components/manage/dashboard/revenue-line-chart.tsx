@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
 import {
   ChartContainer,
@@ -8,19 +9,26 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { RevenueByDateType } from '@app/shared'
 import { formatCurrency } from '@/lib/format'
-
-const chartConfig = {
-  revenue: {
-    label: 'Doanh thu',
-    color: 'var(--chart-1)',
-  },
-} satisfies ChartConfig
+import { useTranslation } from 'react-i18next'
 
 export function RevenueLineChart({ data }: { data: RevenueByDateType[] }) {
+  const { t } = useTranslation('manage')
+
+  const chartConfig = useMemo(
+    () =>
+      ({
+        revenue: {
+          label: t('dashboard.revenue'),
+          color: 'var(--chart-1)',
+        },
+      }) satisfies ChartConfig,
+    [t]
+  )
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Doanh thu</CardTitle>
+        <CardTitle>{t('dashboard.revenue')}</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className='h-[300px] w-full'>
@@ -57,7 +65,7 @@ export function RevenueLineChart({ data }: { data: RevenueByDateType[] }) {
                   }}
                   formatter={value => {
                     const num = typeof value === 'number' ? value : Number(value)
-                    return [formatCurrency(num), 'Doanh thu']
+                    return [formatCurrency(num), t('dashboard.revenue')]
                   }}
                 />
               }

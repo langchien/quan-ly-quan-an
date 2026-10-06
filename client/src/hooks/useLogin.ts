@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { handleErrorApi } from '@/lib/handleErrorApi'
 import i18n from '@/lib/i18n'
 import { useLoginMutation } from '@/queries/use-auth'
@@ -31,6 +32,19 @@ export function useLogin() {
       password: '',
     },
   })
+
+  // Khi người dùng chuyển đổi ngôn ngữ, tự động validate lại để cập nhật message lỗi
+  useEffect(() => {
+    const handleLangChange = () => {
+      if (form.formState.isSubmitted || Object.keys(form.formState.errors).length > 0) {
+        void form.trigger()
+      }
+    }
+    i18n.on('languageChanged', handleLangChange)
+    return () => {
+      i18n.off('languageChanged', handleLangChange)
+    }
+  }, [form])
   async function onSubmit(values: LoginBodyType) {
     if (loginMutation.isPending) return
     try {

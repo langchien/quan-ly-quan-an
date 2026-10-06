@@ -31,6 +31,7 @@ import { Camera, Loader2 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 interface EditStaffDialogProps {
   staff: AccountType | null
@@ -39,6 +40,7 @@ interface EditStaffDialogProps {
 }
 
 export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const [file, setFile] = useState<File | null>(null)
   const updateStaffMutation = useUpdateEmployeeAccountMutation()
   const uploadAvatarMutation = useUploadAvatarMutation()
@@ -96,7 +98,7 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
         body = { ...values, avatar: uploadRes.data.data }
       }
       const res = await updateStaffMutation.mutateAsync({ id: staff.id, body })
-      toast.success(res.data.message || 'Cập nhật nhân viên thành công')
+      toast.success(res.data.message || t('staffs.editDialog.success'))
       handleOpenChange(false)
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
@@ -127,8 +129,8 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className='max-h-[90vh] max-w-[500px] overflow-auto'>
         <DialogHeader>
-          <DialogTitle>Cập nhật nhân viên</DialogTitle>
-          <DialogDescription>Chỉnh sửa thông tin tài khoản nhân viên</DialogDescription>
+          <DialogTitle>{t('staffs.editDialog.title')}</DialogTitle>
+          <DialogDescription>{t('staffs.editDialog.description')}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate className='flex flex-col gap-4'>
@@ -164,16 +166,18 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
                 }}
               />
             </div>
-            <p className='text-xs text-muted-foreground'>Click vào ảnh để đổi</p>
+            <p className='text-xs text-muted-foreground'>
+              {t('staffs.createDialog.avatarHint')}
+            </p>
           </div>
 
           <FieldGroup>
             {/* Tên */}
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='edit-staff-name'>Tên nhân viên</FieldLabel>
+              <FieldLabel htmlFor='edit-staff-name'>{t('staffs.createDialog.nameLabel')}</FieldLabel>
               <Input
                 id='edit-staff-name'
-                placeholder='Nguyễn Văn A'
+                placeholder={t('staffs.createDialog.namePlaceholder')}
                 {...form.register('name')}
                 aria-invalid={!!errors.name}
               />
@@ -182,11 +186,11 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
 
             {/* Email */}
             <Field data-invalid={!!errors.email}>
-              <FieldLabel htmlFor='edit-staff-email'>Email</FieldLabel>
+              <FieldLabel htmlFor='edit-staff-email'>{t('staffs.createDialog.emailLabel')}</FieldLabel>
               <Input
                 id='edit-staff-email'
                 type='email'
-                placeholder='nhanvien@example.com'
+                placeholder={t('staffs.createDialog.emailPlaceholder')}
                 {...form.register('email')}
                 aria-invalid={!!errors.email}
               />
@@ -203,11 +207,11 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
               <FieldContent>
                 <FieldTitle>
                   <label htmlFor='edit-staff-change-password' className='cursor-pointer'>
-                    Đổi mật khẩu
+                    {t('common:userMenu.changePassword')}
                   </label>
                 </FieldTitle>
                 <FieldDescription>
-                  Tích vào đây nếu muốn thay đổi mật khẩu nhân viên
+                  {t('staffs.editDialog.changePasswordToggle')}
                 </FieldDescription>
               </FieldContent>
             </Field>
@@ -216,11 +220,13 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
             {changePassword && (
               <>
                 <Field data-invalid={!!errors.password}>
-                  <FieldLabel htmlFor='edit-staff-password'>Mật khẩu mới</FieldLabel>
+                  <FieldLabel htmlFor='edit-staff-password'>
+                    {t('staffs.editDialog.newPasswordLabel')}
+                  </FieldLabel>
                   <Input
                     id='edit-staff-password'
                     type='password'
-                    placeholder='Tối thiểu 6 ký tự'
+                    placeholder={t('staffs.createDialog.passwordPlaceholder')}
                     {...form.register('password')}
                     aria-invalid={!!errors.password}
                   />
@@ -228,12 +234,12 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
                 </Field>
                 <Field data-invalid={!!errors.confirmPassword}>
                   <FieldLabel htmlFor='edit-staff-confirm-password'>
-                    Xác nhận mật khẩu mới
+                    {t('staffs.editDialog.confirmNewPasswordLabel')}
                   </FieldLabel>
                   <Input
                     id='edit-staff-confirm-password'
                     type='password'
-                    placeholder='Nhập lại mật khẩu mới'
+                    placeholder={t('staffs.editDialog.confirmPasswordPlaceholder')}
                     {...form.register('confirmPassword')}
                     aria-invalid={!!errors.confirmPassword}
                   />
@@ -245,16 +251,16 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
 
           <DialogFooter>
             <Button type='button' variant='outline' onClick={() => handleOpenChange(false)}>
-              Hủy
+              {t('common:actions.cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
               {isPending ? (
                 <>
                   <Loader2 className='mr-2 size-4 animate-spin' />
-                  Đang lưu...
+                  {t('staffs.editDialog.submitting')}
                 </>
               ) : (
-                'Lưu thay đổi'
+                t('staffs.editDialog.submit')
               )}
             </Button>
           </DialogFooter>
@@ -263,3 +269,4 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
     </Dialog>
   )
 }
+

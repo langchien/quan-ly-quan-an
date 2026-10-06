@@ -10,6 +10,7 @@ import { PayGuestDialog } from '@/components/manage/orders/pay-guest-dialog'
 import { cn } from '@/lib/utils'
 import { formatCurrency } from '@/lib/format'
 import { CheckCircle2, Clock, CreditCard, Users } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface LiveTableGridProps {
   orders: OrderSchemaType[]
@@ -34,6 +35,7 @@ function getWaitMinutes(createdAt: Date | string): number {
 }
 
 export function LiveTableGrid({ orders, isLoading }: LiveTableGridProps) {
+  const { t } = useTranslation('manage')
   const [payTarget, setPayTarget] = useState<OrderSchemaType | null>(null)
 
   // Gom orders theo bàn (chỉ lấy orders chưa Paid/Rejected)
@@ -51,7 +53,7 @@ export function LiveTableGrid({ orders, isLoading }: LiveTableGridProps) {
       if (!map.has(tableNum)) {
         map.set(tableNum, {
           tableNumber: tableNum,
-          guestName: order.guest?.name ?? 'Khách',
+          guestName: order.guest?.name ?? t('dashboard.guestFallback'),
           guestId: order.guestId,
           orders: [],
           pendingCount: 0,
@@ -115,10 +117,8 @@ export function LiveTableGrid({ orders, isLoading }: LiveTableGridProps) {
       <div className='flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-16 text-center'>
         <Users className='size-12 text-muted-foreground/40' />
         <div>
-          <p className='font-medium'>Chưa có bàn nào đang phục vụ</p>
-          <p className='text-sm text-muted-foreground'>
-            Khi khách quét QR gọi món, bàn sẽ hiển thị tại đây
-          </p>
+          <p className='font-medium'>{t('dashboard.noServingTables')}</p>
+          <p className='text-sm text-muted-foreground'>{t('dashboard.noServingTablesDesc')}</p>
         </div>
       </div>
     )
@@ -151,6 +151,7 @@ function TableCard({
   group: TableGroup
   onPay: (order: OrderSchemaType) => void
 }) {
+  const { t } = useTranslation('manage')
   const allDelivered = group.pendingCount === 0 && group.processingCount === 0
   const progressPercent =
     group.totalCount > 0 ? Math.round((group.deliveredCount / group.totalCount) * 100) : 0
@@ -173,7 +174,9 @@ function TableCard({
               {group.tableNumber}
             </span>
             <div>
-              <p className='text-sm font-semibold'>Bàn {group.tableNumber}</p>
+              <p className='text-sm font-semibold'>
+                {t('dashboard.tableNumber', { number: group.tableNumber })}
+              </p>
               <p className='max-w-[120px] truncate text-xs font-normal text-muted-foreground'>
                 {group.guestName}
               </p>
@@ -184,7 +187,7 @@ function TableCard({
           {allDelivered ? (
             <Badge className='gap-1 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'>
               <CheckCircle2 className='size-3' />
-              Đủ món
+              {t('dashboard.allDelivered')}
             </Badge>
           ) : (
             <Badge variant='outline' className='gap-1 border-amber-400 text-amber-600'>
@@ -197,9 +200,12 @@ function TableCard({
         {/* Progress bar */}
         <div className='mt-2 space-y-1'>
           <div className='flex justify-between text-[11px] text-muted-foreground'>
-            <span>Tiến độ</span>
+            <span>{t('dashboard.progress')}</span>
             <span>
-              {group.deliveredCount}/{group.totalCount} món đã giao
+              {t('dashboard.deliveredCount', {
+                delivered: group.deliveredCount,
+                total: group.totalCount,
+              })}
             </span>
           </div>
           <div className='h-1.5 w-full overflow-hidden rounded-full bg-muted'>
@@ -246,7 +252,7 @@ function TableCard({
             onClick={() => onPay(group.orders[0])}
           >
             <CreditCard className='size-3.5' />
-            Thanh toán · {formatCurrency(group.totalAmount)}
+            {t('dashboard.payTotal', { amount: formatCurrency(group.totalAmount) })}
           </Button>
         )}
       </CardContent>

@@ -36,6 +36,7 @@ export const settings = {
     cancel: 'Hủy',
     submit: 'Đổi mật khẩu',
     success: 'Đổi mật khẩu thành công!',
+    passwordMismatch: 'Mật khẩu mới không khớp',
   },
   preferences: {
     language: 'Ngôn ngữ',

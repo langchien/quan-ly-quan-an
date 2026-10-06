@@ -20,6 +20,8 @@ import type { Table } from '@tanstack/react-table'
 import { CirclePlus, LayoutGrid, List, Search, Settings2, UtensilsCrossed, X } from 'lucide-react'
 import { useStatusLabel } from '@/lib/status-label'
 
+import { useTranslation } from 'react-i18next'
+
 export type ViewMode = 'table' | 'grid'
 
 interface DishTableToolbarProps {
@@ -29,23 +31,24 @@ interface DishTableToolbarProps {
   onViewModeChange: (mode: ViewMode) => void
 }
 
-const COLUMN_LABEL_MAP: Record<string, string> = {
-  name: 'Món ăn',
-  price: 'Giá',
-  description: 'Mô tả',
-  category: 'Danh mục',
-  status: 'Trạng thái',
-}
-
 export function DishTableToolbar({
   table,
   onAddDish,
   viewMode,
   onViewModeChange,
 }: DishTableToolbarProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const { data: categories } = useGetCategoryList()
   const { dishStatusOptions } = useStatusLabel()
   const isFiltered = table.getState().columnFilters.length > 0 || !!table.getState().globalFilter
+
+  const columnLabels: Record<string, string> = {
+    name: t('dishes.columns.name'),
+    price: t('dishes.columns.price'),
+    description: t('dishes.columns.description'),
+    category: t('dishes.columns.category'),
+    status: t('dishes.columns.status'),
+  }
 
   // Status filter
   const statusColumn = table.getColumn('status')
@@ -65,7 +68,7 @@ export function DishTableToolbar({
     const data = table.getCoreRowModel().rows
     const hasUncategorized = data.some(r => r.original.category == null)
     if (hasUncategorized) {
-      opts.push({ value: '__uncategorized__', label: 'Chưa phân loại' })
+      opts.push({ value: '__uncategorized__', label: t('dishes.uncategorized', { defaultValue: 'Chưa phân loại' }) })
     }
     return opts
   })()
@@ -96,7 +99,7 @@ export function DishTableToolbar({
           <Search className='absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground' />
           <Input
             id='dish-search'
-            placeholder='Tìm món ăn...'
+            placeholder={t('dishes.toolbar.searchPlaceholder')}
             value={(table.getState().globalFilter as string) || ''}
             onChange={e => table.setGlobalFilter(e.target.value)}
             className='h-8 w-full pl-8 sm:w-[200px] lg:w-[280px]'
@@ -113,7 +116,7 @@ export function DishTableToolbar({
             })}
           >
             <CirclePlus className='mr-2 size-4' />
-            Trạng thái
+            {t('dishes.columns.status')}
             {statusFilterValue.length > 0 && (
               <>
                 <Separator orientation='vertical' className='mx-2 h-4' />
@@ -123,7 +126,7 @@ export function DishTableToolbar({
                 <div className='hidden space-x-1 lg:flex'>
                   {statusFilterValue.length > 1 ? (
                     <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                      {statusFilterValue.length} đã chọn
+                      {statusFilterValue.length} {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
                     </Badge>
                   ) : (
                     dishStatusOptions
@@ -173,7 +176,7 @@ export function DishTableToolbar({
               })}
             >
               <CirclePlus className='mr-2 size-4' />
-              Danh mục
+              {t('dishes.columns.category')}
               {categoryFilterValue.length > 0 && (
                 <>
                   <Separator orientation='vertical' className='mx-2 h-4' />
@@ -183,7 +186,7 @@ export function DishTableToolbar({
                   <div className='hidden space-x-1 lg:flex'>
                     {categoryFilterValue.length > 1 ? (
                       <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                        {categoryFilterValue.length} đã chọn
+                        {categoryFilterValue.length} {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
                       </Badge>
                     ) : (
                       categoryOptions
@@ -231,7 +234,7 @@ export function DishTableToolbar({
             className='h-8 px-2 text-muted-foreground'
             onClick={resetFilters}
           >
-            Xóa bộ lọc
+            {t('common:actions.clearFilters')}
             <X className='ml-2 size-4' />
           </Button>
         )}
@@ -252,9 +255,9 @@ export function DishTableToolbar({
               onClick={() => onViewModeChange('table')}
             >
               <List className='size-4' />
-              <span className='sr-only'>Chế độ bảng</span>
+              <span className='sr-only'>{t('common:view.table')}</span>
             </TooltipTrigger>
-            <TooltipContent>Chế độ bảng</TooltipContent>
+            <TooltipContent>{t('common:view.table')}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger
@@ -267,9 +270,9 @@ export function DishTableToolbar({
               onClick={() => onViewModeChange('grid')}
             >
               <LayoutGrid className='size-4' />
-              <span className='sr-only'>Chế độ lưới</span>
+              <span className='sr-only'>{t('common:view.grid')}</span>
             </TooltipTrigger>
-            <TooltipContent>Chế độ lưới</TooltipContent>
+            <TooltipContent>{t('common:view.grid')}</TooltipContent>
           </Tooltip>
         </div>
 
@@ -284,11 +287,11 @@ export function DishTableToolbar({
               })}
             >
               <Settings2 className='mr-2 size-4' />
-              Hiển thị
+              {t('common:table.viewColumns', { defaultValue: 'Hiển thị' })}
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-44'>
               <DropdownMenuGroup>
-                <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
+                <DropdownMenuLabel>{t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {table
                   .getAllColumns()
@@ -300,7 +303,7 @@ export function DishTableToolbar({
                       checked={col.getIsVisible()}
                       onCheckedChange={value => col.toggleVisibility(!!value)}
                     >
-                      {COLUMN_LABEL_MAP[col.id] ?? col.id}
+                      {columnLabels[col.id] ?? col.id}
                     </DropdownMenuCheckboxItem>
                   ))}
               </DropdownMenuGroup>
@@ -311,7 +314,7 @@ export function DishTableToolbar({
         {/* Add dish */}
         <Button id='open-create-dish-dialog' size='sm' className='h-8' onClick={onAddDish}>
           <UtensilsCrossed className='mr-2 size-4' />
-          Thêm món ăn
+          {t('dishes.toolbar.addDish')}
         </Button>
       </div>
     </div>

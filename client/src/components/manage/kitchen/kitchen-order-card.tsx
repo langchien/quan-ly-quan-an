@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 import { ChefHat, CheckCircle2, Clock, Loader2, MessageSquareText } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 // SLA Thresholds (phút)
 const SLA_WARNING_MINUTES = 5
@@ -19,8 +20,8 @@ function getWaitMinutes(createdAt: Date | string): number {
   return Math.floor((Date.now() - new Date(createdAt).getTime()) / 60000)
 }
 
-function formatWaitTime(minutes: number): string {
-  if (minutes < 1) return 'Vừa xong'
+function formatWaitTime(minutes: number, justNowText: string): string {
+  if (minutes < 1) return justNowText
   if (minutes < 60) return `${minutes}p`
   const h = Math.floor(minutes / 60)
   const m = minutes % 60
@@ -46,6 +47,7 @@ interface KitchenOrderCardProps {
  * - Action: "Bắt đầu nấu" hoặc "Đã xong"
  */
 export function KitchenOrderCard({ order }: KitchenOrderCardProps) {
+  const { t } = useTranslation('manage')
   const updateMutation = useUpdateOrderMutation()
   const [waitMinutes, setWaitMinutes] = useState(() => getWaitMinutes(order.createdAt))
 
@@ -73,7 +75,7 @@ export function KitchenOrderCard({ order }: KitchenOrderCardProps) {
           quantity: order.quantity,
         },
       })
-      toast.success(isPending ? 'Đã nhận nấu!' : 'Đã hoàn thành món!')
+      toast.success(isPending ? t('kitchen.startedCooking') : t('kitchen.completedDish'))
     } catch (error) {
       handleErrorApi({ error })
     }
@@ -126,7 +128,7 @@ export function KitchenOrderCard({ order }: KitchenOrderCardProps) {
             )}
           >
             <Clock className='size-3.5' />
-            {formatWaitTime(waitMinutes)}
+            {formatWaitTime(waitMinutes, t('kitchen.justNow'))}
           </div>
         </div>
 
@@ -153,17 +155,17 @@ export function KitchenOrderCard({ order }: KitchenOrderCardProps) {
             {updateMutation.isPending ? (
               <>
                 <Loader2 className='size-4 animate-spin' />
-                Đang xử lý...
+                {t('dashboard.processing')}
               </>
             ) : isPending ? (
               <>
                 <ChefHat className='size-4' />
-                Bắt đầu nấu
+                {t('kitchen.startCooking')}
               </>
             ) : (
               <>
                 <CheckCircle2 className='size-4' />
-                Đã xong
+                {t('kitchen.done')}
               </>
             )}
           </Button>

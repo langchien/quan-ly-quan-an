@@ -25,6 +25,7 @@ import {
 } from '@tanstack/react-table'
 import { UserX } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StaffGridView } from './staff-grid-view'
 import { StaffTableToolbar, type ViewMode } from './staff-table-toolbar'
 
@@ -63,6 +64,7 @@ export function StaffDataTable({
   onEdit,
   onDelete,
 }: StaffDataTableProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -155,8 +157,8 @@ export function StaffDataTable({
                         <UserX className='size-10 text-muted-foreground/40' />
                         <p className='text-sm text-muted-foreground'>
                           {globalFilter || columnFilters.length
-                            ? 'Không tìm thấy kết quả phù hợp'
-                            : 'Chưa có nhân viên nào'}
+                            ? t('common:table.noResults')
+                            : t('staffs.empty', { defaultValue: 'Chưa có nhân viên nào' })}
                         </p>
                       </div>
                     </TableCell>
@@ -172,9 +174,18 @@ export function StaffDataTable({
               {/* Selection info */}
               <span>
                 {table.getFilteredSelectedRowModel().rows.length > 0
-                  ? `${table.getFilteredSelectedRowModel().rows.length} / ${totalFiltered} dòng được chọn`
+                  ? t('common:table.selectedRows', {
+                      selected: table.getFilteredSelectedRowModel().rows.length,
+                      total: totalFiltered,
+                      defaultValue: `${table.getFilteredSelectedRowModel().rows.length} / ${totalFiltered} dòng được chọn`,
+                    })
                   : totalFiltered > 0
-                    ? `${from}\u2013${to} / ${totalFiltered} nhân viên`
+                    ? t('staffs.summary', {
+                        from,
+                        to,
+                        total: totalFiltered,
+                        defaultValue: `${from}–${to} / ${totalFiltered} nhân viên`,
+                      })
                     : ''}
               </span>
 

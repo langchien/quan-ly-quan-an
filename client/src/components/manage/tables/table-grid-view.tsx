@@ -24,15 +24,16 @@ import { LayoutGrid, Link, MoreHorizontal, Pencil, Trash2, Users } from 'lucide-
 import { QRCodeCanvas } from 'qrcode.react'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { useStatusLabel } from '@/lib/status-label'
+import { useStatusLabel, getTableStatusLabel as getDefaultTableStatusLabel } from '@/lib/status-label'
 import { formatDate } from '@/lib/i18n/use-locale'
+import { useTranslation } from 'react-i18next'
 
 function getStatusConfig(status: string, getLabel?: (s: string) => string) {
-  const label = getLabel ? getLabel(status) : status
+  const label = getLabel ? getLabel(status) : getDefaultTableStatusLabel(status)
   switch (status) {
     case 'Available':
       return {
-        label: getLabel ? label : 'Trống',
+        label,
         emoji: '🟢',
         dotColor: 'bg-emerald-500',
         bgColor: 'bg-emerald-500/10',
@@ -42,7 +43,7 @@ function getStatusConfig(status: string, getLabel?: (s: string) => string) {
       }
     case 'Reserved':
       return {
-        label: getLabel ? label : 'Đã đặt',
+        label,
         emoji: '🟡',
         dotColor: 'bg-amber-500',
         bgColor: 'bg-amber-500/10',
@@ -52,7 +53,7 @@ function getStatusConfig(status: string, getLabel?: (s: string) => string) {
       }
     case 'Hidden':
       return {
-        label: getLabel ? label : 'Ẩn',
+        label,
         emoji: '🔴',
         dotColor: 'bg-red-500',
         bgColor: 'bg-red-500/10',
@@ -111,6 +112,7 @@ export function TableGridView({
   globalFilter,
   statusFilter,
 }: TableGridViewProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const { getTableStatusLabel } = useStatusLabel()
 
   if (isLoading) {
@@ -139,8 +141,8 @@ export function TableGridView({
         <LayoutGrid className='size-10 text-muted-foreground/40' />
         <p className='text-sm text-muted-foreground'>
           {globalFilter || statusFilter.length
-            ? 'Không tìm thấy kết quả phù hợp'
-            : 'Chưa có bàn nào'}
+            ? t('common:table.noResults')
+            : t('tables.empty')}
         </p>
       </div>
     )
@@ -163,7 +165,9 @@ export function TableGridView({
                 <span className='flex size-8 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary'>
                   {table.number}
                 </span>
-                <span className='text-base'>Bàn {table.number}</span>
+                <span className='text-base'>
+                  {t('common:table.tableNumber', { number: table.number, defaultValue: `Bàn ${table.number}` })}
+                </span>
               </CardTitle>
 
               <CardAction>
@@ -177,24 +181,24 @@ export function TableGridView({
                     })}
                   >
                     <MoreHorizontal className='size-4' />
-                    <span className='sr-only'>Mở menu</span>
+                    <span className='sr-only'>{t('common:actions.openMenu')}</span>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align='end' className='w-40'>
                     <DropdownMenuGroup>
-                      <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                      <DropdownMenuLabel>{t('common:actions.actions')}</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         onClick={() => {
                           navigator.clipboard.writeText(url)
-                          toast.success('Đã sao chép đường dẫn bàn ăn')
+                          toast.success(t('tables.linkCopied'))
                         }}
                       >
                         <Link className='mr-2 size-4' />
-                        Sao chép URL
+                        {t('tables.qrModal.copyLink')}
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => onEdit(table)}>
                         <Pencil className='mr-2 size-4' />
-                        Chỉnh sửa
+                        {t('common:actions.edit')}
                       </DropdownMenuItem>
                       {onDelete && (
                         <DropdownMenuItem
@@ -202,7 +206,7 @@ export function TableGridView({
                           className='text-destructive focus:text-destructive'
                         >
                           <Trash2 className='mr-2 size-4' />
-                          Xóa
+                          {t('common:actions.delete')}
                         </DropdownMenuItem>
                       )}
                     </DropdownMenuGroup>
@@ -221,7 +225,7 @@ export function TableGridView({
               <div className='flex w-full items-center justify-center gap-2'>
                 <Badge variant='outline' className='gap-1.5'>
                   <Users className='size-3' />
-                  {table.capacity} chỗ
+                  {t('tables.capacityValue', { count: table.capacity, defaultValue: `${table.capacity} chỗ` })}
                 </Badge>
                 <Badge
                   variant='outline'
@@ -235,7 +239,7 @@ export function TableGridView({
 
             <CardFooter className='justify-center border-t pt-3'>
               <p className='text-xs text-muted-foreground'>
-                Tạo ngày {formatDate(table.createdAt)}
+                {formatDate(table.createdAt)}
               </p>
             </CardFooter>
           </Card>
@@ -244,3 +248,4 @@ export function TableGridView({
     </div>
   )
 }
+

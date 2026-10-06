@@ -63,9 +63,10 @@ function AnalyticsPage() {
         {/* Date Range Filter */}
         <div className='flex flex-wrap items-center gap-3'>
           <div className='flex w-full items-center gap-2 sm:w-auto'>
-            <span className='text-sm font-medium text-muted-foreground'>Từ</span>
+            <span className='text-sm font-medium text-muted-foreground'>{t('analytics.from')}</span>
             <DatePicker
               date={fromDate}
+              placeholder={t('analytics.pickDate')}
               onSelect={date => {
                 if (date) {
                   date.setHours(0, 0, 0, 0)
@@ -75,9 +76,10 @@ function AnalyticsPage() {
             />
           </div>
           <div className='flex w-full items-center gap-2 sm:w-auto'>
-            <span className='text-sm font-medium text-muted-foreground'>Đến</span>
+            <span className='text-sm font-medium text-muted-foreground'>{t('analytics.to')}</span>
             <DatePicker
               date={toDate}
+              placeholder={t('analytics.pickDate')}
               onSelect={date => {
                 if (date) {
                   date.setHours(23, 59, 59, 999)
@@ -87,34 +89,34 @@ function AnalyticsPage() {
             />
           </div>
           <Button variant='outline' onClick={handleReset}>
-            Reset
+            {t('analytics.reset')}
           </Button>
         </div>
 
         {/* KPI Cards */}
         <div className='grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 lg:grid-cols-4'>
           <KPICard
-            title='Tổng doanh thu'
+            title={t('analytics.totalRevenue')}
             value={data ? formatCurrency(data.revenue) : undefined}
             icon={DollarSign}
             isLoading={isLoading}
           />
           <KPICard
-            title='Khách'
+            title={t('analytics.guests')}
             value={data?.guestCount.toString()}
-            subtitle='Gọi món'
+            subtitle={t('analytics.guestsSubtitle')}
             icon={Users}
             isLoading={isLoading}
           />
           <KPICard
-            title='Đơn hàng'
+            title={t('analytics.orders')}
             value={data?.orderCount.toString()}
-            subtitle='Đã thanh toán'
+            subtitle={t('analytics.ordersSubtitle')}
             icon={ShoppingBag}
             isLoading={isLoading}
           />
           <KPICard
-            title='Bàn đang phục vụ'
+            title={t('analytics.servingTables')}
             value={data?.servingTableCount.toString()}
             icon={Armchair}
             isLoading={isLoading}
@@ -195,9 +197,11 @@ function KPICard({
 
 function DatePicker({
   date,
+  placeholder,
   onSelect,
 }: {
   date: Date | undefined
+  placeholder?: string
   onSelect: (date: Date | undefined) => void
 }) {
   const [open, setOpen] = useState(false)
@@ -217,7 +221,7 @@ function DatePicker({
         }
       >
         <CalendarIcon className='mr-2 h-4 w-4' />
-        {date ? format(date, 'dd/MM/yyyy', { locale: dateFnsLocale }) : 'Chọn ngày'}
+        {date ? format(date, 'dd/MM/yyyy', { locale: dateFnsLocale }) : placeholder}
       </PopoverTrigger>
       <PopoverContent className='w-auto p-0' align='start'>
         <Calendar

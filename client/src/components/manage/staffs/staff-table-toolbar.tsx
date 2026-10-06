@@ -18,6 +18,7 @@ import type { AccountType } from '@app/shared'
 import type { Table } from '@tanstack/react-table'
 import { CirclePlus, LayoutGrid, List, Search, Settings2, UserPlus, X } from 'lucide-react'
 import { useStatusLabel } from '@/lib/status-label'
+import { useTranslation } from 'react-i18next'
 
 export type ViewMode = 'table' | 'grid'
 
@@ -34,6 +35,7 @@ export function StaffTableToolbar({
   viewMode,
   onViewModeChange,
 }: StaffTableToolbarProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const { roleOptions } = useStatusLabel()
   const isFiltered = table.getState().columnFilters.length > 0 || !!table.getState().globalFilter
 
@@ -61,7 +63,7 @@ export function StaffTableToolbar({
           <Search className='absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground' />
           <Input
             id='staff-search'
-            placeholder='Tìm nhân viên...'
+            placeholder={t('staffs.toolbar.searchPlaceholder')}
             value={(table.getState().globalFilter as string) || ''}
             onChange={e => table.setGlobalFilter(e.target.value)}
             className='h-8 w-full pl-8 sm:w-[200px] lg:w-[280px]'
@@ -78,7 +80,7 @@ export function StaffTableToolbar({
             })}
           >
             <CirclePlus className='mr-2 size-4' />
-            Vai trò
+            {t('staffs.columns.role')}
             {roleFilterValue.length > 0 && (
               <>
                 <Separator orientation='vertical' className='mx-2 h-4' />
@@ -88,7 +90,7 @@ export function StaffTableToolbar({
                 <div className='hidden space-x-1 lg:flex'>
                   {roleFilterValue.length > 1 ? (
                     <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                      {roleFilterValue.length} đã chọn
+                      {roleFilterValue.length} {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
                     </Badge>
                   ) : (
                     roleOptions
@@ -135,7 +137,7 @@ export function StaffTableToolbar({
             className='h-8 px-2 text-muted-foreground'
             onClick={resetFilters}
           >
-            Xóa bộ lọc
+            {t('common:actions.clearFilters')}
             <X className='ml-2 size-4' />
           </Button>
         )}
@@ -156,9 +158,9 @@ export function StaffTableToolbar({
               onClick={() => onViewModeChange('table')}
             >
               <List className='size-4' />
-              <span className='sr-only'>Chế độ bảng</span>
+              <span className='sr-only'>{t('common:view.table')}</span>
             </TooltipTrigger>
-            <TooltipContent>Chế độ bảng</TooltipContent>
+            <TooltipContent>{t('common:view.table')}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger
@@ -171,9 +173,9 @@ export function StaffTableToolbar({
               onClick={() => onViewModeChange('grid')}
             >
               <LayoutGrid className='size-4' />
-              <span className='sr-only'>Chế độ lưới</span>
+              <span className='sr-only'>{t('common:view.grid')}</span>
             </TooltipTrigger>
-            <TooltipContent>Chế độ lưới</TooltipContent>
+            <TooltipContent>{t('common:view.grid')}</TooltipContent>
           </Tooltip>
         </div>
 
@@ -188,33 +190,33 @@ export function StaffTableToolbar({
               })}
             >
               <Settings2 className='mr-2 size-4' />
-              Hiển thị
+              {t('common:table.viewColumns', { defaultValue: 'Hiển thị' })}
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-40'>
               <DropdownMenuGroup>
-                <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
+                <DropdownMenuLabel>{t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {table
                   .getAllColumns()
                   .filter(col => col.getCanHide())
-                  .map(col => (
-                    <DropdownMenuCheckboxItem
-                      key={col.id}
-                      className='capitalize'
-                      checked={col.getIsVisible()}
-                      onCheckedChange={value => col.toggleVisibility(!!value)}
-                    >
-                      {col.id === 'name'
-                        ? 'Nhân viên'
-                        : col.id === 'email'
-                          ? 'Email'
-                          : col.id === 'role'
-                            ? 'Vai trò'
-                            : col.id === 'createdAt'
-                              ? 'Ngày tạo'
-                              : col.id}
-                    </DropdownMenuCheckboxItem>
-                  ))}
+                  .map(col => {
+                    const columnLabelMap: Record<string, string> = {
+                      name: t('staffs.columns.name'),
+                      email: t('staffs.columns.email'),
+                      role: t('staffs.columns.role'),
+                      createdAt: t('staffs.columns.createdAt'),
+                    }
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={col.id}
+                        className='capitalize'
+                        checked={col.getIsVisible()}
+                        onCheckedChange={value => col.toggleVisibility(!!value)}
+                      >
+                        {columnLabelMap[col.id] ?? col.id}
+                      </DropdownMenuCheckboxItem>
+                    )
+                  })}
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -223,9 +225,10 @@ export function StaffTableToolbar({
         {/* Add staff */}
         <Button id='open-create-staff-dialog' size='sm' className='h-8' onClick={onAddStaff}>
           <UserPlus className='mr-2 size-4' />
-          Thêm nhân viên
+          {t('staffs.toolbar.addStaff')}
         </Button>
       </div>
     </div>
   )
 }
+

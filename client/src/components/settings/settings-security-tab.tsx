@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
@@ -24,6 +25,19 @@ export function SettingsSecurityTab() {
       confirmPassword: '',
     },
   })
+
+  // Khi người dùng chuyển đổi ngôn ngữ, tự động validate lại để cập nhật message lỗi
+  useEffect(() => {
+    const handleLangChange = () => {
+      if (form.formState.isSubmitted || Object.keys(form.formState.errors).length > 0) {
+        void form.trigger()
+      }
+    }
+    i18n.on('languageChanged', handleLangChange)
+    return () => {
+      i18n.off('languageChanged', handleLangChange)
+    }
+  }, [form, i18n])
 
   async function onSubmit(values: ChangePasswordBodyType) {
     if (changePasswordMutation.isPending) return
@@ -99,7 +113,9 @@ export function SettingsSecurityTab() {
           />
           {form.formState.errors.confirmPassword && (
             <p className='text-sm text-destructive'>
-              {form.formState.errors.confirmPassword.message}
+              {form.formState.errors.confirmPassword.message === 'Mật khẩu mới không khớp'
+                ? t('security.passwordMismatch')
+                : form.formState.errors.confirmPassword.message}
             </p>
           )}
         </div>

@@ -28,10 +28,12 @@ import { Edit2, FolderOpen, Loader2, Plus, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 // Main Component
 
 export function CategoryManager() {
+  const { t } = useTranslation(['manage', 'common'])
   const { data: categories, isLoading } = useGetCategoryList()
   const [createOpen, setCreateOpen] = useState(false)
   const [editTarget, setEditTarget] = useState<CategoryType | null>(null)
@@ -41,12 +43,16 @@ export function CategoryManager() {
     <div className='space-y-4'>
       <div className='flex items-center justify-between'>
         <div>
-          <h2 className='text-lg font-semibold tracking-tight'>Danh mục</h2>
-          <p className='text-sm text-muted-foreground'>Phân loại món ăn theo nhóm</p>
+          <h2 className='text-lg font-semibold tracking-tight'>
+            {t('dishes.categoryManager.title')}
+          </h2>
+          <p className='text-sm text-muted-foreground'>
+            {t('dishes.categoryManager.description')}
+          </p>
         </div>
         <Button onClick={() => setCreateOpen(true)} size='sm' className='gap-1.5'>
           <Plus className='h-4 w-4' />
-          Thêm danh mục
+          {t('dishes.categoryManager.addCategory')}
         </Button>
       </div>
 
@@ -67,7 +73,9 @@ export function CategoryManager() {
                 <FolderOpen className='h-4 w-4 text-muted-foreground' />
                 <div>
                   <p className='text-sm font-medium'>{cat.name}</p>
-                  <p className='text-xs text-muted-foreground'>Thứ tự: {cat.order}</p>
+                  <p className='text-xs text-muted-foreground'>
+                    {t('common:table.order', { defaultValue: 'Thứ tự' })}: {cat.order}
+                  </p>
                 </div>
               </div>
               <div className='flex items-center gap-1'>
@@ -76,7 +84,7 @@ export function CategoryManager() {
                   size='icon'
                   className='h-8 w-8'
                   onClick={() => setEditTarget(cat)}
-                  aria-label={`Sửa ${cat.name}`}
+                  aria-label={`${t('common:actions.edit')} ${cat.name}`}
                 >
                   <Edit2 className='h-3.5 w-3.5' />
                 </Button>
@@ -85,7 +93,7 @@ export function CategoryManager() {
                   size='icon'
                   className='h-8 w-8 text-destructive hover:text-destructive'
                   onClick={() => setDeleteTarget(cat)}
-                  aria-label={`Xóa ${cat.name}`}
+                  aria-label={`${t('common:actions.delete')} ${cat.name}`}
                 >
                   <Trash2 className='h-3.5 w-3.5' />
                 </Button>
@@ -96,8 +104,10 @@ export function CategoryManager() {
       ) : (
         <div className='flex flex-col items-center justify-center rounded-lg border border-dashed py-12 text-center'>
           <FolderOpen className='mb-2 h-8 w-8 text-muted-foreground/40' />
-          <p className='text-sm text-muted-foreground'>Chưa có danh mục nào</p>
-          <p className='mt-1 text-xs text-muted-foreground/70'>Thêm danh mục để phân loại món ăn</p>
+          <p className='text-sm text-muted-foreground'>{t('dishes.categoryManager.empty')}</p>
+          <p className='mt-1 text-xs text-muted-foreground/70'>
+            {t('dishes.categoryManager.description')}
+          </p>
         </div>
       )}
 
@@ -125,6 +135,7 @@ function CreateCategoryDialog({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
+  const { t } = useTranslation(['manage', 'common'])
   const createMutation = useCreateCategoryMutation()
   const form = useForm<CreateCategoryBodyType>({
     resolver: zodResolver(CreateCategoryBody) as any,
@@ -134,7 +145,7 @@ function CreateCategoryDialog({
   async function onSubmit(values: CreateCategoryBodyType) {
     try {
       const res = await createMutation.mutateAsync(values)
-      toast.success(res.data.message || 'Tạo danh mục thành công')
+      toast.success(res.data.message || t('dishes.categoryManager.createSuccess'))
       handleClose()
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
@@ -152,22 +163,22 @@ function CreateCategoryDialog({
     <Dialog open={open} onOpenChange={v => !v && handleClose()}>
       <DialogContent className='max-w-[400px]'>
         <DialogHeader>
-          <DialogTitle>Thêm danh mục</DialogTitle>
-          <DialogDescription>Tạo danh mục mới để phân loại món ăn</DialogDescription>
+          <DialogTitle>{t('dishes.categoryManager.addCategory')}</DialogTitle>
+          <DialogDescription>{t('dishes.categoryManager.description')}</DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate className='flex flex-col gap-4'>
           <FieldGroup>
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='create-cat-name'>Tên danh mục</FieldLabel>
+              <FieldLabel htmlFor='create-cat-name'>{t('dishes.createDialog.categoryLabel')}</FieldLabel>
               <Input
                 id='create-cat-name'
-                placeholder='VD: Món nước, Đồ uống...'
+                placeholder={t('dishes.categoryManager.namePlaceholder')}
                 {...form.register('name')}
               />
               <FieldError errors={[errors.name]} />
             </Field>
             <Field data-invalid={!!errors.order}>
-              <FieldLabel htmlFor='create-cat-order'>Thứ tự hiển thị</FieldLabel>
+              <FieldLabel htmlFor='create-cat-order'>{t('common:table.order', { defaultValue: 'Thứ tự hiển thị' })}</FieldLabel>
               <Input
                 id='create-cat-order'
                 type='number'
@@ -180,16 +191,16 @@ function CreateCategoryDialog({
           </FieldGroup>
           <DialogFooter>
             <Button type='button' variant='outline' onClick={handleClose}>
-              Hủy
+              {t('common:actions.cancel')}
             </Button>
             <Button type='submit' disabled={createMutation.isPending}>
               {createMutation.isPending ? (
                 <>
                   <Loader2 className='mr-2 size-4 animate-spin' />
-                  Đang tạo...
+                  {t('dishes.createDialog.submitting')}
                 </>
               ) : (
-                'Thêm danh mục'
+                t('dishes.categoryManager.addCategory')
               )}
             </Button>
           </DialogFooter>
@@ -210,6 +221,7 @@ function EditCategoryDialog({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
+  const { t } = useTranslation(['manage', 'common'])
   const updateMutation = useUpdateCategoryMutation()
   const form = useForm<UpdateCategoryBodyType>({
     resolver: zodResolver(UpdateCategoryBody) as any,
@@ -226,7 +238,7 @@ function EditCategoryDialog({
     if (!category) return
     try {
       const res = await updateMutation.mutateAsync({ id: category.id, body: values })
-      toast.success(res.data.message || 'Cập nhật danh mục thành công')
+      toast.success(res.data.message || t('dishes.categoryManager.updateSuccess'))
       onOpenChange(false)
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
@@ -239,18 +251,18 @@ function EditCategoryDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='max-w-[400px]'>
         <DialogHeader>
-          <DialogTitle>Sửa danh mục</DialogTitle>
-          <DialogDescription>Chỉnh sửa thông tin danh mục</DialogDescription>
+          <DialogTitle>{t('common:actions.edit')}</DialogTitle>
+          <DialogDescription>{t('dishes.editDialog.description')}</DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate className='flex flex-col gap-4'>
           <FieldGroup>
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='edit-cat-name'>Tên danh mục</FieldLabel>
+              <FieldLabel htmlFor='edit-cat-name'>{t('dishes.createDialog.categoryLabel')}</FieldLabel>
               <Input id='edit-cat-name' {...form.register('name')} />
               <FieldError errors={[errors.name]} />
             </Field>
             <Field data-invalid={!!errors.order}>
-              <FieldLabel htmlFor='edit-cat-order'>Thứ tự hiển thị</FieldLabel>
+              <FieldLabel htmlFor='edit-cat-order'>{t('common:table.order', { defaultValue: 'Thứ tự hiển thị' })}</FieldLabel>
               <Input
                 id='edit-cat-order'
                 type='number'
@@ -262,16 +274,16 @@ function EditCategoryDialog({
           </FieldGroup>
           <DialogFooter>
             <Button type='button' variant='outline' onClick={() => onOpenChange(false)}>
-              Hủy
+              {t('common:actions.cancel')}
             </Button>
             <Button type='submit' disabled={updateMutation.isPending}>
               {updateMutation.isPending ? (
                 <>
                   <Loader2 className='mr-2 size-4 animate-spin' />
-                  Đang lưu...
+                  {t('common:actions.saving')}
                 </>
               ) : (
-                'Lưu thay đổi'
+                t('common:actions.save')
               )}
             </Button>
           </DialogFooter>
@@ -292,13 +304,14 @@ function DeleteCategoryDialog({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
+  const { t } = useTranslation(['manage', 'common'])
   const deleteMutation = useDeleteCategoryMutation()
 
   async function handleDelete() {
     if (!category) return
     try {
       const res = await deleteMutation.mutateAsync(category.id)
-      toast.success(res.data.message || 'Xóa danh mục thành công')
+      toast.success(res.data.message || t('dishes.categoryManager.deleteSuccess'))
       onOpenChange(false)
     } catch (error) {
       handleErrorApi({ error })
@@ -309,27 +322,23 @@ function DeleteCategoryDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='max-w-[400px]'>
         <DialogHeader>
-          <DialogTitle>Xóa danh mục</DialogTitle>
+          <DialogTitle>{t('common:actions.delete')}</DialogTitle>
           <DialogDescription>
-            Bạn có chắc muốn xóa danh mục <strong>"{category?.name}"</strong>?
-            <br />
-            <span className='text-muted-foreground'>
-              Các món ăn trong danh mục này sẽ không bị xóa, chỉ mất liên kết danh mục.
-            </span>
+            {t('dishes.categoryManager.deleteConfirm', { name: category?.name ?? '' })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant='outline' onClick={() => onOpenChange(false)}>
-            Hủy
+            {t('common:actions.cancel')}
           </Button>
           <Button variant='destructive' onClick={handleDelete} disabled={deleteMutation.isPending}>
             {deleteMutation.isPending ? (
               <>
                 <Loader2 className='mr-2 size-4 animate-spin' />
-                Đang xóa...
+                {t('common:actions.deleting')}
               </>
             ) : (
-              'Xóa danh mục'
+              t('common:actions.delete')
             )}
           </Button>
         </DialogFooter>

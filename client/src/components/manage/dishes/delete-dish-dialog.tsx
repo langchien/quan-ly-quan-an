@@ -13,6 +13,8 @@ import { useDeleteDishMutation } from '@/queries/use-dish'
 import type { DishType } from '@app/shared'
 import { toast } from 'sonner'
 
+import { useTranslation } from 'react-i18next'
+
 interface DeleteDishDialogProps {
   dish: DishType | null
   open: boolean
@@ -20,13 +22,14 @@ interface DeleteDishDialogProps {
 }
 
 export function DeleteDishDialog({ dish, open, onOpenChange }: DeleteDishDialogProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const deleteDishMutation = useDeleteDishMutation()
 
   async function handleDelete() {
     if (!dish) return
     try {
       const res = await deleteDishMutation.mutateAsync(dish.id)
-      toast.success(res.data.message || 'Xóa món ăn thành công')
+      toast.success(res.data.message || t('dishes.deleteDialog.success'))
       onOpenChange(false)
     } catch (error) {
       handleErrorApi({ error })
@@ -37,21 +40,21 @@ export function DeleteDishDialog({ dish, open, onOpenChange }: DeleteDishDialogP
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Xóa món ăn</AlertDialogTitle>
+          <AlertDialogTitle>{t('dishes.deleteDialog.title')}</AlertDialogTitle>
           <AlertDialogDescription>
-            Bạn có chắc chắn muốn xóa món{' '}
-            <span className='font-semibold text-foreground'>{dish?.name}</span>? Hành động này không
-            thể hoàn tác.
+            {t('dishes.deleteDialog.description', { name: dish?.name ?? '' })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Hủy</AlertDialogCancel>
+          <AlertDialogCancel>{t('common:actions.cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             className='text-destructive-foreground bg-destructive hover:bg-destructive/90'
             disabled={deleteDishMutation.isPending}
           >
-            {deleteDishMutation.isPending ? 'Đang xóa...' : 'Xóa'}
+            {deleteDishMutation.isPending
+              ? t('dishes.deleteDialog.deleting')
+              : t('dishes.deleteDialog.confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

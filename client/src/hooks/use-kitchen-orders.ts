@@ -5,6 +5,7 @@ import { adminOrdersQueryKey, useGetOrdersQuery } from '@/queries/use-order'
 import { useAudioChime } from '@/hooks/use-audio-chime'
 import { OrderStatus } from '@app/shared'
 import { toast } from 'sonner'
+import i18n from '@/lib/i18n'
 
 /**
  * Hook tập trung logic data cho Kitchen Display System.
@@ -39,8 +40,8 @@ export function useKitchenOrders() {
   // Socket events — chuông báo + invalidate cache
   useSocketEvents({
     'new-order': () => {
-      toast.info('🔔 Đơn mới vào bếp!', {
-        description: 'Có đơn hàng mới cần chuẩn bị.',
+      toast.info(i18n.t('manage:kitchen.toastNewOrder'), {
+        description: i18n.t('manage:kitchen.toastNewOrderDesc'),
       })
       audioChime.playChime()
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })

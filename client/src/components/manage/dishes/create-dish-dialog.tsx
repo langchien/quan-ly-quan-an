@@ -29,6 +29,8 @@ import { Camera, Loader2 } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
+import { useStatusLabel } from '@/lib/status-label'
 
 interface CreateDishDialogProps {
   open: boolean
@@ -36,6 +38,8 @@ interface CreateDishDialogProps {
 }
 
 export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) {
+  const { t } = useTranslation(['manage', 'common'])
+  const { dishStatusOptions } = useStatusLabel()
   const [file, setFile] = useState<File | null>(null)
   const createDishMutation = useCreateDishMutation()
   const uploadImageMutation = useUploadAvatarMutation()
@@ -72,7 +76,7 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
         body = { ...values, image: uploadRes.data.data }
       }
       const res = await createDishMutation.mutateAsync(body)
-      toast.success(res.data.message || 'Thêm món ăn thành công')
+      toast.success(res.data.message || t('dishes.createDialog.success'))
       handleOpenChange(false)
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
@@ -93,8 +97,8 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className='max-h-[90vh] max-w-[500px] overflow-auto'>
         <DialogHeader>
-          <DialogTitle>Thêm món ăn</DialogTitle>
-          <DialogDescription>Tạo món ăn mới cho thực đơn của quán</DialogDescription>
+          <DialogTitle>{t('dishes.createDialog.title')}</DialogTitle>
+          <DialogDescription>{t('dishes.createDialog.description')}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate className='flex flex-col gap-4'>
@@ -128,17 +132,17 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
                 }}
               />
             </div>
-            <p className='text-xs text-muted-foreground'>Click vào ảnh để tải lên</p>
+            <p className='text-xs text-muted-foreground'>{t('dishes.createDialog.uploadHint')}</p>
             {errors.image && <p className='text-xs text-destructive'>{errors.image.message}</p>}
           </div>
 
           <FieldGroup>
             {/* Tên món ăn */}
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='create-dish-name'>Tên món ăn</FieldLabel>
+              <FieldLabel htmlFor='create-dish-name'>{t('dishes.createDialog.nameLabel')}</FieldLabel>
               <Input
                 id='create-dish-name'
-                placeholder='VD: Phở bò tái'
+                placeholder={t('dishes.createDialog.namePlaceholder')}
                 {...form.register('name')}
                 aria-invalid={!!errors.name}
               />
@@ -147,12 +151,12 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
 
             {/* Giá */}
             <Field data-invalid={!!errors.price}>
-              <FieldLabel htmlFor='create-dish-price'>Giá (VNĐ)</FieldLabel>
+              <FieldLabel htmlFor='create-dish-price'>{t('dishes.createDialog.priceLabel')}</FieldLabel>
               <Input
                 id='create-dish-price'
                 type='number'
                 min={0}
-                placeholder='VD: 50000'
+                placeholder={t('dishes.createDialog.pricePlaceholder')}
                 {...form.register('price')}
                 aria-invalid={!!errors.price}
               />
@@ -161,10 +165,10 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
 
             {/* Mô tả */}
             <Field data-invalid={!!errors.description}>
-              <FieldLabel htmlFor='create-dish-description'>Mô tả</FieldLabel>
+              <FieldLabel htmlFor='create-dish-description'>{t('dishes.createDialog.descriptionLabel')}</FieldLabel>
               <Textarea
                 id='create-dish-description'
-                placeholder='Mô tả ngắn về món ăn...'
+                placeholder={t('dishes.createDialog.descriptionPlaceholder')}
                 rows={3}
                 {...form.register('description')}
                 aria-invalid={!!errors.description}
@@ -174,7 +178,7 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
 
             {/* Danh mục */}
             <Field>
-              <FieldLabel htmlFor='create-dish-category'>Danh mục</FieldLabel>
+              <FieldLabel htmlFor='create-dish-category'>{t('dishes.createDialog.categoryLabel')}</FieldLabel>
               <Controller
                 name='categoryId'
                 control={form.control}
@@ -184,10 +188,10 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
                     onValueChange={v => field.onChange(v === '__none__' ? null : Number(v))}
                   >
                     <SelectTrigger id='create-dish-category' className='w-full'>
-                      <SelectValue placeholder='Chọn danh mục' />
+                      <SelectValue placeholder={t('dishes.createDialog.selectCategory')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value='__none__'>Không có danh mục</SelectItem>
+                      <SelectItem value='__none__'>{t('dishes.uncategorized', { defaultValue: 'Không có danh mục' })}</SelectItem>
                       {categories?.map(cat => (
                         <SelectItem key={cat.id} value={String(cat.id)}>
                           {cat.name}
@@ -201,19 +205,21 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
 
             {/* Trạng thái */}
             <Field data-invalid={!!errors.status}>
-              <FieldLabel htmlFor='create-dish-status'>Trạng thái</FieldLabel>
+              <FieldLabel htmlFor='create-dish-status'>{t('dishes.createDialog.statusLabel')}</FieldLabel>
               <Controller
                 name='status'
                 control={form.control}
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger id='create-dish-status' className='w-full'>
-                      <SelectValue placeholder='Chọn trạng thái' />
+                      <SelectValue placeholder={t('common:table.allStatuses', { defaultValue: 'Chọn trạng thái' })} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={DishStatus.Available}>✅ Đang bán</SelectItem>
-                      <SelectItem value={DishStatus.Unavailable}>⏸️ Tạm hết</SelectItem>
-                      <SelectItem value={DishStatus.Hidden}>🙈 Ẩn</SelectItem>
+                      {dishStatusOptions.map(opt => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 )}
@@ -224,16 +230,16 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
 
           <DialogFooter>
             <Button type='button' variant='outline' onClick={() => handleOpenChange(false)}>
-              Hủy
+              {t('common:actions.cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
               {isPending ? (
                 <>
                   <Loader2 className='mr-2 size-4 animate-spin' />
-                  Đang tạo...
+                  {t('dishes.createDialog.submitting')}
                 </>
               ) : (
-                'Thêm món ăn'
+                t('dishes.createDialog.submit')
               )}
             </Button>
           </DialogFooter>

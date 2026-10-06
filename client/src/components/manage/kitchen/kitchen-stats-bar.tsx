@@ -5,6 +5,7 @@ import { ChefHat, Clock, CheckCircle2, Volume2, VolumeX } from 'lucide-react'
 
 import { useStatusLabel } from '@/lib/status-label'
 import { OrderStatus } from '@app/shared'
+import { useTranslation } from 'react-i18next'
 
 interface KitchenStatsBarProps {
   pendingCount: number
@@ -27,6 +28,7 @@ export function KitchenStatsBar({
   isAudioEnabled,
   onToggleAudio,
 }: KitchenStatsBarProps) {
+  const { t } = useTranslation('manage')
   const { getOrderStatusLabel } = useStatusLabel()
 
   const stats = [
@@ -90,7 +92,9 @@ export function KitchenStatsBar({
                   {stat.count}
                 </span>
                 {stat.pulse && stat.count > 0 && (
-                  <Badge className='animate-pulse bg-amber-500 text-white'>Mới</Badge>
+                  <Badge className='animate-pulse bg-amber-500 text-white'>
+                    {t('kitchen.new')}
+                  </Badge>
                 )}
               </div>
             </div>
@@ -104,7 +108,7 @@ export function KitchenStatsBar({
         size='icon'
         className='size-10 shrink-0'
         onClick={onToggleAudio}
-        title={isAudioEnabled ? 'Tắt chuông báo' : 'Bật chuông báo'}
+        title={isAudioEnabled ? t('kitchen.muteChime') : t('kitchen.unmuteChime')}
       >
         {isAudioEnabled ? (
           <Volume2 className='size-5 text-emerald-600' />

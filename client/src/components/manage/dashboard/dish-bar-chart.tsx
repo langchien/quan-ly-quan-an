@@ -8,6 +8,8 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { DishIndicatorType } from '@app/shared'
 
+import { useTranslation } from 'react-i18next'
+
 // Mảng màu cho các thanh bar
 const COLORS = [
   'var(--chart-1)',
@@ -18,6 +20,8 @@ const COLORS = [
 ]
 
 export function DishBarChart({ data }: { data: DishIndicatorType[] }) {
+  const { t } = useTranslation('manage')
+
   // Sắp xếp giảm dần theo successOrders và lấy tối đa 5 món
   const sortedData = [...data]
     .sort((a, b) => b.successOrders - a.successOrders)
@@ -37,7 +41,7 @@ export function DishBarChart({ data }: { data: DishIndicatorType[] }) {
     },
     {
       successOrders: {
-        label: 'Lượt gọi',
+        label: t('dashboard.orderCount'),
       },
     }
   )
@@ -45,8 +49,8 @@ export function DishBarChart({ data }: { data: DishIndicatorType[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Xếp hạng món ăn</CardTitle>
-        <CardDescription>Được gọi nhiều nhất</CardDescription>
+        <CardTitle>{t('dashboard.dishRanking')}</CardTitle>
+        <CardDescription>{t('dashboard.mostOrdered')}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className='h-[300px] w-full'>
@@ -73,7 +77,7 @@ export function DishBarChart({ data }: { data: DishIndicatorType[] }) {
                   nameKey='name'
                   formatter={value => {
                     const num = typeof value === 'number' ? value : Number(value)
-                    return [num + ' lượt', 'Đã gọi']
+                    return [`${num} ${t('dashboard.times')}`, t('dashboard.ordered')]
                   }}
                 />
               }

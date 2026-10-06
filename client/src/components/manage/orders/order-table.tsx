@@ -11,8 +11,12 @@ import { useQueryClient } from '@tanstack/react-query'
 import { ShoppingBag } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
+import { useStatusLabel } from '@/lib/status-label'
 
 export function OrderTable() {
+  const { t } = useTranslation(['manage', 'common'])
+  const { getOrderStatusLabel } = useStatusLabel()
   const queryClient = useQueryClient()
   const { data: queryResult, isLoading, isError } = useGetOrdersQuery()
   const orders = queryResult?.data
@@ -24,8 +28,8 @@ export function OrderTable() {
   // Lắng nghe socket events realtime
   useSocketEvents({
     'new-order': () => {
-      toast.info('Có đơn hàng mới!', {
-        description: 'Danh sách đơn hàng vừa được cập nhật.',
+      toast.info(t('orders.socket.newOrder', { defaultValue: 'Có đơn hàng mới!' }), {
+        description: t('orders.socket.newOrderDesc', { defaultValue: 'Danh sách đơn hàng vừa được cập nhật.' }),
       })
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
     },
@@ -53,8 +57,10 @@ export function OrderTable() {
       getOrderColumns({
         onUpdate: order => setUpdateTarget(order),
         onPay: order => setPayTarget(order),
+        t,
+        getStatusLabel: getOrderStatusLabel,
       }),
-    []
+    [t, getOrderStatusLabel]
   )
 
   if (isError) {
@@ -62,12 +68,13 @@ export function OrderTable() {
       <div className='flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-16 text-center'>
         <ShoppingBag className='size-12 text-muted-foreground/50' />
         <div>
-          <p className='font-medium text-destructive'>Không thể tải danh sách đơn hàng</p>
-          <p className='text-sm text-muted-foreground'>Vui lòng thử lại sau</p>
+          <p className='font-medium text-destructive'>{t('orders.loadError')}</p>
+          <p className='text-sm text-muted-foreground'>{t('orders.tryAgainLater')}</p>
         </div>
       </div>
     )
   }
+
 
   return (
     <>

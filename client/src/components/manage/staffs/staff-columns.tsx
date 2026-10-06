@@ -31,9 +31,9 @@ export { formatDate }
 
 export const ROLE_OPTIONS = getRoleOptions()
 
-function getRoleBadge(role: string) {
+export function getRoleBadge(role: string, getLabel?: (role: string) => string) {
   const emoji = ROLE_EMOJI[role] ?? ''
-  const label = getRoleLabel(role)
+  const label = getLabel ? getLabel(role) : getRoleLabel(role)
   switch (role) {
     case 'Owner':
       return (
@@ -55,12 +55,26 @@ function getRoleBadge(role: string) {
 interface GetStaffColumnsOptions {
   onEdit: (staff: AccountType) => void
   onDelete: (staff: AccountType) => void
+  t?: (key: any, opts?: any) => string
+  getRoleLabel?: (role: string) => string
 }
 
 export function getStaffColumns({
   onEdit,
   onDelete,
+  t,
+  getRoleLabel: customRoleLabel,
 }: GetStaffColumnsOptions): ColumnDef<AccountType>[] {
+  const selectAll = t ? t('common:table.selectAll') : 'Chọn tất cả'
+  const selectRow = t ? t('common:table.selectRow') : 'Chọn dòng'
+  const nameHeader = t ? t('staffs.columns.name') : 'Nhân viên'
+  const emailHeader = t ? t('staffs.columns.email') : 'Email'
+  const roleHeader = t ? t('staffs.columns.role') : 'Vai trò'
+  const createdAtHeader = t ? t('staffs.columns.createdAt') : 'Ngày tạo'
+  const actionsHeader = t ? t('staffs.columns.actions') : 'Thao tác'
+  const openMenu = t ? t('common:actions.openMenu') : 'Mở menu'
+  const editLabel = t ? t('common:actions.edit') : 'Chỉnh sửa'
+  const deleteLabel = t ? t('common:actions.delete') : 'Xóa'
   return [
     {
       id: 'select',
@@ -68,14 +82,14 @@ export function getStaffColumns({
         <Checkbox
           checked={table.getIsAllPageRowsSelected() || table.getIsSomePageRowsSelected()}
           onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
-          aria-label='Chọn tất cả'
+          aria-label={selectAll}
         />
       ),
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={value => row.toggleSelected(!!value)}
-          aria-label='Chọn dòng'
+          aria-label={selectRow}
         />
       ),
       enableSorting: false,
@@ -91,7 +105,7 @@ export function getStaffColumns({
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Nhân viên
+          {nameHeader}
           <ArrowUpDown className='ml-2 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -119,7 +133,7 @@ export function getStaffColumns({
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Email
+          {emailHeader}
           <ArrowUpDown className='ml-2 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -127,8 +141,8 @@ export function getStaffColumns({
     },
     {
       accessorKey: 'role',
-      header: 'Vai trò',
-      cell: ({ row }) => getRoleBadge(row.getValue('role')),
+      header: roleHeader,
+      cell: ({ row }) => getRoleBadge(row.getValue('role'), customRoleLabel),
       filterFn: (row, id, value: string[]) => value.includes(row.getValue(id)),
     },
     {
@@ -140,7 +154,7 @@ export function getStaffColumns({
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Ngày tạo
+          {createdAtHeader}
           <ArrowUpDown className='ml-2 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -153,7 +167,7 @@ export function getStaffColumns({
     },
     {
       id: 'actions',
-      header: () => <span className='sr-only'>Thao tác</span>,
+      header: () => <span className='sr-only'>{actionsHeader}</span>,
       cell: ({ row }) => {
         const staff = row.original
         return (
@@ -168,15 +182,15 @@ export function getStaffColumns({
                 })}
               >
                 <MoreHorizontal className='size-4' />
-                <span className='sr-only'>Mở menu</span>
+                <span className='sr-only'>{openMenu}</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end' className='w-40'>
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                  <DropdownMenuLabel>{actionsHeader}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem id={`edit-staff-${staff.id}`} onClick={() => onEdit(staff)}>
                     <Pencil className='mr-2 size-4' />
-                    Chỉnh sửa
+                    {editLabel}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     id={`delete-staff-${staff.id}`}
@@ -184,7 +198,7 @@ export function getStaffColumns({
                     className='text-destructive focus:text-destructive'
                   >
                     <Trash2 className='mr-2 size-4' />
-                    Xóa
+                    {deleteLabel}
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -197,3 +211,4 @@ export function getStaffColumns({
     },
   ]
 }
+

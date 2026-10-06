@@ -27,6 +27,7 @@ import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 import { getInitials, getOrderStatusBadge } from './order-columns'
 
 import { useStatusLabel, ORDER_STATUS_EMOJI } from '@/lib/status-label'
@@ -41,6 +42,7 @@ interface UpdateOrderDialogProps {
 const EDITABLE_STATUSES = OrderStatusValues.filter(s => s !== OrderStatus.Paid)
 
 export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDialogProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const { getOrderStatusLabel } = useStatusLabel()
   const updateMutation = useUpdateOrderMutation()
 
@@ -70,7 +72,7 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
     if (!order) return
     try {
       const res = await updateMutation.mutateAsync({ orderId: order.id, body: values })
-      toast.success(res.data.message || 'Cập nhật đơn hàng thành công')
+      toast.success(res.data.message || t('orders.updateDialog.success'))
       onOpenChange(false)
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
@@ -88,8 +90,10 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className='max-w-[440px]'>
         <DialogHeader>
-          <DialogTitle>Cập nhật đơn hàng #{order?.id}</DialogTitle>
-          <DialogDescription>Chỉnh sửa trạng thái và số lượng đơn hàng</DialogDescription>
+          <DialogTitle>{t('orders.updateDialog.title', { id: order?.id ?? '' })}</DialogTitle>
+          <DialogDescription>
+            {t('orders.updateDialog.description', { defaultValue: 'Chỉnh sửa trạng thái và số lượng đơn hàng' })}
+          </DialogDescription>
         </DialogHeader>
 
         {/* Thông tin đơn hàng */}
@@ -108,14 +112,17 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
             <div className='flex-1 space-y-0.5'>
               <p className='font-medium'>{order.dishSnapshot.name}</p>
               <p className='text-sm text-muted-foreground'>
-                {order.guest?.name ?? 'Khách'} — Bàn{' '}
-                {order.tableNumber ?? order.guest?.tableNumber ?? '?'}
+                {order.guest?.name ?? t('orders.columns.guest')} —{' '}
+                {t('common:table.tableNumber', {
+                  number: order.tableNumber ?? order.guest?.tableNumber ?? '?',
+                  defaultValue: `Bàn ${order.tableNumber ?? order.guest?.tableNumber ?? '?'}`,
+                })}
               </p>
               <p className='text-sm font-medium text-primary'>
                 {formatCurrency(order.dishSnapshot.price)} × {order.quantity}
               </p>
             </div>
-            <div>{getOrderStatusBadge(order.status)}</div>
+            <div>{getOrderStatusBadge(order.status, getOrderStatusLabel)}</div>
           </div>
         )}
 
@@ -123,7 +130,7 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
           <FieldGroup>
             {/* Số lượng */}
             <Field data-invalid={!!errors.quantity}>
-              <FieldLabel htmlFor='update-order-quantity'>Số lượng</FieldLabel>
+              <FieldLabel htmlFor='update-order-quantity'>{t('orders.columns.quantity')}</FieldLabel>
               <Input
                 id='update-order-quantity'
                 type='number'
@@ -136,14 +143,14 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
 
             {/* Trạng thái */}
             <Field data-invalid={!!errors.status}>
-              <FieldLabel htmlFor='update-order-status'>Trạng thái</FieldLabel>
+              <FieldLabel htmlFor='update-order-status'>{t('orders.updateDialog.statusLabel')}</FieldLabel>
               <Controller
                 name='status'
                 control={form.control}
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger id='update-order-status' className='w-full'>
-                      <SelectValue placeholder='Chọn trạng thái' />
+                      <SelectValue placeholder={t('orders.toolbar.allStatuses')} />
                     </SelectTrigger>
                     <SelectContent>
                       {EDITABLE_STATUSES.map(status => (
@@ -161,16 +168,16 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
 
           <DialogFooter>
             <Button type='button' variant='outline' onClick={() => handleOpenChange(false)}>
-              Hủy
+              {t('common:actions.cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
               {isPending ? (
                 <>
                   <Loader2 className='mr-2 size-4 animate-spin' />
-                  Đang lưu...
+                  {t('orders.updateDialog.submitting')}
                 </>
               ) : (
-                'Lưu thay đổi'
+                t('orders.updateDialog.submit')
               )}
             </Button>
           </DialogFooter>
@@ -179,3 +186,4 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
     </Dialog>
   )
 }
+

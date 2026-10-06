@@ -12,13 +12,17 @@ import { useTranslation } from 'react-i18next'
  * Render một nhóm đơn theo bàn trong cột Kanban
  */
 function TableGroup({ tableNumber, orders }: { tableNumber: number; orders: OrderSchemaType[] }) {
+  const { t } = useTranslation('manage')
+
   return (
     <div className='space-y-2'>
       <div className='flex items-center gap-2'>
         <Badge variant='outline' className='text-xs font-semibold'>
-          Bàn {tableNumber || '?'}
+          {t('kitchen.tableNumber', { number: tableNumber || '?' })}
         </Badge>
-        <span className='text-xs text-muted-foreground'>{orders.length} món</span>
+        <span className='text-xs text-muted-foreground'>
+          {t('kitchen.dishCount', { count: orders.length })}
+        </span>
       </div>
       {orders.map(order => (
         <KitchenOrderCard key={order.id} order={order} />
@@ -135,7 +139,7 @@ export function KitchenMain() {
                 {col.groups.size === 0 ? (
                   <div className='flex flex-col items-center justify-center gap-3 py-16 text-muted-foreground/50'>
                     <Inbox className='size-12' />
-                    <span className='text-sm'>Không có đơn</span>
+                    <span className='text-sm'>{t('kitchen.noOrders')}</span>
                   </div>
                 ) : (
                   Array.from(col.groups.entries())

@@ -5,6 +5,7 @@ import type { OrderSchemaType } from '@app/shared'
 import { OrderStatus } from '@app/shared'
 import { CheckCircle2, ChefHat, Clock, Inbox } from 'lucide-react'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { OrderCard } from './order-card'
 
 import { useStatusLabel } from '@/lib/status-label'
@@ -29,6 +30,7 @@ interface KanbanColumn {
 }
 
 export function LiveOrderKanban({ orders, isLoading }: LiveOrderKanbanProps) {
+  const { t } = useTranslation('manage')
   const { getOrderStatusLabel } = useStatusLabel()
 
   const columns = useMemo<KanbanColumn[]>(() => {
@@ -119,7 +121,7 @@ export function LiveOrderKanban({ orders, isLoading }: LiveOrderKanbanProps) {
             {col.orders.length === 0 ? (
               <div className='flex flex-col items-center justify-center gap-2 py-8 text-muted-foreground/60'>
                 <Inbox className='size-8' />
-                <span className='text-xs'>Không có món</span>
+                <span className='text-xs'>{t('dashboard.noDishes')}</span>
               </div>
             ) : (
               col.orders.map(order => <OrderCard key={order.id} order={order} variant='kanban' />)

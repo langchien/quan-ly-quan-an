@@ -27,6 +27,8 @@ import {
 import { QRCodeSVG } from 'qrcode.react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
+import { useStatusLabel } from '@/lib/status-label'
 import { getOrderStatusBadge } from './order-columns'
 
 interface PayGuestDialogProps {
@@ -41,6 +43,8 @@ interface PayGuestDialogProps {
 type QrPaymentState = 'idle' | 'loading' | 'ready' | 'paid'
 
 export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: PayGuestDialogProps) {
+  const { t } = useTranslation(['manage', 'common'])
+  const { getOrderStatusLabel } = useStatusLabel()
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'vietqr'>('cash')
   const [qrState, setQrState] = useState<QrPaymentState>('idle')
   const [qrData, setQrData] = useState<{
@@ -65,7 +69,7 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
     payment: () => {
       if (open && qrState === 'ready') {
         setQrState('paid')
-        toast.success('Khách đã thanh toán qua VietQR thành công! 🎉')
+        toast.success(t('orders.payDialog.vietQrSuccess', { defaultValue: 'Khách đã thanh toán qua VietQR thành công! 🎉' }))
       }
     },
   })
@@ -75,7 +79,7 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
     if (!guestId) return
     try {
       const res = await payCashMutation.mutateAsync({ guestId })
-      toast.success(res.data.message || `Thanh toán thành công ${res.data.data.length} đơn! 🎉`)
+      toast.success(res.data.message || t('orders.payDialog.cashSuccess', { count: res.data.data.length, defaultValue: `Thanh toán thành công ${res.data.data.length} đơn! 🎉` }))
       handleClose()
     } catch (error) {
       handleErrorApi({ error })
@@ -111,11 +115,14 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2'>
             <CreditCard className='size-5 text-violet-600' />
-            Thanh toán hóa đơn
+            {t('orders.payDialog.title')}
           </DialogTitle>
           <DialogDescription>
-            Bàn <span className='font-semibold text-foreground'>{tableNumber ?? 'N/A'}</span> —{' '}
-            <span className='font-medium text-foreground'>{guestName}</span>
+            {t('common:table.tableNumber', {
+              number: tableNumber ?? 'N/A',
+              defaultValue: `Bàn ${tableNumber ?? 'N/A'}`,
+            })}{' '}
+            — <span className='font-medium text-foreground'>{guestName}</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -128,11 +135,11 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
           <TabsList className='grid w-full grid-cols-2'>
             <TabsTrigger value='cash' className='gap-1.5'>
               <Banknote className='size-4' />
-              Tiền mặt
+              {t('orders.payDialog.cashTab', { defaultValue: 'Tiền mặt' })}
             </TabsTrigger>
             <TabsTrigger value='vietqr' className='gap-1.5'>
               <QrCode className='size-4' />
-              VietQR (PayOS)
+              {t('orders.payDialog.vietQrTab', { defaultValue: 'VietQR (PayOS)' })}
             </TabsTrigger>
           </TabsList>
 
@@ -146,7 +153,7 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                     <div className='min-w-0 flex-1'>
                       <p className='truncate text-sm font-medium'>{o.dishSnapshot.name}</p>
                       <div className='mt-0.5 flex items-center gap-2'>
-                        {getOrderStatusBadge(o.status)}
+                        {getOrderStatusBadge(o.status, getOrderStatusLabel)}
                         <span className='text-xs text-muted-foreground'>× {o.quantity}</span>
                       </div>
                     </div>
@@ -160,7 +167,7 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
 
             {/* Tổng tiền */}
             <div className='flex items-center justify-between rounded-lg bg-muted/60 px-4 py-3'>
-              <span className='font-medium'>Tổng tiền mặt cần thu</span>
+              <span className='font-medium'>{t('orders.payDialog.cashTotalLabel', { defaultValue: 'Tổng tiền mặt cần thu' })}</span>
               <span className='text-xl font-bold text-violet-600'>
                 {formatCurrency(totalAmount)}
               </span>
@@ -169,14 +176,15 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
             {/* Cảnh báo món chưa giao */}
             {pendingOrders.some(o => o.status !== OrderStatus.Delivered) && (
               <p className='text-xs text-amber-600'>
-                ⚠️ Một số đơn chưa ở trạng thái &quot;Đã giao&quot;. Hệ thống vẫn sẽ thanh toán tất
-                cả đơn hiện tại của khách.
+                {t('orders.payDialog.undeliveredWarning', {
+                  defaultValue: '⚠️ Một số đơn chưa ở trạng thái "Đã giao". Hệ thống vẫn sẽ thanh toán tất cả đơn hiện tại của khách.',
+                })}
               </p>
             )}
 
             <DialogFooter className='gap-2 sm:gap-0'>
               <Button variant='outline' onClick={handleClose} disabled={isPendingCash}>
-                Hủy
+                {t('common:actions.cancel')}
               </Button>
               <Button
                 onClick={handleConfirmCash}
@@ -187,12 +195,12 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                 {isPendingCash ? (
                   <>
                     <Loader2 className='mr-2 size-4 animate-spin' />
-                    Đang xử lý...
+                    {t('orders.payDialog.cashProcessing', { defaultValue: 'Đang xử lý...' })}
                   </>
                 ) : (
                   <>
                     <Banknote className='mr-2 size-4' />
-                    Xác nhận đã nhận tiền mặt
+                    {t('orders.payDialog.confirmCash', { defaultValue: 'Xác nhận đã nhận tiền mặt' })}
                   </>
                 )}
               </Button>
@@ -206,7 +214,10 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
               <div className='space-y-4'>
                 <div className='flex items-center justify-between rounded-lg bg-blue-50 px-4 py-3 dark:bg-blue-950/30'>
                   <span className='text-sm text-muted-foreground'>
-                    {pendingOrders.length} món cần thanh toán
+                    {t('orders.payDialog.itemsToPay', {
+                      count: pendingOrders.length,
+                      defaultValue: `${pendingOrders.length} món cần thanh toán`,
+                    })}
                   </span>
                   <span className='text-xl font-bold text-blue-600'>
                     {formatCurrency(totalAmount)}
@@ -219,7 +230,10 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                   id='generate-vietqr-btn'
                 >
                   <Smartphone className='size-4' />
-                  Tạo mã VietQR cho bàn {tableNumber ?? ''}
+                  {t('orders.payDialog.generateQr', {
+                    table: tableNumber ?? '',
+                    defaultValue: `Tạo mã VietQR cho bàn ${tableNumber ?? ''}`,
+                  })}
                 </Button>
               </div>
             )}
@@ -228,7 +242,9 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
             {qrState === 'loading' && (
               <div className='flex flex-col items-center gap-3 py-8'>
                 <Loader2 className='size-8 animate-spin text-blue-600' />
-                <p className='text-sm text-muted-foreground'>Đang tạo mã QR VietQR từ PayOS...</p>
+                <p className='text-sm text-muted-foreground'>
+                  {t('orders.payDialog.creatingQr', { defaultValue: 'Đang tạo mã QR VietQR từ PayOS...' })}
+                </p>
               </div>
             )}
 
@@ -255,7 +271,12 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                     )}
                   </div>
                   <div className='flex items-center gap-2 text-xs text-muted-foreground'>
-                    <span>Mã đơn: #{qrData.orderCode}</span>
+                    <span>
+                      {t('orders.payDialog.orderCode', {
+                        code: qrData.orderCode,
+                        defaultValue: `Mã đơn: #${qrData.orderCode}`,
+                      })}
+                    </span>
                     {qrData.checkoutUrl && (
                       <>
                         <span>•</span>
@@ -265,26 +286,30 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                           rel='noreferrer'
                           className='inline-flex items-center gap-1 text-blue-600 hover:underline'
                         >
-                          <span>Mở link PayOS</span>
+                          <span>{t('orders.payDialog.openPayOs', { defaultValue: 'Mở link PayOS' })}</span>
                           <ExternalLink className='size-3' />
                         </a>
                       </>
                     )}
                   </div>
                   <p className='text-xs text-muted-foreground'>
-                    Đưa mã này cho khách quét bằng App ngân hàng bất kỳ
+                    {t('orders.payDialog.scanHint', {
+                      defaultValue: 'Đưa mã này cho khách quét bằng App ngân hàng bất kỳ',
+                    })}
                   </p>
                 </div>
 
                 <div className='flex items-center justify-between rounded-lg bg-blue-50 px-4 py-2.5 dark:bg-blue-950/30'>
-                  <span className='text-sm font-medium'>Số tiền</span>
+                  <span className='text-sm font-medium'>{t('orders.payDialog.amount', { defaultValue: 'Số tiền' })}</span>
                   <span className='text-lg font-bold text-blue-600'>
                     {formatCurrency(totalAmount)}
                   </span>
                 </div>
 
                 <p className='animate-pulse text-center text-xs text-muted-foreground'>
-                  ⏳ Đang chờ khách thanh toán (hệ thống tự động nhận diện)...
+                  {t('orders.payDialog.waitingPayment', {
+                    defaultValue: '⏳ Đang chờ khách thanh toán (hệ thống tự động nhận diện)...',
+                  })}
                 </p>
               </div>
             )}
@@ -295,9 +320,13 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                 <div className='flex size-14 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950/50'>
                   <CheckCircle2 className='size-8 text-emerald-600' />
                 </div>
-                <p className='text-lg font-semibold text-emerald-600'>Thanh toán thành công!</p>
+                <p className='text-lg font-semibold text-emerald-600'>
+                  {t('orders.payDialog.successTitle', { defaultValue: 'Thanh toán thành công!' })}
+                </p>
                 <p className='text-xs text-muted-foreground'>
-                  Đã nhận tiền qua VietQR, đơn hàng đã được cập nhật.
+                  {t('orders.payDialog.successDesc', {
+                    defaultValue: 'Đã nhận tiền qua VietQR, đơn hàng đã được cập nhật.',
+                  })}
                 </p>
               </div>
             )}
@@ -308,11 +337,13 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                   onClick={handleClose}
                   className='w-full bg-emerald-600 hover:bg-emerald-700'
                 >
-                  Hoàn tất
+                  {t('common:actions.confirm', { defaultValue: 'Hoàn tất' })}
                 </Button>
               ) : (
                 <Button variant='outline' onClick={handleClose} className='w-full'>
-                  {qrState === 'ready' ? 'Đóng mã QR' : 'Hủy'}
+                  {qrState === 'ready'
+                    ? t('orders.payDialog.closeQr', { defaultValue: 'Đóng mã QR' })
+                    : t('common:actions.cancel')}
                 </Button>
               )}
             </DialogFooter>
@@ -322,3 +353,4 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
     </Dialog>
   )
 }
+

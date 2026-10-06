@@ -18,6 +18,7 @@ import { Camera, Loader2 } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 interface CreateStaffDialogProps {
   open: boolean
@@ -25,6 +26,7 @@ interface CreateStaffDialogProps {
 }
 
 export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const [file, setFile] = useState<File | null>(null)
   const createStaffMutation = useCreateEmployeeAccountMutation()
   const uploadAvatarMutation = useUploadAvatarMutation()
@@ -59,7 +61,7 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
         body = { ...values, avatar: uploadRes.data.data }
       }
       const res = await createStaffMutation.mutateAsync(body)
-      toast.success(res.data.message || 'Tạo nhân viên thành công')
+      toast.success(res.data.message || t('staffs.createDialog.success'))
       handleOpenChange(false)
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
@@ -80,8 +82,8 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className='max-h-[90vh] max-w-[500px] overflow-auto'>
         <DialogHeader>
-          <DialogTitle>Thêm nhân viên</DialogTitle>
-          <DialogDescription>Tạo tài khoản nhân viên mới cho quán ăn</DialogDescription>
+          <DialogTitle>{t('staffs.createDialog.title')}</DialogTitle>
+          <DialogDescription>{t('staffs.createDialog.description')}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate className='flex flex-col gap-4'>
@@ -117,16 +119,18 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
                 }}
               />
             </div>
-            <p className='text-xs text-muted-foreground'>Click vào ảnh để thay đổi</p>
+            <p className='text-xs text-muted-foreground'>
+              {t('staffs.createDialog.avatarHint')}
+            </p>
           </div>
 
           <FieldGroup>
             {/* Tên */}
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='create-staff-name'>Tên nhân viên</FieldLabel>
+              <FieldLabel htmlFor='create-staff-name'>{t('staffs.createDialog.nameLabel')}</FieldLabel>
               <Input
                 id='create-staff-name'
-                placeholder='Nguyễn Văn A'
+                placeholder={t('staffs.createDialog.namePlaceholder')}
                 {...form.register('name')}
                 aria-invalid={!!errors.name}
               />
@@ -135,11 +139,11 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
 
             {/* Email */}
             <Field data-invalid={!!errors.email}>
-              <FieldLabel htmlFor='create-staff-email'>Email</FieldLabel>
+              <FieldLabel htmlFor='create-staff-email'>{t('staffs.createDialog.emailLabel')}</FieldLabel>
               <Input
                 id='create-staff-email'
                 type='email'
-                placeholder='nhanvien@example.com'
+                placeholder={t('staffs.createDialog.emailPlaceholder')}
                 {...form.register('email')}
                 aria-invalid={!!errors.email}
               />
@@ -148,11 +152,11 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
 
             {/* Mật khẩu */}
             <Field data-invalid={!!errors.password}>
-              <FieldLabel htmlFor='create-staff-password'>Mật khẩu</FieldLabel>
+              <FieldLabel htmlFor='create-staff-password'>{t('staffs.createDialog.passwordLabel')}</FieldLabel>
               <Input
                 id='create-staff-password'
                 type='password'
-                placeholder='Tối thiểu 6 ký tự'
+                placeholder={t('staffs.createDialog.passwordPlaceholder')}
                 {...form.register('password')}
                 aria-invalid={!!errors.password}
               />
@@ -161,11 +165,13 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
 
             {/* Xác nhận mật khẩu */}
             <Field data-invalid={!!errors.confirmPassword}>
-              <FieldLabel htmlFor='create-staff-confirm-password'>Xác nhận mật khẩu</FieldLabel>
+              <FieldLabel htmlFor='create-staff-confirm-password'>
+                {t('staffs.createDialog.confirmPasswordLabel')}
+              </FieldLabel>
               <Input
                 id='create-staff-confirm-password'
                 type='password'
-                placeholder='Nhập lại mật khẩu'
+                placeholder={t('staffs.createDialog.confirmPasswordPlaceholder')}
                 {...form.register('confirmPassword')}
                 aria-invalid={!!errors.confirmPassword}
               />
@@ -175,16 +181,16 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
 
           <DialogFooter>
             <Button type='button' variant='outline' onClick={() => handleOpenChange(false)}>
-              Hủy
+              {t('common:actions.cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
               {isPending ? (
                 <>
                   <Loader2 className='mr-2 size-4 animate-spin' />
-                  Đang tạo...
+                  {t('staffs.createDialog.submitting')}
                 </>
               ) : (
-                'Tạo nhân viên'
+                t('staffs.createDialog.submit')
               )}
             </Button>
           </DialogFooter>
@@ -193,3 +199,4 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
     </Dialog>
   )
 }
+

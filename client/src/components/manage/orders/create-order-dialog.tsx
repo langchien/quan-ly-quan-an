@@ -26,6 +26,7 @@ import { useCreateOrdersMutation } from '@/queries/use-order'
 import { Loader2, Minus, Plus, ShoppingCart, Trash2, Users } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 import { getInitials } from './order-columns'
 
 interface CartItem {
@@ -42,6 +43,7 @@ interface CreateOrderDialogProps {
 }
 
 export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const [selectedGuestId, setSelectedGuestId] = useState<string>('')
   const [cart, setCart] = useState<CartItem[]>([])
   const [selectedDishId, setSelectedDishId] = useState<string>('')
@@ -96,11 +98,11 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
 
   async function handleSubmit() {
     if (!selectedGuestId) {
-      toast.error('Vui lòng chọn khách hàng')
+      toast.error(t('orders.createDialog.errorSelectGuest', { defaultValue: 'Vui lòng chọn khách hàng' }))
       return
     }
     if (cart.length === 0) {
-      toast.error('Vui lòng thêm ít nhất một món')
+      toast.error(t('orders.createDialog.errorSelectDish', { defaultValue: 'Vui lòng thêm ít nhất một món' }))
       return
     }
     try {
@@ -108,7 +110,7 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
         guestId: Number(selectedGuestId),
         orders: cart.map(item => ({ dishId: item.dishId, quantity: item.quantity })),
       })
-      toast.success(res.data.message || `Tạo thành công ${res.data.data.length} đơn hàng`)
+      toast.success(res.data.message || t('orders.createDialog.success'))
       handleOpenChange(false)
     } catch (error) {
       handleErrorApi({ error })
@@ -131,8 +133,8 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className='max-h-[90vh] max-w-[540px] overflow-auto'>
         <DialogHeader>
-          <DialogTitle>Tạo đơn hàng mới</DialogTitle>
-          <DialogDescription>Đặt món thay mặt khách hàng tại bàn</DialogDescription>
+          <DialogTitle>{t('orders.createDialog.title')}</DialogTitle>
+          <DialogDescription>{t('orders.createDialog.description')}</DialogDescription>
         </DialogHeader>
 
         <div className='flex flex-col gap-5'>
@@ -141,11 +143,11 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
             <Field>
               <FieldLabel htmlFor='create-order-guest'>
                 <Users className='mr-1.5 inline size-4' />
-                Khách hàng
+                {t('orders.createDialog.guestName', { defaultValue: 'Khách hàng' })}
               </FieldLabel>
               {guestsLoading ? (
                 <div className='flex h-9 items-center gap-2 text-sm text-muted-foreground'>
-                  <Loader2 className='size-4 animate-spin' /> Đang tải...
+                  <Loader2 className='size-4 animate-spin' /> {t('common:actions.loading', { defaultValue: 'Đang tải...' })}
                 </div>
               ) : (
                 <Select
@@ -153,17 +155,20 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
                   onValueChange={val => setSelectedGuestId(val ?? '')}
                 >
                   <SelectTrigger id='create-order-guest' className='w-full'>
-                    <SelectValue placeholder='Chọn khách hàng' />
+                    <SelectValue placeholder={t('orders.createDialog.guestPlaceholder', { defaultValue: 'Chọn khách hàng' })} />
                   </SelectTrigger>
                   <SelectContent>
                     {(guests ?? []).length === 0 ? (
                       <SelectItem value='__empty' disabled>
-                        Không có khách nào
+                        {t('orders.createDialog.noGuests', { defaultValue: 'Không có khách nào' })}
                       </SelectItem>
                     ) : (
                       (guests ?? []).map(g => (
                         <SelectItem key={g.id} value={String(g.id)}>
-                          {g.name} {g.tableNumber !== null ? `— Bàn ${g.tableNumber}` : ''}
+                          {g.name}{' '}
+                          {g.tableNumber !== null
+                            ? `— ${t('common:table.tableNumber', { number: g.tableNumber, defaultValue: `Bàn ${g.tableNumber}` })}`
+                            : ''}
                         </SelectItem>
                       ))
                     )}
@@ -177,7 +182,7 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
 
           {/* Chọn món */}
           <div className='space-y-3'>
-            <p className='text-sm font-medium'>Thêm món ăn</p>
+            <p className='text-sm font-medium'>{t('orders.createDialog.selectDishes', { defaultValue: 'Thêm món ăn' })}</p>
             <div className='flex gap-2'>
               <div className='flex-1'>
                 <Select
@@ -186,7 +191,7 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
                   disabled={dishesLoading}
                 >
                   <SelectTrigger id='create-order-dish' className='w-full'>
-                    <SelectValue placeholder='Chọn món ăn' />
+                    <SelectValue placeholder={t('orders.createDialog.dishSearch', { defaultValue: 'Chọn món ăn' })} />
                   </SelectTrigger>
                   <SelectContent>
                     {(dishes ?? []).map(d => (
@@ -238,7 +243,7 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
                 className='shrink-0'
                 size='sm'
               >
-                Thêm
+                {t('common:actions.create', { defaultValue: 'Thêm' })}
               </Button>
             </div>
           </div>
@@ -250,7 +255,12 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
               <div className='space-y-2'>
                 <div className='flex items-center gap-2'>
                   <ShoppingCart className='size-4 text-muted-foreground' />
-                  <p className='text-sm font-medium'>Giỏ hàng ({cart.length} món)</p>
+                  <p className='text-sm font-medium'>
+                    {t('orders.createDialog.cartTitle', {
+                      count: cart.length,
+                      defaultValue: `Giỏ hàng (${cart.length} món)`,
+                    })}
+                  </p>
                 </div>
                 <div className='space-y-2 rounded-lg border p-3'>
                   {cart.map(item => (
@@ -313,7 +323,7 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
 
                   <Separator className='my-1' />
                   <div className='flex justify-between text-sm font-medium'>
-                    <span>Tổng cộng</span>
+                    <span>{t('orders.createDialog.total', { defaultValue: 'Tổng cộng' })}</span>
                     <span className='text-primary'>{formatCurrency(totalAmount)}</span>
                   </div>
                 </div>
@@ -324,7 +334,7 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
 
         <DialogFooter>
           <Button type='button' variant='outline' onClick={() => handleOpenChange(false)}>
-            Hủy
+            {t('common:actions.cancel')}
           </Button>
           <Button
             onClick={handleSubmit}
@@ -333,12 +343,12 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
             {isPending ? (
               <>
                 <Loader2 className='mr-2 size-4 animate-spin' />
-                Đang tạo...
+                {t('orders.createDialog.submitting')}
               </>
             ) : (
               <>
                 <ShoppingCart className='mr-2 size-4' />
-                Tạo {cart.length > 0 ? `${cart.length} đơn` : 'đơn hàng'}
+                {t('orders.createDialog.submit')}
               </>
             )}
           </Button>
@@ -347,3 +357,4 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
     </Dialog>
   )
 }
+

@@ -20,6 +20,7 @@ import type { z } from 'zod'
 
 import { formatDate } from '@/lib/i18n/use-locale'
 import { getTableStatusLabel, TABLE_STATUS_EMOJI } from '@/lib/status-label'
+import i18n from '@/lib/i18n'
 
 export { formatDate }
 
@@ -51,11 +52,13 @@ function getStatusBadge(status: string) {
 }
 
 interface GetTableColumnsOptions {
+  t?: (key: any, opts?: any) => string
   onEdit: (table: z.infer<typeof TableSchema>) => void
   onDelete?: (table: z.infer<typeof TableSchema>) => void
 }
 
 export function getTableColumns({
+  t = i18n.t,
   onEdit,
   onDelete,
 }: GetTableColumnsOptions): ColumnDef<z.infer<typeof TableSchema>>[] {
@@ -66,14 +69,14 @@ export function getTableColumns({
         <Checkbox
           checked={table.getIsAllPageRowsSelected() || table.getIsSomePageRowsSelected()}
           onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
-          aria-label='Chọn tất cả'
+          aria-label={t('common:table.selectAll')}
         />
       ),
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={value => row.toggleSelected(!!value)}
-          aria-label='Chọn dòng'
+          aria-label={t('common:table.selectRow')}
         />
       ),
       enableSorting: false,
@@ -88,7 +91,7 @@ export function getTableColumns({
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Số bàn
+          {t('tables.columns.number')}
           <ArrowUpDown className='ml-2 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -103,7 +106,7 @@ export function getTableColumns({
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Sức chứa
+          {t('tables.columns.capacity')}
           <ArrowUpDown className='ml-2 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -111,13 +114,13 @@ export function getTableColumns({
     },
     {
       accessorKey: 'status',
-      header: 'Trạng thái',
+      header: t('tables.columns.status'),
       cell: ({ row }) => getStatusBadge(row.getValue('status')),
       filterFn: (row, id, value: string[]) => value.includes(row.getValue(id)),
     },
     {
       accessorKey: 'token',
-      header: 'QR Code',
+      header: t('tables.columns.qrCode'),
       cell: ({ row }) => {
         const table = row.original
         const url = `${envConfig.VITE_WEB_URL}/guest/tables/${table.number}?token=${table.token}`
@@ -139,7 +142,7 @@ export function getTableColumns({
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Ngày tạo
+          {t('tables.columns.createdAt')}
           <ArrowUpDown className='ml-2 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -152,7 +155,7 @@ export function getTableColumns({
     },
     {
       id: 'actions',
-      header: () => <span className='sr-only'>Thao tác</span>,
+      header: () => <span className='sr-only'>{t('tables.columns.actions')}</span>,
       cell: ({ row }) => {
         const table = row.original
         return (
@@ -167,26 +170,26 @@ export function getTableColumns({
                 })}
               >
                 <MoreHorizontal className='size-4' />
-                <span className='sr-only'>Mở menu</span>
+                <span className='sr-only'>{t('common:actions.openMenu')}</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end' className='w-40'>
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                  <DropdownMenuLabel>{t('tables.columns.actions')}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     id={`copy-table-link-${table.number}`}
                     onClick={() => {
                       const url = `${envConfig.VITE_WEB_URL}/guest/tables/${table.number}?token=${table.token}`
                       navigator.clipboard.writeText(url)
-                      toast.success('Đã sao chép đường dẫn bàn ăn')
+                      toast.success(t('tables.linkCopied'))
                     }}
                   >
                     <Link className='mr-2 size-4' />
-                    Sao chép URL
+                    {t('tables.qrModal.copyLink')}
                   </DropdownMenuItem>
                   <DropdownMenuItem id={`edit-table-${table.number}`} onClick={() => onEdit(table)}>
                     <Pencil className='mr-2 size-4' />
-                    Chỉnh sửa
+                    {t('common:actions.edit')}
                   </DropdownMenuItem>
                   {onDelete && (
                     <DropdownMenuItem
@@ -195,7 +198,7 @@ export function getTableColumns({
                       className='text-destructive focus:text-destructive'
                     >
                       <Trash2 className='mr-2 size-4' />
-                      Xóa
+                      {t('common:actions.delete')}
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuGroup>

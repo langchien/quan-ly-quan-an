@@ -27,7 +27,8 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { TABLE_STATUS_OPTIONS } from './table-table-toolbar'
+import { useTranslation } from 'react-i18next'
+import { useStatusLabel } from '@/lib/status-label'
 
 interface EditTableDialogProps {
   table: z.infer<typeof TableSchema> | null
@@ -36,6 +37,8 @@ interface EditTableDialogProps {
 }
 
 export function EditTableDialog({ table, open, onOpenChange }: EditTableDialogProps) {
+  const { t } = useTranslation(['manage', 'common'])
+  const { tableStatusOptions } = useStatusLabel()
   const updateTableMutation = useUpdateTableMutation()
 
   const form = useForm<UpdateTableBodyType>({
@@ -66,7 +69,7 @@ export function EditTableDialog({ table, open, onOpenChange }: EditTableDialogPr
         number: table.number,
         body: values,
       })
-      toast.success(res.data.message || 'Cập nhật bàn thành công')
+      toast.success(res.data.message || t('tables.editDialog.success'))
       onOpenChange(false)
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
@@ -79,25 +82,25 @@ export function EditTableDialog({ table, open, onOpenChange }: EditTableDialogPr
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='max-w-[450px]'>
         <DialogHeader>
-          <DialogTitle>Cập nhật bàn ăn</DialogTitle>
-          <DialogDescription>Chỉnh sửa thông tin của bàn số {table?.number}</DialogDescription>
+          <DialogTitle>{t('tables.editDialog.title')}</DialogTitle>
+          <DialogDescription>{t('tables.editDialog.description')}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate className='flex flex-col gap-4'>
           <FieldGroup>
             {/* Số bàn (Read Only) */}
             <Field>
-              <FieldLabel>Số bàn</FieldLabel>
+              <FieldLabel>{t('tables.columns.number')}</FieldLabel>
               <Input type='number' value={table?.number || ''} disabled className='bg-muted' />
             </Field>
 
             {/* Sức chứa */}
             <Field data-invalid={!!errors.capacity}>
-              <FieldLabel htmlFor='edit-table-capacity'>Sức chứa (người)</FieldLabel>
+              <FieldLabel htmlFor='edit-table-capacity'>{t('tables.createDialog.capacityLabel')}</FieldLabel>
               <Input
                 id='edit-table-capacity'
                 type='number'
-                placeholder='Nhập sức chứa (VD: 4)'
+                placeholder={t('tables.createDialog.capacityPlaceholder')}
                 {...form.register('capacity')}
                 aria-invalid={!!errors.capacity}
               />
@@ -106,16 +109,16 @@ export function EditTableDialog({ table, open, onOpenChange }: EditTableDialogPr
 
             {/* Trạng thái */}
             <Field data-invalid={!!errors.status}>
-              <FieldLabel htmlFor='edit-table-status'>Trạng thái</FieldLabel>
+              <FieldLabel htmlFor='edit-table-status'>{t('tables.createDialog.statusLabel')}</FieldLabel>
               <Select
                 value={form.watch('status')}
                 onValueChange={value => form.setValue('status', value as any)}
               >
                 <SelectTrigger id='edit-table-status'>
-                  <SelectValue placeholder='Chọn trạng thái' />
+                  <SelectValue placeholder={t('tables.toolbar.allStatuses')} />
                 </SelectTrigger>
                 <SelectContent>
-                  {TABLE_STATUS_OPTIONS.map(option => (
+                  {tableStatusOptions.map(option => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
@@ -136,23 +139,23 @@ export function EditTableDialog({ table, open, onOpenChange }: EditTableDialogPr
                 htmlFor='change-token'
                 className='flex-1 cursor-pointer font-normal text-muted-foreground'
               >
-                Đổi mã QR Code (tạo token mới cho bàn này)
+                {t('tables.editDialog.changeTokenDesc')}
               </Label>
             </div>
           </FieldGroup>
 
           <DialogFooter>
             <Button type='button' variant='outline' onClick={() => onOpenChange(false)}>
-              Hủy
+              {t('common:actions.cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
               {isPending ? (
                 <>
                   <Loader2 className='mr-2 size-4 animate-spin' />
-                  Đang lưu...
+                  {t('tables.editDialog.submitting')}
                 </>
               ) : (
-                'Lưu thay đổi'
+                t('tables.editDialog.submit')
               )}
             </Button>
           </DialogFooter>
@@ -161,3 +164,4 @@ export function EditTableDialog({ table, open, onOpenChange }: EditTableDialogPr
     </Dialog>
   )
 }
+

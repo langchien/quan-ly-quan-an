@@ -24,15 +24,17 @@ import { useToggleDishStatusMutation } from '@/queries/use-dish'
 import type { DishType } from '@app/shared'
 import { DishStatus } from '@app/shared'
 import { Eye, EyeOff, Loader2, MoreHorizontal, Pencil, Trash2, UtensilsCrossed } from 'lucide-react'
-import { useStatusLabel } from '@/lib/status-label'
+import { useStatusLabel, getDishStatusLabel as getDefaultDishStatusLabel } from '@/lib/status-label'
 import { formatDate } from '@/lib/i18n/use-locale'
 
+import { useTranslation } from 'react-i18next'
+
 function getStatusConfig(status: string, getLabel?: (s: string) => string) {
-  const label = getLabel ? getLabel(status) : status
+  const label = getLabel ? getLabel(status) : getDefaultDishStatusLabel(status)
   switch (status) {
     case DishStatus.Available:
       return {
-        label: getLabel ? label : 'Đang bán',
+        label,
         emoji: '✅',
         dotColor: 'bg-emerald-500',
         bgColor: 'bg-emerald-500/10',
@@ -42,7 +44,7 @@ function getStatusConfig(status: string, getLabel?: (s: string) => string) {
       }
     case DishStatus.Unavailable:
       return {
-        label: getLabel ? label : 'Tạm hết',
+        label,
         emoji: '⏸️',
         dotColor: 'bg-amber-500',
         bgColor: 'bg-amber-500/10',
@@ -52,7 +54,7 @@ function getStatusConfig(status: string, getLabel?: (s: string) => string) {
       }
     case DishStatus.Hidden:
       return {
-        label: getLabel ? label : 'Ẩn',
+        label,
         emoji: '🙈',
         dotColor: 'bg-red-500',
         bgColor: 'bg-red-500/10',
@@ -108,6 +110,7 @@ function GridSkeleton() {
  * Món Hidden không hiển thị nút này.
  */
 function GridQuickToggle({ dish }: { dish: DishType }) {
+  const { t } = useTranslation('manage')
   const toggleMutation = useToggleDishStatusMutation()
   const isPending = toggleMutation.isPending && toggleMutation.variables.id === dish.id
 
@@ -116,7 +119,9 @@ function GridQuickToggle({ dish }: { dish: DishType }) {
   const nextStatus =
     dish.status === DishStatus.Available ? DishStatus.Unavailable : DishStatus.Available
   const label =
-    dish.status === DishStatus.Available ? 'Đánh dấu Tạm hết' : 'Đánh dấu Đang bán trở lại'
+    dish.status === DishStatus.Available
+      ? t('dishes.toggleStatus.markUnavailable')
+      : t('dishes.toggleStatus.markAvailable')
 
   return (
     <TooltipProvider>
@@ -157,6 +162,7 @@ export function DishGridView({
   statusFilter,
   categoryFilter,
 }: DishGridViewProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const { getDishStatusLabel } = useStatusLabel()
 
   if (isLoading) {
@@ -190,8 +196,8 @@ export function DishGridView({
         <UtensilsCrossed className='size-10 text-muted-foreground/40' />
         <p className='text-sm text-muted-foreground'>
           {globalFilter || statusFilter.length || categoryFilter.length
-            ? 'Không tìm thấy kết quả phù hợp'
-            : 'Chưa có món ăn nào'}
+            ? t('common:table.noResults')
+            : t('dishes.empty')}
         </p>
       </div>
     )
@@ -247,15 +253,15 @@ export function DishGridView({
                     })}
                   >
                     <MoreHorizontal className='size-4' />
-                    <span className='sr-only'>Mở menu</span>
+                    <span className='sr-only'>{t('common:actions.openMenu')}</span>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align='end' className='w-40'>
                     <DropdownMenuGroup>
-                      <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                      <DropdownMenuLabel>{t('dishes.columns.actions')}</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => onEdit(dish)}>
                         <Pencil className='mr-2 size-4' />
-                        Chỉnh sửa
+                        {t('common:actions.edit')}
                       </DropdownMenuItem>
                       {onDelete && (
                         <DropdownMenuItem
@@ -263,7 +269,7 @@ export function DishGridView({
                           className='text-destructive focus:text-destructive'
                         >
                           <Trash2 className='mr-2 size-4' />
-                          Xóa
+                          {t('common:actions.delete')}
                         </DropdownMenuItem>
                       )}
                     </DropdownMenuGroup>
@@ -274,7 +280,7 @@ export function DishGridView({
 
             <CardContent className='pb-0'>
               <p className='line-clamp-2 text-xs text-muted-foreground'>
-                {dish.description || <span className='italic opacity-50'>Chưa có mô tả</span>}
+                {dish.description || <span className='italic opacity-50'>{t('dishes.columns.noDescription')}</span>}
               </p>
               {dish.category && (
                 <Badge variant='outline' className='mt-1.5 text-[10px] font-normal'>

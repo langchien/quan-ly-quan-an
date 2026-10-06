@@ -19,7 +19,7 @@ import type { common } from '@/locales/vi/common'
 type BreadcrumbKey = keyof typeof common.breadcrumb
 
 /** Map segment URL → key dịch `common:breadcrumb.*` */
-const routeTitleKeys: Record<string, BreadcrumbKey> = {
+const routeTitleKeys: Partial<Record<string, BreadcrumbKey>> = {
   manage: 'manage',
   dashboard: 'dashboard',
   dishes: 'dishes',

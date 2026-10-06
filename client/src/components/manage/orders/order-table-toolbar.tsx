@@ -17,6 +17,7 @@ import type { OrderSchemaType } from '@app/shared'
 import type { Table } from '@tanstack/react-table'
 import { CirclePlus, ClipboardPlus, Search, Settings2, X } from 'lucide-react'
 import { useStatusLabel } from '@/lib/status-label'
+import { useTranslation } from 'react-i18next'
 
 interface OrderTableToolbarProps {
   table: Table<OrderSchemaType>
@@ -24,6 +25,7 @@ interface OrderTableToolbarProps {
 }
 
 export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const { orderStatusOptions } = useStatusLabel()
   const isFiltered = table.getState().columnFilters.length > 0 || !!table.getState().globalFilter
 
@@ -51,7 +53,7 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
           <Search className='absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground' />
           <Input
             id='order-search'
-            placeholder='Tìm khách, món ăn...'
+            placeholder={t('orders.toolbar.searchPlaceholder')}
             value={(table.getState().globalFilter as string) || ''}
             onChange={e => table.setGlobalFilter(e.target.value)}
             className='h-8 w-full pl-8 sm:w-[200px] lg:w-[280px]'
@@ -68,7 +70,7 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
             })}
           >
             <CirclePlus className='mr-2 size-4' />
-            Trạng thái
+            {t('orders.columns.status')}
             {statusFilterValue.length > 0 && (
               <>
                 <Separator orientation='vertical' className='mx-2 h-4' />
@@ -78,7 +80,7 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
                 <div className='hidden space-x-1 lg:flex'>
                   {statusFilterValue.length > 2 ? (
                     <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                      {statusFilterValue.length} đã chọn
+                      {statusFilterValue.length} {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
                     </Badge>
                   ) : (
                     orderStatusOptions
@@ -125,7 +127,7 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
             className='h-8 px-2 text-muted-foreground'
             onClick={resetFilters}
           >
-            Xóa bộ lọc
+            {t('common:actions.clearFilters')}
             <X className='ml-2 size-4' />
           </Button>
         )}
@@ -143,11 +145,11 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
             })}
           >
             <Settings2 className='mr-2 size-4' />
-            Hiển thị
+            {t('common:table.viewColumns', { defaultValue: 'Hiển thị' })}
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-44'>
             <DropdownMenuGroup>
-              <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
+              <DropdownMenuLabel>{t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {table
                 .getAllColumns()
@@ -155,13 +157,13 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
                 .map(col => {
                   const labelMap: Record<string, string> = {
                     id: '#',
-                    guest: 'Khách',
-                    dish: 'Món ăn',
-                    quantity: 'SL',
-                    total: 'Tổng tiền',
-                    status: 'Trạng thái',
-                    handler: 'Nhân viên',
-                    createdAt: 'Thời gian',
+                    guest: t('orders.columns.guest'),
+                    dish: t('orders.columns.dish'),
+                    quantity: t('orders.columns.quantityShort'),
+                    total: t('orders.columns.total'),
+                    status: t('orders.columns.status'),
+                    handler: t('orders.columns.handler', { defaultValue: 'Nhân viên' }),
+                    createdAt: t('orders.columns.time'),
                   }
                   return (
                     <DropdownMenuCheckboxItem
@@ -185,9 +187,10 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
           onClick={onAddOrder}
         >
           <ClipboardPlus className='mr-2 size-4' />
-          Tạo đơn hàng
+          {t('orders.toolbar.createOrder')}
         </Button>
       </div>
     </div>
   )
 }
+

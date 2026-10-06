@@ -16,7 +16,7 @@ import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 
 export function SettingsProfileTab() {
-  const { t } = useTranslation('settings')
+  const { t, i18n } = useTranslation('settings')
   const [file, setFile] = useState<File | null>(null)
   const avatarInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -53,6 +53,19 @@ export function SettingsProfileTab() {
       })
     }
   }, [user, form])
+
+  // Khi đổi ngôn ngữ, validate lại nếu form đang có lỗi
+  useEffect(() => {
+    const handleLangChange = () => {
+      if (form.formState.isSubmitted || Object.keys(form.formState.errors).length > 0) {
+        void form.trigger()
+      }
+    }
+    i18n.on('languageChanged', handleLangChange)
+    return () => {
+      i18n.off('languageChanged', handleLangChange)
+    }
+  }, [form, i18n])
 
   const initials = user?.name
     ? user.name

@@ -11,8 +11,10 @@ import { useQueryClient } from '@tanstack/react-query'
 import { UtensilsCrossed } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 export function DishTable() {
+  const { t } = useTranslation(['manage', 'common'])
   const queryClient = useQueryClient()
   const { data: dishList, isLoading, isError } = useGetDishList()
   const { isOwner } = useRole()
@@ -25,21 +27,22 @@ export function DishTable() {
     queryClient.invalidateQueries({ queryKey: ['dishes', 'list'] })
 
     if (payload.status === DishStatus.Available) {
-      toast.success(`Món "${payload.name}" đã mở bán trở lại`)
+      toast.success(t('dishes.toastAvailable', { name: payload.name }))
     } else if (payload.status === DishStatus.Unavailable) {
-      toast.warning(`Món "${payload.name}" đã chuyển sang Tạm hết`)
+      toast.warning(t('dishes.toastUnavailable', { name: payload.name }))
     } else if (payload.status === DishStatus.Hidden) {
-      toast.info(`Món "${payload.name}" đã được ẩn`)
+      toast.info(t('dishes.toastHidden', { name: payload.name }))
     }
   })
 
   const columns = useMemo(
     () =>
       getDishColumns({
+        t,
         onEdit: dish => setEditTarget(dish),
         onDelete: isOwner ? dish => setDeleteTarget(dish) : undefined,
       }),
-    [isOwner]
+    [isOwner, t]
   )
 
   if (isError) {
@@ -47,8 +50,8 @@ export function DishTable() {
       <div className='flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed py-16 text-center'>
         <UtensilsCrossed className='size-12 text-muted-foreground/50' />
         <div>
-          <p className='font-medium text-destructive'>Không thể tải danh sách món ăn</p>
-          <p className='text-sm text-muted-foreground'>Vui lòng thử lại sau</p>
+          <p className='font-medium text-destructive'>{t('dishes.loadError')}</p>
+          <p className='text-sm text-muted-foreground'>{t('dishes.tryAgainLater')}</p>
         </div>
       </div>
     )

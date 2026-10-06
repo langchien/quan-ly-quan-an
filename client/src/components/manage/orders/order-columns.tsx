@@ -41,8 +41,8 @@ export { formatDateTime }
 
 export const ORDER_STATUS_OPTIONS = getOrderStatusOptions()
 
-export function getOrderStatusBadge(status: string) {
-  const label = getOrderStatusLabel(status)
+export function getOrderStatusBadge(status: string, getLabel?: (s: string) => string) {
+  const label = getLabel ? getLabel(status) : getOrderStatusLabel(status)
   switch (status) {
     case OrderStatus.Pending:
       return (
@@ -87,12 +87,25 @@ export function getOrderStatusBadge(status: string) {
 interface GetOrderColumnsOptions {
   onUpdate: (order: OrderSchemaType) => void
   onPay: (order: OrderSchemaType) => void
+  t?: (key: any, opts?: any) => string
+  getStatusLabel?: (status: string) => string
 }
 
 export function getOrderColumns({
   onUpdate,
   onPay,
+  t,
+  getStatusLabel,
 }: GetOrderColumnsOptions): ColumnDef<OrderSchemaType>[] {
+  const guestHeader = t ? t('orders.columns.guest') : 'Khách'
+  const dishHeader = t ? t('orders.columns.dish') : 'Món ăn'
+  const qtyHeader = t ? t('orders.columns.quantityShort') : 'SL'
+  const totalHeader = t ? t('orders.columns.total') : 'Tổng tiền'
+  const statusHeader = t ? t('orders.columns.status') : 'Trạng thái'
+  const handlerHeader = t ? t('orders.columns.handler', { defaultValue: 'Nhân viên' }) : 'Nhân viên'
+  const timeHeader = t ? t('orders.columns.time') : 'Thời gian'
+  const actionsHeader = t ? t('orders.columns.actions') : 'Thao tác'
+  const unknownGuest = t ? t('orders.columns.unknownGuest') : 'Không rõ'
   return [
     // ID
     {
@@ -118,16 +131,18 @@ export function getOrderColumns({
     {
       id: 'guest',
       accessorFn: row => row.guest?.name ?? '',
-      header: 'Khách',
+      header: guestHeader,
       cell: ({ row }) => {
         const order = row.original
-        const name = order.guest?.name ?? 'Không rõ'
+        const name = order.guest?.name ?? unknownGuest
         const table = order.tableNumber ?? order.guest?.tableNumber
         return (
           <div className='flex flex-col'>
             <span className='font-medium'>{name}</span>
             {table !== null && table !== undefined && (
-              <span className='text-xs text-muted-foreground'>Bàn {table}</span>
+              <span className='text-xs text-muted-foreground'>
+                {t ? t('common:table.tableNumber', { number: table, defaultValue: `Bàn ${table}` }) : `Bàn ${table}`}
+              </span>
             )}
           </div>
         )
@@ -145,7 +160,7 @@ export function getOrderColumns({
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Món ăn
+          {dishHeader}
           <ArrowUpDown className='ml-1.5 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -168,7 +183,7 @@ export function getOrderColumns({
     // Số lượng
     {
       accessorKey: 'quantity',
-      header: 'SL',
+      header: qtyHeader,
       cell: ({ row }) => (
         <span className='font-medium tabular-nums'>{row.getValue('quantity')}</span>
       ),
@@ -184,7 +199,7 @@ export function getOrderColumns({
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Tổng tiền
+          {totalHeader}
           <ArrowUpDown className='ml-1.5 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -198,8 +213,8 @@ export function getOrderColumns({
     // Trạng thái
     {
       accessorKey: 'status',
-      header: 'Trạng thái',
-      cell: ({ row }) => getOrderStatusBadge(row.getValue('status')),
+      header: statusHeader,
+      cell: ({ row }) => getOrderStatusBadge(row.getValue('status'), getStatusLabel),
       filterFn: (row, id, value: string[]) => value.includes(row.getValue(id)),
     },
 
@@ -207,11 +222,15 @@ export function getOrderColumns({
     {
       id: 'handler',
       accessorFn: row => row.orderHandler?.name ?? '',
-      header: 'Nhân viên',
+      header: handlerHeader,
       cell: ({ row }) => {
         const handler = row.original.orderHandler
         if (!handler) {
-          return <span className='text-xs text-muted-foreground italic'>Chưa có</span>
+          return (
+            <span className='text-xs text-muted-foreground italic'>
+              {t ? t('orders.columns.noHandler', { defaultValue: 'Chưa có' }) : 'Chưa có'}
+            </span>
+          )
         }
         return (
           <div className='flex items-center gap-2'>
@@ -237,7 +256,7 @@ export function getOrderColumns({
           className='-ml-3 h-8 font-medium'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Thời gian
+          {timeHeader}
           <ArrowUpDown className='ml-1.5 size-3.5 text-muted-foreground/70' />
         </Button>
       ),
@@ -251,7 +270,7 @@ export function getOrderColumns({
     // Actions
     {
       id: 'actions',
-      header: () => <span className='sr-only'>Thao tác</span>,
+      header: () => <span className='sr-only'>{actionsHeader}</span>,
       cell: ({ row }) => {
         const order = row.original
         const isPaid = order.status === OrderStatus.Paid
@@ -267,11 +286,11 @@ export function getOrderColumns({
                 })}
               >
                 <MoreHorizontal className='size-4' />
-                <span className='sr-only'>Mở menu</span>
+                <span className='sr-only'>{t ? t('common:actions.openMenu') : 'Mở menu'}</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end' className='w-44'>
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                  <DropdownMenuLabel>{actionsHeader}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     id={`update-order-${order.id}`}
@@ -279,7 +298,7 @@ export function getOrderColumns({
                     disabled={isPaid}
                   >
                     <RefreshCcw className='mr-2 size-4' />
-                    Cập nhật
+                    {t ? t('common:actions.update') : 'Cập nhật'}
                   </DropdownMenuItem>
                   {!isPaid && order.guest && (
                     <DropdownMenuItem
@@ -288,7 +307,7 @@ export function getOrderColumns({
                       className='text-violet-600 focus:text-violet-600'
                     >
                       <CheckCheck className='mr-2 size-4' />
-                      Thanh toán
+                      {t ? t('orders.payDialog.title') : 'Thanh toán'}
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuGroup>

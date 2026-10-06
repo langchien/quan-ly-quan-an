@@ -28,6 +28,7 @@ import { useState } from 'react'
 import type { z } from 'zod'
 import { TableGridView } from './table-grid-view'
 import { TableTableToolbar, type ViewMode } from './table-table-toolbar'
+import { useTranslation } from 'react-i18next'
 
 const PAGE_SIZE = 10
 
@@ -64,6 +65,7 @@ export function TableDataTable({
   onEdit,
   onDelete,
 }: TableDataTableProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -156,8 +158,8 @@ export function TableDataTable({
                         <LayoutGrid className='size-10 text-muted-foreground/40' />
                         <p className='text-sm text-muted-foreground'>
                           {globalFilter || columnFilters.length
-                            ? 'Không tìm thấy kết quả phù hợp'
-                            : 'Chưa có bàn nào'}
+                            ? t('common:table.noResults')
+                            : t('tables.empty')}
                         </p>
                       </div>
                     </TableCell>
@@ -173,9 +175,12 @@ export function TableDataTable({
               {/* Selection info */}
               <span>
                 {table.getFilteredSelectedRowModel().rows.length > 0
-                  ? `${table.getFilteredSelectedRowModel().rows.length} / ${totalFiltered} dòng được chọn`
+                  ? t('common:table.selectedRows', {
+                      selected: table.getFilteredSelectedRowModel().rows.length,
+                      total: totalFiltered,
+                    })
                   : totalFiltered > 0
-                    ? `${from}\u2013${to} / ${totalFiltered} bàn`
+                    ? t('tables.summary', { from, to, total: totalFiltered })
                     : ''}
               </span>
 

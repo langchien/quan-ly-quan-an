@@ -20,6 +20,8 @@ import { CirclePlus, LayoutGrid, List, Search, Settings2, Plus, X } from 'lucide
 import type { z } from 'zod'
 import { useStatusLabel, getTableStatusOptions } from '@/lib/status-label'
 
+import { useTranslation } from 'react-i18next'
+
 export type ViewMode = 'table' | 'grid'
 
 export const TABLE_STATUS_OPTIONS = getTableStatusOptions()
@@ -37,6 +39,7 @@ export function TableTableToolbar({
   viewMode,
   onViewModeChange,
 }: TableTableToolbarProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const { tableStatusOptions } = useStatusLabel()
   const isFiltered = table.getState().columnFilters.length > 0 || !!table.getState().globalFilter
 
@@ -55,6 +58,14 @@ export function TableTableToolbar({
     table.setGlobalFilter('')
   }
 
+  const columnLabelMap: Record<string, string> = {
+    number: t('tables.columns.number'),
+    capacity: t('tables.columns.capacity'),
+    status: t('tables.columns.status'),
+    token: t('tables.columns.qrCode'),
+    createdAt: t('tables.columns.createdAt'),
+  }
+
   return (
     <div className='flex flex-wrap items-center justify-between gap-2'>
       {/* Left: search + filters */}
@@ -64,7 +75,7 @@ export function TableTableToolbar({
           <Search className='absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground' />
           <Input
             id='table-search'
-            placeholder='Tìm kiếm bàn...'
+            placeholder={t('tables.toolbar.searchPlaceholder')}
             value={(table.getState().globalFilter as string) || ''}
             onChange={e => table.setGlobalFilter(e.target.value)}
             className='h-8 w-full pl-8 sm:w-[200px] lg:w-[280px]'
@@ -81,7 +92,7 @@ export function TableTableToolbar({
             })}
           >
             <CirclePlus className='mr-2 size-4' />
-            Trạng thái
+            {t('tables.columns.status')}
             {statusFilterValue.length > 0 && (
               <>
                 <Separator orientation='vertical' className='mx-2 h-4' />
@@ -91,7 +102,7 @@ export function TableTableToolbar({
                 <div className='hidden space-x-1 lg:flex'>
                   {statusFilterValue.length > 1 ? (
                     <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                      {statusFilterValue.length} đã chọn
+                      {statusFilterValue.length} {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
                     </Badge>
                   ) : (
                     tableStatusOptions
@@ -138,7 +149,7 @@ export function TableTableToolbar({
             className='h-8 px-2 text-muted-foreground'
             onClick={resetFilters}
           >
-            Xóa bộ lọc
+            {t('common:actions.clearFilters')}
             <X className='ml-2 size-4' />
           </Button>
         )}
@@ -159,9 +170,9 @@ export function TableTableToolbar({
               onClick={() => onViewModeChange('table')}
             >
               <List className='size-4' />
-              <span className='sr-only'>Chế độ bảng</span>
+              <span className='sr-only'>{t('common:view.table')}</span>
             </TooltipTrigger>
-            <TooltipContent>Chế độ bảng</TooltipContent>
+            <TooltipContent>{t('common:view.table')}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger
@@ -174,9 +185,9 @@ export function TableTableToolbar({
               onClick={() => onViewModeChange('grid')}
             >
               <LayoutGrid className='size-4' />
-              <span className='sr-only'>Chế độ lưới</span>
+              <span className='sr-only'>{t('common:view.grid')}</span>
             </TooltipTrigger>
-            <TooltipContent>Chế độ lưới</TooltipContent>
+            <TooltipContent>{t('common:view.grid')}</TooltipContent>
           </Tooltip>
         </div>
 
@@ -191,11 +202,11 @@ export function TableTableToolbar({
               })}
             >
               <Settings2 className='mr-2 size-4' />
-              Hiển thị
+              {t('common:table.viewColumns', { defaultValue: 'Hiển thị' })}
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-40'>
               <DropdownMenuGroup>
-                <DropdownMenuLabel>Bật/tắt cột</DropdownMenuLabel>
+                <DropdownMenuLabel>{t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {table
                   .getAllColumns()
@@ -207,17 +218,7 @@ export function TableTableToolbar({
                       checked={col.getIsVisible()}
                       onCheckedChange={value => col.toggleVisibility(!!value)}
                     >
-                      {col.id === 'number'
-                        ? 'Số bàn'
-                        : col.id === 'capacity'
-                          ? 'Sức chứa'
-                          : col.id === 'status'
-                            ? 'Trạng thái'
-                            : col.id === 'token'
-                              ? 'QR Code'
-                              : col.id === 'createdAt'
-                                ? 'Ngày tạo'
-                                : col.id}
+                      {columnLabelMap[col.id] ?? col.id}
                     </DropdownMenuCheckboxItem>
                   ))}
               </DropdownMenuGroup>
@@ -228,7 +229,7 @@ export function TableTableToolbar({
         {/* Add table */}
         <Button id='open-create-table-dialog' size='sm' className='h-8' onClick={onAddTable}>
           <Plus className='mr-2 size-4' />
-          Thêm bàn
+          {t('tables.toolbar.addTable')}
         </Button>
       </div>
     </div>

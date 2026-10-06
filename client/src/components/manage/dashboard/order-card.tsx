@@ -11,6 +11,8 @@ import { cn } from '@/lib/utils'
 import { ChefHat, CheckCircle2, Clock, Truck, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
+import { useStatusLabel } from '@/lib/status-label'
 
 // SLA Thresholds (phút)
 const SLA_WARNING_MINUTES = 5
@@ -29,9 +31,9 @@ function getWaitMinutes(createdAt: Date | string): number {
   return Math.floor((Date.now() - created.getTime()) / 60000)
 }
 
-function formatWaitTime(minutes: number): string {
-  if (minutes < 1) return 'Vừa xong'
-  if (minutes < 60) return `${minutes} phút`
+function formatWaitTime(minutes: number, t: (key: any, opts?: any) => string): string {
+  if (minutes < 1) return t('dashboard.justNow')
+  if (minutes < 60) return t('dashboard.minutesAgo', { minutes })
   const h = Math.floor(minutes / 60)
   const m = minutes % 60
   return m > 0 ? `${h}h${m}m` : `${h}h`
@@ -54,7 +56,10 @@ function getSlaTimerClass(minutes: number, status: string): string {
   return 'text-muted-foreground'
 }
 
-function getNextAction(status: string): {
+function getNextAction(
+  status: string,
+  t: (key: any, opts?: any) => string
+): {
   label: string
   icon: React.ReactNode
   nextStatus: string
@@ -63,21 +68,21 @@ function getNextAction(status: string): {
   switch (status) {
     case OrderStatus.Pending:
       return {
-        label: 'Nhận làm',
+        label: t('dashboard.actionCook'),
         icon: <ChefHat className='size-3.5' />,
         nextStatus: OrderStatus.Processing,
         color: 'bg-blue-600 hover:bg-blue-700 text-white',
       }
     case OrderStatus.Processing:
       return {
-        label: 'Báo xong',
+        label: t('dashboard.actionDone'),
         icon: <CheckCircle2 className='size-3.5' />,
         nextStatus: OrderStatus.Delivered,
         color: 'bg-emerald-600 hover:bg-emerald-700 text-white',
       }
     case OrderStatus.Delivered:
       return {
-        label: 'Đã bưng',
+        label: t('dashboard.actionServed'),
         icon: <Truck className='size-3.5' />,
         nextStatus: '',
         color: 'bg-violet-600 hover:bg-violet-700 text-white',
@@ -88,6 +93,7 @@ function getNextAction(status: string): {
 }
 
 export function OrderCard({ order, variant = 'kanban', showTableNumber = true }: OrderCardProps) {
+  const { t } = useTranslation('manage')
   const updateMutation = useUpdateOrderMutation()
   const [waitMinutes, setWaitMinutes] = useState(() => getWaitMinutes(order.createdAt))
 
@@ -100,7 +106,7 @@ export function OrderCard({ order, variant = 'kanban', showTableNumber = true }:
     return () => clearInterval(interval)
   }, [order.createdAt])
 
-  const action = getNextAction(order.status)
+  const action = getNextAction(order.status, t)
 
   async function handleQuickAction() {
     if (!action || !action.nextStatus) return
@@ -113,7 +119,7 @@ export function OrderCard({ order, variant = 'kanban', showTableNumber = true }:
           quantity: order.quantity,
         },
       })
-      toast.success(`Đã chuyển trạng thái thành công!`)
+      toast.success(t('dashboard.statusUpdated'))
     } catch (error) {
       handleErrorApi({ error })
     }
@@ -193,7 +199,9 @@ export function OrderCard({ order, variant = 'kanban', showTableNumber = true }:
                 </Badge>
               )}
               {showTableNumber && order.tableNumber && (
-                <span className='text-xs text-muted-foreground'>Bàn {order.tableNumber}</span>
+                <span className='text-xs text-muted-foreground'>
+                  {t('dashboard.tableNumber', { number: order.tableNumber })}
+                </span>
               )}
             </div>
           </div>
@@ -205,9 +213,9 @@ export function OrderCard({ order, variant = 'kanban', showTableNumber = true }:
               }
             >
               <Clock className='size-3' />
-              {formatWaitTime(waitMinutes)}
+              {formatWaitTime(waitMinutes, t)}
             </TooltipTrigger>
-            <TooltipContent>Thời gian chờ từ lúc đặt món</TooltipContent>
+            <TooltipContent>{t('dashboard.waitTimeTooltip')}</TooltipContent>
           </Tooltip>
         </div>
 
@@ -227,7 +235,7 @@ export function OrderCard({ order, variant = 'kanban', showTableNumber = true }:
             {updateMutation.isPending ? (
               <>
                 <Loader2 className='size-3.5 animate-spin' />
-                Đang xử lý...
+                {t('dashboard.processing')}
               </>
             ) : (
               <>
@@ -244,20 +252,22 @@ export function OrderCard({ order, variant = 'kanban', showTableNumber = true }:
 
 // Status Dot mini
 function StatusDot({ status }: { status: string }) {
-  const config: Record<string, { color: string; label: string }> = {
-    [OrderStatus.Pending]: { color: 'bg-amber-500', label: 'Chờ' },
-    [OrderStatus.Processing]: { color: 'bg-blue-500', label: 'Nấu' },
-    [OrderStatus.Delivered]: { color: 'bg-emerald-500', label: 'Xong' },
-    [OrderStatus.Paid]: { color: 'bg-violet-500', label: 'Paid' },
-    [OrderStatus.Rejected]: { color: 'bg-red-500', label: 'Hủy' },
+  const { getOrderStatusLabel } = useStatusLabel()
+  const config: Record<string, { color: string }> = {
+    [OrderStatus.Pending]: { color: 'bg-amber-500' },
+    [OrderStatus.Processing]: { color: 'bg-blue-500' },
+    [OrderStatus.Delivered]: { color: 'bg-emerald-500' },
+    [OrderStatus.Paid]: { color: 'bg-violet-500' },
+    [OrderStatus.Rejected]: { color: 'bg-red-500' },
   }
-  const c = config[status] ?? { color: 'bg-gray-400', label: status }
+  const c = config[status] ?? { color: 'bg-gray-400' }
+  const label = getOrderStatusLabel(status)
   return (
     <Tooltip>
       <TooltipTrigger
         render={<span className={cn('inline-block size-2 shrink-0 rounded-full', c.color)} />}
       />
-      <TooltipContent>{c.label}</TooltipContent>
+      <TooltipContent>{label}</TooltipContent>
     </Tooltip>
   )
 }

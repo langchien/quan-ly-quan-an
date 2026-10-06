@@ -23,15 +23,16 @@ import type { AccountType } from '@app/shared'
 import { Mail, MoreHorizontal, Pencil, Trash2, UserX } from 'lucide-react'
 import { getInitials } from './staff-columns'
 
-import { useStatusLabel } from '@/lib/status-label'
+import { useStatusLabel, getRoleLabel as getDefaultRoleLabel } from '@/lib/status-label'
 import { formatDate } from '@/lib/i18n/use-locale'
+import { useTranslation } from 'react-i18next'
 
 function getRoleConfig(role: string, getLabel?: (r: string) => string) {
-  const label = getLabel ? getLabel(role) : role
+  const label = getLabel ? getLabel(role) : getDefaultRoleLabel(role)
   switch (role) {
     case 'Owner':
       return {
-        label: getLabel ? label : 'Chủ quán',
+        label,
         emoji: '👑',
         dotColor: 'bg-amber-500',
         bgColor: 'bg-amber-500/10',
@@ -43,7 +44,7 @@ function getRoleConfig(role: string, getLabel?: (r: string) => string) {
       }
     case 'Employee':
       return {
-        label: getLabel ? label : 'Nhân viên',
+        label,
         emoji: '👤',
         dotColor: 'bg-blue-500',
         bgColor: 'bg-blue-500/10',
@@ -104,6 +105,7 @@ export function StaffGridView({
   globalFilter,
   roleFilter,
 }: StaffGridViewProps) {
+  const { t } = useTranslation(['manage', 'common'])
   const { getRoleLabel } = useStatusLabel()
 
   if (isLoading) {
@@ -132,8 +134,8 @@ export function StaffGridView({
         <UserX className='size-10 text-muted-foreground/40' />
         <p className='text-sm text-muted-foreground'>
           {globalFilter || roleFilter.length
-            ? 'Không tìm thấy kết quả phù hợp'
-            : 'Chưa có nhân viên nào'}
+            ? t('common:table.noResults')
+            : t('staffs.empty', { defaultValue: 'Chưa có nhân viên nào' })}
         </p>
       </div>
     )
@@ -166,22 +168,22 @@ export function StaffGridView({
                     })}
                   >
                     <MoreHorizontal className='size-4' />
-                    <span className='sr-only'>Mở menu</span>
+                    <span className='sr-only'>{t('common:actions.openMenu')}</span>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align='end' className='w-40'>
                     <DropdownMenuGroup>
-                      <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+                      <DropdownMenuLabel>{t('common:actions.actions')}</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => onEdit(staff)}>
                         <Pencil className='mr-2 size-4' />
-                        Chỉnh sửa
+                        {t('common:actions.edit')}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => onDelete(staff)}
                         className='text-destructive focus:text-destructive'
                       >
                         <Trash2 className='mr-2 size-4' />
-                        Xóa
+                        {t('common:actions.delete')}
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
@@ -219,7 +221,7 @@ export function StaffGridView({
 
             <CardFooter className='justify-center border-t pt-3'>
               <p className='text-xs text-muted-foreground'>
-                Tạo ngày {formatDate(staff.createdAt)}
+                {formatDate(staff.createdAt)}
               </p>
             </CardFooter>
           </Card>
@@ -228,3 +230,4 @@ export function StaffGridView({
     </div>
   )
 }
+

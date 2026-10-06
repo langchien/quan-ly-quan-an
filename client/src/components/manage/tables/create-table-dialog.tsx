@@ -24,7 +24,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { TABLE_STATUS_OPTIONS } from './table-table-toolbar'
+import { useTranslation } from 'react-i18next'
+import { useStatusLabel } from '@/lib/status-label'
 
 interface CreateTableDialogProps {
   open: boolean
@@ -32,6 +33,8 @@ interface CreateTableDialogProps {
 }
 
 export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps) {
+  const { t } = useTranslation(['manage', 'common'])
+  const { tableStatusOptions } = useStatusLabel()
   const createTableMutation = useCreateTableMutation()
 
   const form = useForm<CreateTableBodyType>({
@@ -48,7 +51,7 @@ export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps
   async function onSubmit(values: CreateTableBodyType) {
     try {
       const res = await createTableMutation.mutateAsync(values)
-      toast.success(res.data.message || 'Tạo bàn thành công')
+      toast.success(res.data.message || t('tables.createDialog.success'))
       handleOpenChange(false)
     } catch (error) {
       handleErrorApi({ error, setError: form.setError })
@@ -68,19 +71,19 @@ export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className='max-w-[450px]'>
         <DialogHeader>
-          <DialogTitle>Thêm bàn ăn</DialogTitle>
-          <DialogDescription>Tạo bàn ăn mới và hệ thống sẽ tự động sinh mã QR.</DialogDescription>
+          <DialogTitle>{t('tables.createDialog.title')}</DialogTitle>
+          <DialogDescription>{t('tables.createDialog.description')}</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate className='flex flex-col gap-4'>
           <FieldGroup>
             {/* Số bàn */}
             <Field data-invalid={!!errors.number}>
-              <FieldLabel htmlFor='create-table-number'>Số bàn</FieldLabel>
+              <FieldLabel htmlFor='create-table-number'>{t('tables.createDialog.numberLabel')}</FieldLabel>
               <Input
                 id='create-table-number'
                 type='number'
-                placeholder='Nhập số bàn (VD: 1)'
+                placeholder={t('tables.createDialog.numberPlaceholder')}
                 {...form.register('number')}
                 aria-invalid={!!errors.number}
               />
@@ -89,11 +92,11 @@ export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps
 
             {/* Sức chứa */}
             <Field data-invalid={!!errors.capacity}>
-              <FieldLabel htmlFor='create-table-capacity'>Sức chứa (người)</FieldLabel>
+              <FieldLabel htmlFor='create-table-capacity'>{t('tables.createDialog.capacityLabel')}</FieldLabel>
               <Input
                 id='create-table-capacity'
                 type='number'
-                placeholder='Nhập sức chứa (VD: 4)'
+                placeholder={t('tables.createDialog.capacityPlaceholder')}
                 {...form.register('capacity')}
                 aria-invalid={!!errors.capacity}
               />
@@ -102,16 +105,16 @@ export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps
 
             {/* Trạng thái */}
             <Field data-invalid={!!errors.status}>
-              <FieldLabel htmlFor='create-table-status'>Trạng thái</FieldLabel>
+              <FieldLabel htmlFor='create-table-status'>{t('tables.createDialog.statusLabel')}</FieldLabel>
               <Select
                 value={form.watch('status')}
                 onValueChange={value => form.setValue('status', value as any)}
               >
                 <SelectTrigger id='create-table-status'>
-                  <SelectValue placeholder='Chọn trạng thái' />
+                  <SelectValue placeholder={t('tables.toolbar.allStatuses')} />
                 </SelectTrigger>
                 <SelectContent>
-                  {TABLE_STATUS_OPTIONS.map(option => (
+                  {tableStatusOptions.map(option => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
@@ -124,16 +127,16 @@ export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps
 
           <DialogFooter>
             <Button type='button' variant='outline' onClick={() => handleOpenChange(false)}>
-              Hủy
+              {t('common:actions.cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
               {isPending ? (
                 <>
                   <Loader2 className='mr-2 size-4 animate-spin' />
-                  Đang tạo...
+                  {t('tables.createDialog.submitting')}
                 </>
               ) : (
-                'Thêm bàn'
+                t('tables.createDialog.submit')
               )}
             </Button>
           </DialogFooter>
@@ -142,3 +145,4 @@ export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps
     </Dialog>
   )
 }
+
