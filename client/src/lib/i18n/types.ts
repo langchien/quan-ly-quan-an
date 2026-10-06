@@ -6,7 +6,7 @@ export type Translation<T> = {
   [K in keyof T]: T[K] extends string ? string : Translation<T[K]>
 }
 
-export const SUPPORTED_LANGUAGES = ['vi', 'en'] as const
+export const SUPPORTED_LANGUAGES = ['vi', 'en', 'ja'] as const
 export type AppLanguage = (typeof SUPPORTED_LANGUAGES)[number]
 export const DEFAULT_LANGUAGE: AppLanguage = 'vi'
 export const LANGUAGE_STORAGE_KEY = 'lang'

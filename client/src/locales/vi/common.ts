@@ -49,6 +49,7 @@ export const common = {
     switch: 'Đổi ngôn ngữ',
     vi: 'Tiếng Việt',
     en: 'English',
+    ja: 'Tiếng Nhật',
   },
   pagination: {
     previous: 'Trước',

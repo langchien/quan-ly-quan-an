@@ -22,7 +22,7 @@ function syncLanguageSideEffects(lng: string) {
   if (typeof document !== 'undefined') {
     document.documentElement.lang = language
   }
-  z.config(language === 'en' ? z.locales.en() : z.locales.vi())
+  z.config(language === 'en' ? z.locales.en() : language === 'ja' ? z.locales.ja() : z.locales.vi())
 }
 
 // Khởi tạo ngay lập tức cho Zod và thẻ html

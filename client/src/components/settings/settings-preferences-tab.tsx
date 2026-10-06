@@ -63,8 +63,8 @@ export function SettingsPreferencesTab() {
           </p>
         </div>
 
-        {/* 2 nút chọn ngôn ngữ dạng card */}
-        <div className='grid grid-cols-2 gap-2'>
+        {/* Các nút chọn ngôn ngữ dạng card */}
+        <div className='grid grid-cols-1 gap-2 sm:grid-cols-3'>
           {LANGUAGE_OPTIONS.map(({ value, flag }) => (
             <button
               key={value}

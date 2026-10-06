@@ -9,7 +9,15 @@ import type { AppLanguage } from '@/lib/i18n/types'
  * @example formatCurrency(1200000) (en) → "₫1,200,000"
  */
 export function formatCurrency(value: number, lng?: AppLanguage | string) {
-  const locale = lng ? (lng === 'en' ? 'en-US' : lng === 'vi' ? 'vi-VN' : lng) : getIntlLocale()
+  const locale = lng
+    ? lng === 'en'
+      ? 'en-US'
+      : lng === 'ja'
+        ? 'ja-JP'
+        : lng === 'vi'
+          ? 'vi-VN'
+          : lng
+    : getIntlLocale()
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'VND',
@@ -29,7 +37,15 @@ export const formatCurrencyVND = formatCurrency
  * @example formatCurrencyCompact(500000) (en) → "₫500K"
  */
 export function formatCurrencyCompact(value: number, lng?: AppLanguage | string): string {
-  const locale = lng ? (lng === 'en' ? 'en-US' : lng === 'vi' ? 'vi-VN' : lng) : getIntlLocale()
+  const locale = lng
+    ? lng === 'en'
+      ? 'en-US'
+      : lng === 'ja'
+        ? 'ja-JP'
+        : lng === 'vi'
+          ? 'vi-VN'
+          : lng
+    : getIntlLocale()
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'VND',

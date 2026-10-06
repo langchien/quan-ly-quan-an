@@ -1,5 +1,5 @@
 import type { Locale } from 'date-fns'
-import { enUS, vi } from 'date-fns/locale'
+import { enUS, ja, vi } from 'date-fns/locale'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -9,11 +9,13 @@ import { normalizeLanguage, type AppLanguage } from './types'
 const INTL_LOCALES: Record<AppLanguage, string> = {
   vi: 'vi-VN',
   en: 'en-US',
+  ja: 'ja-JP',
 }
 
 const DATE_FNS_LOCALES: Record<AppLanguage, Locale> = {
   vi,
   en: enUS,
+  ja,
 }
 
 export function getIntlLocale(lng: AppLanguage = getCurrentLanguage()) {

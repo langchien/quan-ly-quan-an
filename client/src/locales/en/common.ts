@@ -52,6 +52,7 @@ export const common = {
     switch: 'Change language',
     vi: 'Tiếng Việt',
     en: 'English',
+    ja: 'Japanese',
   },
   pagination: {
     previous: 'Previous',

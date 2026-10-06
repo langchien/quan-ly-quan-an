@@ -1,0 +1,58 @@
+import type { Translation } from '@/lib/i18n/types'
+import type { settings as vi } from '../vi/settings'
+
+export const settings = {
+  dialog: {
+    title: 'アカウント設定',
+    description: 'プロフィールの更新、パスワード変更、システム設定',
+    heading: '設定',
+    close: '閉じる',
+  },
+  tabs: {
+    profile: 'プロフィール',
+    profileDesc: '個人情報とアバター',
+    security: 'セキュリティ',
+    securityDesc: 'パスワードとアクセス権限',
+    preferences: 'システム設定',
+    preferencesDesc: '言語、テーマ、通知設定',
+  },
+  profile: {
+    owner: '👑 オーナー',
+    employee: '👤 スタッフ',
+    displayName: '表示名',
+    namePlaceholder: 'お名前を入力',
+    undo: '元に戻す',
+    save: '変更を保存',
+    updated: '情報を更新しました！',
+    unsaved: '⚠ 未保存:',
+    unsavedHint: '「変更を保存」をクリックすると、選択した画像がアップロードされます。',
+  },
+  security: {
+    title: 'パスワードとセキュリティ',
+    description: 'アカウント保護のためパスワードを更新します',
+    oldPassword: '現在のパスワード',
+    oldPasswordPlaceholder: '現在のパスワードを入力',
+    newPassword: '新しいパスワード',
+    newPasswordPlaceholder: '6文字以上',
+    confirmPassword: '新しいパスワード（確認）',
+    confirmPasswordPlaceholder: '新しいパスワードを再入力',
+    cancel: 'キャンセル',
+    submit: 'パスワードを変更',
+    success: 'パスワードを変更しました！',
+    passwordMismatch: '新しいパスワードが一致しません',
+  },
+  preferences: {
+    language: '言語',
+    languageDesc: 'アプリの表示言語を選択',
+    appearance: '外観',
+    appearanceDesc: 'アプリのテーマを選択',
+    usingDark: 'ダークモード使用中',
+    usingLight: 'ライトモード使用中',
+    toggleDarkHint: 'スイッチをオンにしてダークモードに切り替え',
+    notifications: '通知',
+    notificationsDesc: '音声通知およびリアルタイム通知の設定',
+    sound: '新規注文の通知音',
+    soundOn: 'テーブルから新しい注文が入った時にチャイム音を鳴らす',
+    soundOff: '消音 – ポップアップ通知のみ表示',
+  },
+} satisfies Translation<typeof vi>
