@@ -3,7 +3,7 @@ import { RoleValues } from "../constants.js";
 
 export const LoginBody = z
   .object({
-    email: z.string().email(),
+    email: z.email(),
     password: z.string().min(6).max(100),
   })
   .strict();

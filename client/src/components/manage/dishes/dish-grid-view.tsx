@@ -280,7 +280,9 @@ export function DishGridView({
 
             <CardContent className='pb-0'>
               <p className='line-clamp-2 text-xs text-muted-foreground'>
-                {dish.description || <span className='italic opacity-50'>{t('dishes.columns.noDescription')}</span>}
+                {dish.description || (
+                  <span className='italic opacity-50'>{t('dishes.columns.noDescription')}</span>
+                )}
               </p>
               {dish.category && (
                 <Badge variant='outline' className='mt-1.5 text-[10px] font-normal'>

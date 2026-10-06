@@ -175,7 +175,9 @@ export function EditDishDialog({ dish, open, onOpenChange }: EditDishDialogProps
 
             {/* Giá */}
             <Field data-invalid={!!errors.price}>
-              <FieldLabel htmlFor='edit-dish-price'>{t('dishes.createDialog.priceLabel')}</FieldLabel>
+              <FieldLabel htmlFor='edit-dish-price'>
+                {t('dishes.createDialog.priceLabel')}
+              </FieldLabel>
               <Input
                 id='edit-dish-price'
                 type='number'
@@ -189,7 +191,9 @@ export function EditDishDialog({ dish, open, onOpenChange }: EditDishDialogProps
 
             {/* Mô tả */}
             <Field data-invalid={!!errors.description}>
-              <FieldLabel htmlFor='edit-dish-description'>{t('dishes.createDialog.descriptionLabel')}</FieldLabel>
+              <FieldLabel htmlFor='edit-dish-description'>
+                {t('dishes.createDialog.descriptionLabel')}
+              </FieldLabel>
               <Textarea
                 id='edit-dish-description'
                 placeholder={t('dishes.createDialog.descriptionPlaceholder')}
@@ -202,7 +206,9 @@ export function EditDishDialog({ dish, open, onOpenChange }: EditDishDialogProps
 
             {/* Danh mục */}
             <Field>
-              <FieldLabel htmlFor='edit-dish-category'>{t('dishes.createDialog.categoryLabel')}</FieldLabel>
+              <FieldLabel htmlFor='edit-dish-category'>
+                {t('dishes.createDialog.categoryLabel')}
+              </FieldLabel>
               <Controller
                 name='categoryId'
                 control={form.control}
@@ -215,7 +221,9 @@ export function EditDishDialog({ dish, open, onOpenChange }: EditDishDialogProps
                       <SelectValue placeholder={t('dishes.createDialog.selectCategory')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value='__none__'>{t('dishes.uncategorized', { defaultValue: 'Không có danh mục' })}</SelectItem>
+                      <SelectItem value='__none__'>
+                        {t('dishes.uncategorized', { defaultValue: 'Không có danh mục' })}
+                      </SelectItem>
                       {categories?.map(cat => (
                         <SelectItem key={cat.id} value={String(cat.id)}>
                           {cat.name}
@@ -229,14 +237,20 @@ export function EditDishDialog({ dish, open, onOpenChange }: EditDishDialogProps
 
             {/* Trạng thái */}
             <Field data-invalid={!!errors.status}>
-              <FieldLabel htmlFor='edit-dish-status'>{t('dishes.createDialog.statusLabel')}</FieldLabel>
+              <FieldLabel htmlFor='edit-dish-status'>
+                {t('dishes.createDialog.statusLabel')}
+              </FieldLabel>
               <Controller
                 name='status'
                 control={form.control}
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger id='edit-dish-status' className='w-full'>
-                      <SelectValue placeholder={t('common:table.allStatuses', { defaultValue: 'Chọn trạng thái' })} />
+                      <SelectValue
+                        placeholder={t('common:table.allStatuses', {
+                          defaultValue: 'Chọn trạng thái',
+                        })}
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       {dishStatusOptions.map(opt => (

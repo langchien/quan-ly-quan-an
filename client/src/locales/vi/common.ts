@@ -89,6 +89,7 @@ export const common = {
     viewDetails: 'Xem chi tiết',
     actions: 'Thao tác',
     openMenu: 'Mở menu',
+    loading: 'Đang tải...',
   },
   view: {
     table: 'Dạng bảng',

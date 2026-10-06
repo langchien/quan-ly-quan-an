@@ -90,7 +90,8 @@ export function StaffTableToolbar({
                 <div className='hidden space-x-1 lg:flex'>
                   {roleFilterValue.length > 1 ? (
                     <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                      {roleFilterValue.length} {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
+                      {roleFilterValue.length}{' '}
+                      {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
                     </Badge>
                   ) : (
                     roleOptions
@@ -194,7 +195,9 @@ export function StaffTableToolbar({
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-40'>
               <DropdownMenuGroup>
-                <DropdownMenuLabel>{t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {table
                   .getAllColumns()
@@ -231,4 +234,3 @@ export function StaffTableToolbar({
     </div>
   )
 }
-

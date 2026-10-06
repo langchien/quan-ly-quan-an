@@ -98,11 +98,15 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
 
   async function handleSubmit() {
     if (!selectedGuestId) {
-      toast.error(t('orders.createDialog.errorSelectGuest', { defaultValue: 'Vui lòng chọn khách hàng' }))
+      toast.error(
+        t('orders.createDialog.errorSelectGuest', { defaultValue: 'Vui lòng chọn khách hàng' })
+      )
       return
     }
     if (cart.length === 0) {
-      toast.error(t('orders.createDialog.errorSelectDish', { defaultValue: 'Vui lòng thêm ít nhất một món' }))
+      toast.error(
+        t('orders.createDialog.errorSelectDish', { defaultValue: 'Vui lòng thêm ít nhất một món' })
+      )
       return
     }
     try {
@@ -147,7 +151,8 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
               </FieldLabel>
               {guestsLoading ? (
                 <div className='flex h-9 items-center gap-2 text-sm text-muted-foreground'>
-                  <Loader2 className='size-4 animate-spin' /> {t('common:actions.loading', { defaultValue: 'Đang tải...' })}
+                  <Loader2 className='size-4 animate-spin' />{' '}
+                  {t('common:actions.loading', { defaultValue: 'Đang tải...' })}
                 </div>
               ) : (
                 <Select
@@ -155,7 +160,11 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
                   onValueChange={val => setSelectedGuestId(val ?? '')}
                 >
                   <SelectTrigger id='create-order-guest' className='w-full'>
-                    <SelectValue placeholder={t('orders.createDialog.guestPlaceholder', { defaultValue: 'Chọn khách hàng' })} />
+                    <SelectValue
+                      placeholder={t('orders.createDialog.guestPlaceholder', {
+                        defaultValue: 'Chọn khách hàng',
+                      })}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     {(guests ?? []).length === 0 ? (
@@ -182,7 +191,9 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
 
           {/* Chọn món */}
           <div className='space-y-3'>
-            <p className='text-sm font-medium'>{t('orders.createDialog.selectDishes', { defaultValue: 'Thêm món ăn' })}</p>
+            <p className='text-sm font-medium'>
+              {t('orders.createDialog.selectDishes', { defaultValue: 'Thêm món ăn' })}
+            </p>
             <div className='flex gap-2'>
               <div className='flex-1'>
                 <Select
@@ -191,7 +202,11 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
                   disabled={dishesLoading}
                 >
                   <SelectTrigger id='create-order-dish' className='w-full'>
-                    <SelectValue placeholder={t('orders.createDialog.dishSearch', { defaultValue: 'Chọn món ăn' })} />
+                    <SelectValue
+                      placeholder={t('orders.createDialog.dishSearch', {
+                        defaultValue: 'Chọn món ăn',
+                      })}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     {(dishes ?? []).map(d => (
@@ -357,4 +372,3 @@ export function CreateOrderDialog({ open, onOpenChange }: CreateOrderDialogProps
     </Dialog>
   )
 }
-

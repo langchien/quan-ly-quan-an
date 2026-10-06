@@ -141,7 +141,9 @@ export function getOrderColumns({
             <span className='font-medium'>{name}</span>
             {table !== null && table !== undefined && (
               <span className='text-xs text-muted-foreground'>
-                {t ? t('common:table.tableNumber', { number: table, defaultValue: `Bàn ${table}` }) : `Bàn ${table}`}
+                {t
+                  ? t('common:table.tableNumber', { number: table, defaultValue: `Bàn ${table}` })
+                  : `Bàn ${table}`}
               </span>
             )}
           </div>

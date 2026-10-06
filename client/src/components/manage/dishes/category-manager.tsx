@@ -46,9 +46,7 @@ export function CategoryManager() {
           <h2 className='text-lg font-semibold tracking-tight'>
             {t('dishes.categoryManager.title')}
           </h2>
-          <p className='text-sm text-muted-foreground'>
-            {t('dishes.categoryManager.description')}
-          </p>
+          <p className='text-sm text-muted-foreground'>{t('dishes.categoryManager.description')}</p>
         </div>
         <Button onClick={() => setCreateOpen(true)} size='sm' className='gap-1.5'>
           <Plus className='h-4 w-4' />
@@ -169,7 +167,9 @@ function CreateCategoryDialog({
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate className='flex flex-col gap-4'>
           <FieldGroup>
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='create-cat-name'>{t('dishes.createDialog.categoryLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-cat-name'>
+                {t('dishes.createDialog.categoryLabel')}
+              </FieldLabel>
               <Input
                 id='create-cat-name'
                 placeholder={t('dishes.categoryManager.namePlaceholder')}
@@ -178,7 +178,9 @@ function CreateCategoryDialog({
               <FieldError errors={[errors.name]} />
             </Field>
             <Field data-invalid={!!errors.order}>
-              <FieldLabel htmlFor='create-cat-order'>{t('common:table.order', { defaultValue: 'Thứ tự hiển thị' })}</FieldLabel>
+              <FieldLabel htmlFor='create-cat-order'>
+                {t('common:table.order', { defaultValue: 'Thứ tự hiển thị' })}
+              </FieldLabel>
               <Input
                 id='create-cat-order'
                 type='number'
@@ -257,12 +259,16 @@ function EditCategoryDialog({
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate className='flex flex-col gap-4'>
           <FieldGroup>
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='edit-cat-name'>{t('dishes.createDialog.categoryLabel')}</FieldLabel>
+              <FieldLabel htmlFor='edit-cat-name'>
+                {t('dishes.createDialog.categoryLabel')}
+              </FieldLabel>
               <Input id='edit-cat-name' {...form.register('name')} />
               <FieldError errors={[errors.name]} />
             </Field>
             <Field data-invalid={!!errors.order}>
-              <FieldLabel htmlFor='edit-cat-order'>{t('common:table.order', { defaultValue: 'Thứ tự hiển thị' })}</FieldLabel>
+              <FieldLabel htmlFor='edit-cat-order'>
+                {t('common:table.order', { defaultValue: 'Thứ tự hiển thị' })}
+              </FieldLabel>
               <Input
                 id='edit-cat-order'
                 type='number'

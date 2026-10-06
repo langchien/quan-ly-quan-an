@@ -32,7 +32,7 @@ export type AccountResType = z.output<typeof AccountRes>;
 export const CreateEmployeeAccountBody = z
   .object({
     name: z.string().trim().min(2).max(256),
-    email: z.string().email(),
+    email: z.email(),
     avatar: z.url().optional(),
     password: z.string().min(6).max(100),
     confirmPassword: z.string().min(6).max(100),
@@ -55,7 +55,7 @@ export type CreateEmployeeAccountBodyType = z.output<
 export const UpdateEmployeeAccountBody = z
   .object({
     name: z.string().trim().min(2).max(256),
-    email: z.string().email(),
+    email: z.email(),
     avatar: z.url().optional(),
     changePassword: z.boolean().optional(),
     password: z.string().min(6).max(100).optional(),

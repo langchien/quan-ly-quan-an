@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 
 export const LANGUAGE_OPTIONS: { value: AppLanguage; flag: string; short: string }[] = [
   { value: 'vi', flag: '🇻🇳', short: 'VI' },
-  { value: 'en', flag: '🇬🇧', short: 'EN' },
+  { value: 'en', flag: '🇺🇸', short: 'EN' },
 ]
 
 /** Hook dùng chung cho mọi nơi cần đọc/đổi ngôn ngữ */

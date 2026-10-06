@@ -166,15 +166,15 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
                 }}
               />
             </div>
-            <p className='text-xs text-muted-foreground'>
-              {t('staffs.createDialog.avatarHint')}
-            </p>
+            <p className='text-xs text-muted-foreground'>{t('staffs.createDialog.avatarHint')}</p>
           </div>
 
           <FieldGroup>
             {/* Tên */}
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='edit-staff-name'>{t('staffs.createDialog.nameLabel')}</FieldLabel>
+              <FieldLabel htmlFor='edit-staff-name'>
+                {t('staffs.createDialog.nameLabel')}
+              </FieldLabel>
               <Input
                 id='edit-staff-name'
                 placeholder={t('staffs.createDialog.namePlaceholder')}
@@ -186,7 +186,9 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
 
             {/* Email */}
             <Field data-invalid={!!errors.email}>
-              <FieldLabel htmlFor='edit-staff-email'>{t('staffs.createDialog.emailLabel')}</FieldLabel>
+              <FieldLabel htmlFor='edit-staff-email'>
+                {t('staffs.createDialog.emailLabel')}
+              </FieldLabel>
               <Input
                 id='edit-staff-email'
                 type='email'
@@ -210,9 +212,7 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
                     {t('common:userMenu.changePassword')}
                   </label>
                 </FieldTitle>
-                <FieldDescription>
-                  {t('staffs.editDialog.changePasswordToggle')}
-                </FieldDescription>
+                <FieldDescription>{t('staffs.editDialog.changePasswordToggle')}</FieldDescription>
               </FieldContent>
             </Field>
 
@@ -243,7 +243,13 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
                     {...form.register('confirmPassword')}
                     aria-invalid={!!errors.confirmPassword}
                   />
-                  <FieldError errors={[errors.confirmPassword]} />
+                  <FieldError
+                    errors={[
+                      errors.confirmPassword?.message === 'Mật khẩu không khớp'
+                        ? { message: t('staffs.editDialog.passwordMismatch') }
+                        : errors.confirmPassword,
+                    ]}
+                  />
                 </Field>
               </>
             )}
@@ -269,4 +275,3 @@ export function EditStaffDialog({ staff, open, onOpenChange }: EditStaffDialogPr
     </Dialog>
   )
 }
-

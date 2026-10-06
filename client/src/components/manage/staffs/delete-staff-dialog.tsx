@@ -63,4 +63,3 @@ export function DeleteStaffDialog({ staff, open, onOpenChange }: DeleteStaffDial
     </AlertDialog>
   )
 }
-

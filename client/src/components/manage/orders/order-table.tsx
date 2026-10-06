@@ -29,7 +29,9 @@ export function OrderTable() {
   useSocketEvents({
     'new-order': () => {
       toast.info(t('orders.socket.newOrder', { defaultValue: 'Có đơn hàng mới!' }), {
-        description: t('orders.socket.newOrderDesc', { defaultValue: 'Danh sách đơn hàng vừa được cập nhật.' }),
+        description: t('orders.socket.newOrderDesc', {
+          defaultValue: 'Danh sách đơn hàng vừa được cập nhật.',
+        }),
       })
       queryClient.invalidateQueries({ queryKey: adminOrdersQueryKey })
     },
@@ -74,7 +76,6 @@ export function OrderTable() {
       </div>
     )
   }
-
 
   return (
     <>

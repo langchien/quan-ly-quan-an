@@ -93,7 +93,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
           update: { socketId: socket.id },
           create: { accountId: userId, socketId: socket.id },
         })
-        socket.join(ManagerRoom)
+        await socket.join(ManagerRoom)
       }
 
       socket.decodedAccessToken = payload

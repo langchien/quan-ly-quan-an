@@ -45,7 +45,6 @@ export function StaffTable() {
     )
   }
 
-
   return (
     <>
       <StaffDataTable

@@ -58,7 +58,8 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
   const createPaymentLink = useManagerCreatePaymentLinkMutation()
 
   const guestId = order?.guestId
-  const guestName = order?.guest?.name ?? 'Khách'
+  const guestName =
+    order?.guest?.name ?? t('orders.payDialog.defaultGuestName', { defaultValue: 'Khách' })
   const tableNumber = order?.tableNumber ?? order?.guest?.tableNumber
 
   // Tính tổng tiền các đơn chưa thanh toán
@@ -69,7 +70,11 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
     payment: () => {
       if (open && qrState === 'ready') {
         setQrState('paid')
-        toast.success(t('orders.payDialog.vietQrSuccess', { defaultValue: 'Khách đã thanh toán qua VietQR thành công! 🎉' }))
+        toast.success(
+          t('orders.payDialog.vietQrSuccess', {
+            defaultValue: 'Khách đã thanh toán qua VietQR thành công! 🎉',
+          })
+        )
       }
     },
   })
@@ -79,7 +84,13 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
     if (!guestId) return
     try {
       const res = await payCashMutation.mutateAsync({ guestId })
-      toast.success(res.data.message || t('orders.payDialog.cashSuccess', { count: res.data.data.length, defaultValue: `Thanh toán thành công ${res.data.data.length} đơn! 🎉` }))
+      toast.success(
+        res.data.message ||
+          t('orders.payDialog.cashSuccess', {
+            count: res.data.data.length,
+            defaultValue: `Thanh toán thành công ${res.data.data.length} đơn! 🎉`,
+          })
+      )
       handleClose()
     } catch (error) {
       handleErrorApi({ error })
@@ -167,7 +178,9 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
 
             {/* Tổng tiền */}
             <div className='flex items-center justify-between rounded-lg bg-muted/60 px-4 py-3'>
-              <span className='font-medium'>{t('orders.payDialog.cashTotalLabel', { defaultValue: 'Tổng tiền mặt cần thu' })}</span>
+              <span className='font-medium'>
+                {t('orders.payDialog.cashTotalLabel', { defaultValue: 'Tổng tiền mặt cần thu' })}
+              </span>
               <span className='text-xl font-bold text-violet-600'>
                 {formatCurrency(totalAmount)}
               </span>
@@ -177,7 +190,8 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
             {pendingOrders.some(o => o.status !== OrderStatus.Delivered) && (
               <p className='text-xs text-amber-600'>
                 {t('orders.payDialog.undeliveredWarning', {
-                  defaultValue: '⚠️ Một số đơn chưa ở trạng thái "Đã giao". Hệ thống vẫn sẽ thanh toán tất cả đơn hiện tại của khách.',
+                  defaultValue:
+                    '⚠️ Một số đơn chưa ở trạng thái "Đã giao". Hệ thống vẫn sẽ thanh toán tất cả đơn hiện tại của khách.',
                 })}
               </p>
             )}
@@ -200,7 +214,9 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                 ) : (
                   <>
                     <Banknote className='mr-2 size-4' />
-                    {t('orders.payDialog.confirmCash', { defaultValue: 'Xác nhận đã nhận tiền mặt' })}
+                    {t('orders.payDialog.confirmCash', {
+                      defaultValue: 'Xác nhận đã nhận tiền mặt',
+                    })}
                   </>
                 )}
               </Button>
@@ -243,7 +259,9 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
               <div className='flex flex-col items-center gap-3 py-8'>
                 <Loader2 className='size-8 animate-spin text-blue-600' />
                 <p className='text-sm text-muted-foreground'>
-                  {t('orders.payDialog.creatingQr', { defaultValue: 'Đang tạo mã QR VietQR từ PayOS...' })}
+                  {t('orders.payDialog.creatingQr', {
+                    defaultValue: 'Đang tạo mã QR VietQR từ PayOS...',
+                  })}
                 </p>
               </div>
             )}
@@ -256,7 +274,7 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                     {qrData.qrCode.startsWith('http') || qrData.qrCode.startsWith('data:') ? (
                       <img
                         src={qrData.qrCode}
-                        alt='Mã QR VietQR'
+                        alt={t('orders.payDialog.qrAlt', { defaultValue: 'Mã QR VietQR' })}
                         className='size-[220px] object-contain'
                         id='manage-payos-qr-image'
                       />
@@ -286,7 +304,9 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                           rel='noreferrer'
                           className='inline-flex items-center gap-1 text-blue-600 hover:underline'
                         >
-                          <span>{t('orders.payDialog.openPayOs', { defaultValue: 'Mở link PayOS' })}</span>
+                          <span>
+                            {t('orders.payDialog.openPayOs', { defaultValue: 'Mở link PayOS' })}
+                          </span>
                           <ExternalLink className='size-3' />
                         </a>
                       </>
@@ -300,7 +320,9 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
                 </div>
 
                 <div className='flex items-center justify-between rounded-lg bg-blue-50 px-4 py-2.5 dark:bg-blue-950/30'>
-                  <span className='text-sm font-medium'>{t('orders.payDialog.amount', { defaultValue: 'Số tiền' })}</span>
+                  <span className='text-sm font-medium'>
+                    {t('orders.payDialog.amount', { defaultValue: 'Số tiền' })}
+                  </span>
                   <span className='text-lg font-bold text-blue-600'>
                     {formatCurrency(totalAmount)}
                   </span>
@@ -353,4 +375,3 @@ export function PayGuestDialog({ order, pendingOrders, open, onOpenChange }: Pay
     </Dialog>
   )
 }
-

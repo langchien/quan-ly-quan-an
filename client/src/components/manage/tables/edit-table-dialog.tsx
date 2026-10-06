@@ -96,7 +96,9 @@ export function EditTableDialog({ table, open, onOpenChange }: EditTableDialogPr
 
             {/* Sức chứa */}
             <Field data-invalid={!!errors.capacity}>
-              <FieldLabel htmlFor='edit-table-capacity'>{t('tables.createDialog.capacityLabel')}</FieldLabel>
+              <FieldLabel htmlFor='edit-table-capacity'>
+                {t('tables.createDialog.capacityLabel')}
+              </FieldLabel>
               <Input
                 id='edit-table-capacity'
                 type='number'
@@ -109,7 +111,9 @@ export function EditTableDialog({ table, open, onOpenChange }: EditTableDialogPr
 
             {/* Trạng thái */}
             <Field data-invalid={!!errors.status}>
-              <FieldLabel htmlFor='edit-table-status'>{t('tables.createDialog.statusLabel')}</FieldLabel>
+              <FieldLabel htmlFor='edit-table-status'>
+                {t('tables.createDialog.statusLabel')}
+              </FieldLabel>
               <Select
                 value={form.watch('status')}
                 onValueChange={value => form.setValue('status', value as any)}
@@ -164,4 +168,3 @@ export function EditTableDialog({ table, open, onOpenChange }: EditTableDialogPr
     </Dialog>
   )
 }
-

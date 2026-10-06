@@ -139,7 +139,9 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
           <FieldGroup>
             {/* Tên món ăn */}
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='create-dish-name'>{t('dishes.createDialog.nameLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-dish-name'>
+                {t('dishes.createDialog.nameLabel')}
+              </FieldLabel>
               <Input
                 id='create-dish-name'
                 placeholder={t('dishes.createDialog.namePlaceholder')}
@@ -151,7 +153,9 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
 
             {/* Giá */}
             <Field data-invalid={!!errors.price}>
-              <FieldLabel htmlFor='create-dish-price'>{t('dishes.createDialog.priceLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-dish-price'>
+                {t('dishes.createDialog.priceLabel')}
+              </FieldLabel>
               <Input
                 id='create-dish-price'
                 type='number'
@@ -165,7 +169,9 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
 
             {/* Mô tả */}
             <Field data-invalid={!!errors.description}>
-              <FieldLabel htmlFor='create-dish-description'>{t('dishes.createDialog.descriptionLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-dish-description'>
+                {t('dishes.createDialog.descriptionLabel')}
+              </FieldLabel>
               <Textarea
                 id='create-dish-description'
                 placeholder={t('dishes.createDialog.descriptionPlaceholder')}
@@ -178,7 +184,9 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
 
             {/* Danh mục */}
             <Field>
-              <FieldLabel htmlFor='create-dish-category'>{t('dishes.createDialog.categoryLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-dish-category'>
+                {t('dishes.createDialog.categoryLabel')}
+              </FieldLabel>
               <Controller
                 name='categoryId'
                 control={form.control}
@@ -191,7 +199,9 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
                       <SelectValue placeholder={t('dishes.createDialog.selectCategory')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value='__none__'>{t('dishes.uncategorized', { defaultValue: 'Không có danh mục' })}</SelectItem>
+                      <SelectItem value='__none__'>
+                        {t('dishes.uncategorized', { defaultValue: 'Không có danh mục' })}
+                      </SelectItem>
                       {categories?.map(cat => (
                         <SelectItem key={cat.id} value={String(cat.id)}>
                           {cat.name}
@@ -205,14 +215,20 @@ export function CreateDishDialog({ open, onOpenChange }: CreateDishDialogProps) 
 
             {/* Trạng thái */}
             <Field data-invalid={!!errors.status}>
-              <FieldLabel htmlFor='create-dish-status'>{t('dishes.createDialog.statusLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-dish-status'>
+                {t('dishes.createDialog.statusLabel')}
+              </FieldLabel>
               <Controller
                 name='status'
                 control={form.control}
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger id='create-dish-status' className='w-full'>
-                      <SelectValue placeholder={t('common:table.allStatuses', { defaultValue: 'Chọn trạng thái' })} />
+                      <SelectValue
+                        placeholder={t('common:table.allStatuses', {
+                          defaultValue: 'Chọn trạng thái',
+                        })}
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       {dishStatusOptions.map(opt => (

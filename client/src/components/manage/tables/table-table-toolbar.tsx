@@ -102,7 +102,8 @@ export function TableTableToolbar({
                 <div className='hidden space-x-1 lg:flex'>
                   {statusFilterValue.length > 1 ? (
                     <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                      {statusFilterValue.length} {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
+                      {statusFilterValue.length}{' '}
+                      {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
                     </Badge>
                   ) : (
                     tableStatusOptions
@@ -206,7 +207,9 @@ export function TableTableToolbar({
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-40'>
               <DropdownMenuGroup>
-                <DropdownMenuLabel>{t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {table
                   .getAllColumns()

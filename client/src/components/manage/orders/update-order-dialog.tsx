@@ -92,7 +92,9 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
         <DialogHeader>
           <DialogTitle>{t('orders.updateDialog.title', { id: order?.id ?? '' })}</DialogTitle>
           <DialogDescription>
-            {t('orders.updateDialog.description', { defaultValue: 'Chỉnh sửa trạng thái và số lượng đơn hàng' })}
+            {t('orders.updateDialog.description', {
+              defaultValue: 'Chỉnh sửa trạng thái và số lượng đơn hàng',
+            })}
           </DialogDescription>
         </DialogHeader>
 
@@ -130,7 +132,9 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
           <FieldGroup>
             {/* Số lượng */}
             <Field data-invalid={!!errors.quantity}>
-              <FieldLabel htmlFor='update-order-quantity'>{t('orders.columns.quantity')}</FieldLabel>
+              <FieldLabel htmlFor='update-order-quantity'>
+                {t('orders.columns.quantity')}
+              </FieldLabel>
               <Input
                 id='update-order-quantity'
                 type='number'
@@ -143,7 +147,9 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
 
             {/* Trạng thái */}
             <Field data-invalid={!!errors.status}>
-              <FieldLabel htmlFor='update-order-status'>{t('orders.updateDialog.statusLabel')}</FieldLabel>
+              <FieldLabel htmlFor='update-order-status'>
+                {t('orders.updateDialog.statusLabel')}
+              </FieldLabel>
               <Controller
                 name='status'
                 control={form.control}
@@ -186,4 +192,3 @@ export function UpdateOrderDialog({ order, open, onOpenChange }: UpdateOrderDial
     </Dialog>
   )
 }
-

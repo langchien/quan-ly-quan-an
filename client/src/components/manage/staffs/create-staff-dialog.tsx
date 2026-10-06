@@ -119,15 +119,15 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
                 }}
               />
             </div>
-            <p className='text-xs text-muted-foreground'>
-              {t('staffs.createDialog.avatarHint')}
-            </p>
+            <p className='text-xs text-muted-foreground'>{t('staffs.createDialog.avatarHint')}</p>
           </div>
 
           <FieldGroup>
             {/* Tên */}
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='create-staff-name'>{t('staffs.createDialog.nameLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-staff-name'>
+                {t('staffs.createDialog.nameLabel')}
+              </FieldLabel>
               <Input
                 id='create-staff-name'
                 placeholder={t('staffs.createDialog.namePlaceholder')}
@@ -139,7 +139,9 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
 
             {/* Email */}
             <Field data-invalid={!!errors.email}>
-              <FieldLabel htmlFor='create-staff-email'>{t('staffs.createDialog.emailLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-staff-email'>
+                {t('staffs.createDialog.emailLabel')}
+              </FieldLabel>
               <Input
                 id='create-staff-email'
                 type='email'
@@ -152,7 +154,9 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
 
             {/* Mật khẩu */}
             <Field data-invalid={!!errors.password}>
-              <FieldLabel htmlFor='create-staff-password'>{t('staffs.createDialog.passwordLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-staff-password'>
+                {t('staffs.createDialog.passwordLabel')}
+              </FieldLabel>
               <Input
                 id='create-staff-password'
                 type='password'
@@ -175,7 +179,13 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
                 {...form.register('confirmPassword')}
                 aria-invalid={!!errors.confirmPassword}
               />
-              <FieldError errors={[errors.confirmPassword]} />
+              <FieldError
+                errors={[
+                  errors.confirmPassword?.message === 'Mật khẩu không khớp'
+                    ? { message: t('staffs.createDialog.passwordMismatch') }
+                    : errors.confirmPassword,
+                ]}
+              />
             </Field>
           </FieldGroup>
 
@@ -199,4 +209,3 @@ export function CreateStaffDialog({ open, onOpenChange }: CreateStaffDialogProps
     </Dialog>
   )
 }
-

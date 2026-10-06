@@ -64,6 +64,7 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9.20.0",
+    "eslint-plugin-i18next": "^6.1.5",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "shadcn": "^4.16.2",

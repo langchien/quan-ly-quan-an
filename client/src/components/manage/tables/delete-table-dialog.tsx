@@ -64,4 +64,3 @@ export function DeleteTableDialog({ table, open, onOpenChange }: DeleteTableDial
     </AlertDialog>
   )
 }
-

@@ -68,7 +68,10 @@ export function DishTableToolbar({
     const data = table.getCoreRowModel().rows
     const hasUncategorized = data.some(r => r.original.category == null)
     if (hasUncategorized) {
-      opts.push({ value: '__uncategorized__', label: t('dishes.uncategorized', { defaultValue: 'Chưa phân loại' }) })
+      opts.push({
+        value: '__uncategorized__',
+        label: t('dishes.uncategorized', { defaultValue: 'Chưa phân loại' }),
+      })
     }
     return opts
   })()
@@ -126,7 +129,8 @@ export function DishTableToolbar({
                 <div className='hidden space-x-1 lg:flex'>
                   {statusFilterValue.length > 1 ? (
                     <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                      {statusFilterValue.length} {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
+                      {statusFilterValue.length}{' '}
+                      {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
                     </Badge>
                   ) : (
                     dishStatusOptions
@@ -186,7 +190,8 @@ export function DishTableToolbar({
                   <div className='hidden space-x-1 lg:flex'>
                     {categoryFilterValue.length > 1 ? (
                       <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                        {categoryFilterValue.length} {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
+                        {categoryFilterValue.length}{' '}
+                        {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
                       </Badge>
                     ) : (
                       categoryOptions
@@ -291,7 +296,9 @@ export function DishTableToolbar({
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-44'>
               <DropdownMenuGroup>
-                <DropdownMenuLabel>{t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {table
                   .getAllColumns()

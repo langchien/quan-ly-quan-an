@@ -8,6 +8,7 @@ import type {
 } from '@app/shared'
 import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { i18n } from '@/lib/i18n'
 
 // Query Options
 
@@ -97,7 +98,7 @@ export function useToggleDishStatusMutation() {
       if (context?.previous !== undefined) {
         queryClient.setQueryData(['dishes', 'list'], context.previous)
       }
-      toast.error('Cập nhật trạng thái món thất bại. Đã khôi phục dữ liệu ban đầu.')
+      toast.error(i18n.t('manage:dishes.statusUpdateError'))
     },
     onSettled: () => {
       // Luôn refetch để đảm bảo đồng bộ với server

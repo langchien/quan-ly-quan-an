@@ -80,7 +80,8 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
                 <div className='hidden space-x-1 lg:flex'>
                   {statusFilterValue.length > 2 ? (
                     <Badge variant='secondary' className='rounded-sm px-1 font-normal'>
-                      {statusFilterValue.length} {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
+                      {statusFilterValue.length}{' '}
+                      {t('common:table.selectedSuffix', { defaultValue: 'đã chọn' })}
                     </Badge>
                   ) : (
                     orderStatusOptions
@@ -149,7 +150,9 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-44'>
             <DropdownMenuGroup>
-              <DropdownMenuLabel>{t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                {t('common:table.toggleColumns', { defaultValue: 'Bật/tắt cột' })}
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               {table
                 .getAllColumns()
@@ -193,4 +196,3 @@ export function OrderTableToolbar({ table, onAddOrder }: OrderTableToolbarProps)
     </div>
   )
 }
-

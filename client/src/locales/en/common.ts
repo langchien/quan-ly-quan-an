@@ -92,6 +92,7 @@ export const common = {
     viewDetails: 'View details',
     actions: 'Actions',
     openMenu: 'Open menu',
+    loading: 'Loading...',
   },
   view: {
     table: 'Table view',

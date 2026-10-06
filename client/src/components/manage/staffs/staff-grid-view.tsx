@@ -220,9 +220,7 @@ export function StaffGridView({
             </CardContent>
 
             <CardFooter className='justify-center border-t pt-3'>
-              <p className='text-xs text-muted-foreground'>
-                {formatDate(staff.createdAt)}
-              </p>
+              <p className='text-xs text-muted-foreground'>{formatDate(staff.createdAt)}</p>
             </CardFooter>
           </Card>
         )
@@ -230,4 +228,3 @@ export function StaffGridView({
     </div>
   )
 }
-

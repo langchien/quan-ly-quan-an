@@ -67,7 +67,9 @@ export function useLiveOrders() {
       const { tableNumber, guestName, message } = payload
       audioChime.playChime()
       toast.warning(i18n.t('manage:dashboard.toastCallStaff', { tableNumber }), {
-        description: message ? `${guestName}: ${message}` : i18n.t('manage:dashboard.toastCallStaffDesc', { guestName }),
+        description: message
+          ? `${guestName}: ${message}`
+          : i18n.t('manage:dashboard.toastCallStaffDesc', { guestName }),
         duration: 10_000,
       })
     },

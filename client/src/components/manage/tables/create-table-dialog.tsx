@@ -79,7 +79,9 @@ export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps
           <FieldGroup>
             {/* Số bàn */}
             <Field data-invalid={!!errors.number}>
-              <FieldLabel htmlFor='create-table-number'>{t('tables.createDialog.numberLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-table-number'>
+                {t('tables.createDialog.numberLabel')}
+              </FieldLabel>
               <Input
                 id='create-table-number'
                 type='number'
@@ -92,7 +94,9 @@ export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps
 
             {/* Sức chứa */}
             <Field data-invalid={!!errors.capacity}>
-              <FieldLabel htmlFor='create-table-capacity'>{t('tables.createDialog.capacityLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-table-capacity'>
+                {t('tables.createDialog.capacityLabel')}
+              </FieldLabel>
               <Input
                 id='create-table-capacity'
                 type='number'
@@ -105,7 +109,9 @@ export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps
 
             {/* Trạng thái */}
             <Field data-invalid={!!errors.status}>
-              <FieldLabel htmlFor='create-table-status'>{t('tables.createDialog.statusLabel')}</FieldLabel>
+              <FieldLabel htmlFor='create-table-status'>
+                {t('tables.createDialog.statusLabel')}
+              </FieldLabel>
               <Select
                 value={form.watch('status')}
                 onValueChange={value => form.setValue('status', value as any)}
@@ -145,4 +151,3 @@ export function CreateTableDialog({ open, onOpenChange }: CreateTableDialogProps
     </Dialog>
   )
 }
-

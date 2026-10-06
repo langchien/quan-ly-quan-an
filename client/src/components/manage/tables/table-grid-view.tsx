@@ -24,7 +24,10 @@ import { LayoutGrid, Link, MoreHorizontal, Pencil, Trash2, Users } from 'lucide-
 import { QRCodeCanvas } from 'qrcode.react'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { useStatusLabel, getTableStatusLabel as getDefaultTableStatusLabel } from '@/lib/status-label'
+import {
+  useStatusLabel,
+  getTableStatusLabel as getDefaultTableStatusLabel,
+} from '@/lib/status-label'
 import { formatDate } from '@/lib/i18n/use-locale'
 import { useTranslation } from 'react-i18next'
 
@@ -140,9 +143,7 @@ export function TableGridView({
       <div className='flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed py-16 text-center'>
         <LayoutGrid className='size-10 text-muted-foreground/40' />
         <p className='text-sm text-muted-foreground'>
-          {globalFilter || statusFilter.length
-            ? t('common:table.noResults')
-            : t('tables.empty')}
+          {globalFilter || statusFilter.length ? t('common:table.noResults') : t('tables.empty')}
         </p>
       </div>
     )
@@ -166,7 +167,10 @@ export function TableGridView({
                   {table.number}
                 </span>
                 <span className='text-base'>
-                  {t('common:table.tableNumber', { number: table.number, defaultValue: `Bàn ${table.number}` })}
+                  {t('common:table.tableNumber', {
+                    number: table.number,
+                    defaultValue: `Bàn ${table.number}`,
+                  })}
                 </span>
               </CardTitle>
 
@@ -225,7 +229,10 @@ export function TableGridView({
               <div className='flex w-full items-center justify-center gap-2'>
                 <Badge variant='outline' className='gap-1.5'>
                   <Users className='size-3' />
-                  {t('tables.capacityValue', { count: table.capacity, defaultValue: `${table.capacity} chỗ` })}
+                  {t('tables.capacityValue', {
+                    count: table.capacity,
+                    defaultValue: `${table.capacity} chỗ`,
+                  })}
                 </Badge>
                 <Badge
                   variant='outline'
@@ -238,9 +245,7 @@ export function TableGridView({
             </CardContent>
 
             <CardFooter className='justify-center border-t pt-3'>
-              <p className='text-xs text-muted-foreground'>
-                {formatDate(table.createdAt)}
-              </p>
+              <p className='text-xs text-muted-foreground'>{formatDate(table.createdAt)}</p>
             </CardFooter>
           </Card>
         )
@@ -248,4 +253,3 @@ export function TableGridView({
     </div>
   )
 }
-
